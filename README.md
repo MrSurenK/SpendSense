@@ -1,2 +1,4 @@
 # SpendSense
-Small scale finance tracker to track and plan your spending habits 
+Personal Project: Finance tracker to track and plan spending habits
+
+Development in progress... 
