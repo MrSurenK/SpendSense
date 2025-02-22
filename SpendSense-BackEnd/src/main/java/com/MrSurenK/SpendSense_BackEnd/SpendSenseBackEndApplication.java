@@ -8,5 +8,6 @@ public class SpendSenseBackEndApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpendSenseBackEndApplication.class, args);
+
 	}
 }
