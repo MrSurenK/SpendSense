@@ -11,7 +11,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Data
 @Entity
-public class Transaction {
+public class Transactions {
 
     @Id
     @GeneratedValue
@@ -20,6 +20,7 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
+    @Basic(optional = false)
     private BigDecimal amount;
 
     private String remarks;
@@ -30,5 +31,8 @@ public class Transaction {
 
     @ManyToOne(fetch=LAZY)
     private UserAccount userAccount;
+
+    @ManyToOne(fetch=LAZY)
+    private Categories category;
 
 }

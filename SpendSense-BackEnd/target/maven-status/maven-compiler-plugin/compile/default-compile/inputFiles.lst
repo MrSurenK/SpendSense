@@ -1,4 +1,5 @@
 /home/surenk/Personal_Projects/FinanceTracker/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/SpendSenseBackEndApplication.java
-/home/surenk/Personal_Projects/FinanceTracker/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/model/Transaction.java
+/home/surenk/Personal_Projects/FinanceTracker/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/model/Categories.java
 /home/surenk/Personal_Projects/FinanceTracker/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/model/TransactionType.java
+/home/surenk/Personal_Projects/FinanceTracker/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/model/Transactions.java
 /home/surenk/Personal_Projects/FinanceTracker/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/model/UserAccount.java
