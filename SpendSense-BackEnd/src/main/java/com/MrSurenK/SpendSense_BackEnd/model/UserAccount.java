@@ -35,6 +35,6 @@ public class UserAccount {
 
     private LocalDateTime lastLogin;
 
-    @OneToMany(mappedBy=Transaction_.USERACCOUNT)
+    @OneToMany(mappedBy=Transaction_.USER_ACCOUNT)
     Set<Transaction> transactions;
 }
