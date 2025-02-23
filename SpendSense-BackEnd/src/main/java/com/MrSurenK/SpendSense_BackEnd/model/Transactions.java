@@ -11,6 +11,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Data
 @Entity
+@Table(name = "transactions")
 public class Transactions {
 
     @Id
@@ -27,11 +28,14 @@ public class Transactions {
 
     private boolean recurring = false; //Default value of false in new instances
 
+    @Basic(optional = false)
     private LocalDate transactionDate;
 
+    @Basic(optional = false)
     @ManyToOne(fetch=LAZY)
     private UserAccount userAccount;
 
+    @Basic(optional = false)
     @ManyToOne(fetch=LAZY)
     private Categories category;
 
