@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 @Entity
-public class Categories {
+public class Category {
 
     @Id
     @GeneratedValue
@@ -20,7 +20,7 @@ public class Categories {
 
     private Blob catImage;
 
-    @OneToMany(mappedBy = Transactions_.CATEGORY)
-    private Set<Transactions> transactions;
+    @OneToMany(mappedBy = Transaction_.CATEGORY)
+    private Set<Transaction> transactions;
 
 }

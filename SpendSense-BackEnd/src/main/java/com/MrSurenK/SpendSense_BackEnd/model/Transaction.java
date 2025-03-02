@@ -11,8 +11,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Data
 @Entity
-@Table(name = "transactions")
-public class Transactions {
+public class Transaction {
 
     @Id
     @GeneratedValue
@@ -37,6 +36,6 @@ public class Transactions {
 
     @Basic(optional = false)
     @ManyToOne(fetch=LAZY)
-    private Categories category;
+    private Category category;
 
 }
