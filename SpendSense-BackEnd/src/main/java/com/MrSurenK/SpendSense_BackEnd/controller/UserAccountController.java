@@ -23,6 +23,7 @@ public class UserAccountController {
 
     @PostMapping("/register")
     public ResponseEntity newAccount(@RequestBody UserSignUpDto userSignUpDto){
+        System.out.println(userSignUpDto);
         return ResponseEntity.status(HttpStatus.OK).body("Account successfully created");
     }
 
