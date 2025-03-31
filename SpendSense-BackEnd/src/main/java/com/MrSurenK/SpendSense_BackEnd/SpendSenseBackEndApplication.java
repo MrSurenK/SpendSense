@@ -11,4 +11,3 @@ public class SpendSenseBackEndApplication {
 		SpringApplication.run(SpendSenseBackEndApplication.class, args);
 	}
 }
-//ToDo: Fix double transaction table appearing in mysql db

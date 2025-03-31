@@ -2,6 +2,7 @@ package com.MrSurenK.SpendSense_BackEnd.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.constraints.Email;
@@ -25,9 +26,8 @@ public class UserSignUpDto {
 	@NotBlank(message = "Please provide a last name")
 	private String lastName;
 
-//	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@NotBlank(message = "Please provide a dob")
-	private String dob;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dob;
 
 	@NotBlank(message = "Password Required")
 	@Size(min = 8, message = "Password should be at least 8 characters long")

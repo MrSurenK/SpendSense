@@ -9,9 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserAccountRepo extends CrudRepository<UserAccount,Integer> {
 
-    UserAccount save(UserAccount userAccount);
-
-    Iterable<UserAccount> findAll();
 
     @Query(value = "SELECT EXISTS(SELECT 1 FROM user_account WHERE username=:username)",nativeQuery = true)
     int existsByUsername(String username);

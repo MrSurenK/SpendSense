@@ -11,7 +11,7 @@ import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 public class UserAccountService {
 
 	private UserAccountRepo userAccountRepo;
-	private UserAccount userAccount = new UserAccount();
+	private UserAccount userAccount;
 
 	@Autowired
 	private UserAccountService(UserAccountRepo userAccountRepo) {
@@ -19,18 +19,24 @@ public class UserAccountService {
 	}
 
 	public void createAccount(UserSignUpDto userSignUpDto) {
-		if (checkIfAccountExsits(userSignUpDto)) {
+		if (!checkIfAccountExsits(userSignUpDto)) {
 			// Map fields to user account
+			userAccount = new UserAccount();
 			userAccount.setEmail(userSignUpDto.getEmail());
+			userAccount.setUserName(userSignUpDto.getUserName());
+			userAccount.setFirstName(userSignUpDto.getFirstName());
+			userAccount.setLastName(userSignUpDto.getLastName());
+			userAccount.setDateOfBirth(userSignUpDto.getDob());
+			userAccount.setPassword(userSignUpDto.getPassword());
 		}
+
+		userAccountRepo.save(userAccount);
 	}
 
 	public boolean checkIfAccountExsits(UserSignUpDto userSignUpDto) {
 		Iterable<UserAccount> allAccounts = userAccountRepo.findAll();
 		for (UserAccount eachAccount : allAccounts) {
-			if (userAccount.getEmail().equals(userSignUpDto.getEmail())) {
-				return false;
-			} else {
+			if (eachAccount.getEmail().equals(userSignUpDto.getEmail())) {
 				return true;
 			}
 		}
