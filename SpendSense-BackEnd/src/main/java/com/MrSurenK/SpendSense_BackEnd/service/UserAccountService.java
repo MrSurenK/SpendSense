@@ -1,5 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
+import com.MrSurenK.SpendSense_BackEnd.Exception.EmailAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,13 +35,11 @@ public class UserAccountService {
 	}
 
 	public boolean checkIfAccountExsits(UserSignUpDto userSignUpDto) {
-		Iterable<UserAccount> allAccounts = userAccountRepo.findAll();
-		for (UserAccount eachAccount : allAccounts) {
-			if (eachAccount.getEmail().equals(userSignUpDto.getEmail())) {
-				return true;
-			}
+		if (userAccountRepo.existsByEmail(userSignUpDto.getEmail())){
+			throw new EmailAlreadyExistsException("Account already exists", userSignUpDto.getEmail());
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	public boolean checkIfUsernameExists() {
