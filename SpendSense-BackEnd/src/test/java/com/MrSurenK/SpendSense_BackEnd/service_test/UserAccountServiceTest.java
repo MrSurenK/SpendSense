@@ -12,8 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,31 +27,46 @@ public class UserAccountServiceTest {
 
 
     @Test
-    @DisplayName("Test service if email account exists")
+    @DisplayName("Test user sign-up if email account exists")
     void testUserAccountExistsReturnTrue(){
         String email = "existingUser@gmail.com";
-        UserSignUpDto userSignUpDto = new UserSignUpDto();
-        userSignUpDto.setEmail(email);
-
         when(userAccountRepo.existsByEmail(email)).thenReturn(true);
-
-        Exception exception = assertThrows(EmailAlreadyExistsException.class,
-                ()-> userAccountService.checkIfAccountExsits(userSignUpDto));
-
-        assertEquals("Account already exists", exception.getMessage());
+        //Asserts
+        assertTrue(userAccountService.checkIfAccountExsits(email));
         //Check that mocked method was called at least once
         verify(userAccountRepo, times(1)).existsByEmail(email);
     }
 
     @Test
-    @DisplayName("Test service if email account deos not exists")
+    @DisplayName("Test user sign-up if email account deos not exists")
     void testUserAccounExistsReturnFalse(){
+        String email = "newSignUp@gmal.com";
+        //Mock repo
+        when(userAccountRepo.existsByEmail(email)).thenReturn(false);
+        //Asserts
+        assertFalse(userAccountService.checkIfAccountExsits(email));
+        verify(userAccountRepo, times(1)).existsByEmail(email);
+    }
+
+    @Test
+    @DisplayName("Test if username is taken")
+    void testUsernameTaken(){
+        String username = "newUser";
+        when(userAccountRepo.existsByUsername(username)).thenReturn(true);
+
+        assertTrue(userAccountService.checkIfUsernameExists(username));
+        verify(userAccountRepo, times(1)).existsByUsername(username);
 
     }
 
     @Test
-    void testUsernameTaken(){
+    @DisplayName("Test if username is available")
+    void testUsernameAvailable(){
+        String username = "newUser";
+        when(userAccountRepo.existsByUsername(username)).thenReturn(false);
 
+        assertFalse(userAccountService.checkIfUsernameExists(username));
+        verify(userAccountRepo, times(1)).existsByUsername(username);
     }
 
     @Test
@@ -72,9 +86,6 @@ public class UserAccountServiceTest {
 
     @Test
     void testInvalidDateFormat(){
-
+        //ToDo: Format date time properly such that only date without time is stored in DB
     }
-
-
-
 }

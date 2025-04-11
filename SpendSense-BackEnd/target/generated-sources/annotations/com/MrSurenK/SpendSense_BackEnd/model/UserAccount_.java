@@ -18,9 +18,9 @@ public abstract class UserAccount_ {
 	public static final String PASSWORD = "password";
 	public static final String DATE_OF_BIRTH = "dateOfBirth";
 	public static final String ID = "id";
-	public static final String USER_NAME = "userName";
 	public static final String TRANSACTIONS = "transactions";
 	public static final String EMAIL = "email";
+	public static final String USERNAME = "username";
 
 	
 	/**
@@ -54,11 +54,6 @@ public abstract class UserAccount_ {
 	public static volatile SingularAttribute<UserAccount, Integer> id;
 	
 	/**
-	 * @see com.MrSurenK.SpendSense_BackEnd.model.UserAccount#userName
-	 **/
-	public static volatile SingularAttribute<UserAccount, String> userName;
-	
-	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.UserAccount#transactions
 	 **/
 	public static volatile SetAttribute<UserAccount, Transaction> transactions;
@@ -72,6 +67,11 @@ public abstract class UserAccount_ {
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.UserAccount#email
 	 **/
 	public static volatile SingularAttribute<UserAccount, String> email;
+	
+	/**
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.UserAccount#username
+	 **/
+	public static volatile SingularAttribute<UserAccount, String> username;
 
 }
 

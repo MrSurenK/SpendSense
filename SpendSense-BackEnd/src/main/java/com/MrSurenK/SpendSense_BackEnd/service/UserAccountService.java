@@ -19,33 +19,28 @@ public class UserAccountService {
 		this.userAccountRepo = userAccountRepo;
 	}
 
-	public void createAccount(UserSignUpDto userSignUpDto) {
-		if (!checkIfAccountExsits(userSignUpDto)) {
-			// Map fields to user account
-			userAccount = new UserAccount();
-			userAccount.setEmail(userSignUpDto.getEmail());
-			userAccount.setUserName(userSignUpDto.getUserName());
-			userAccount.setFirstName(userSignUpDto.getFirstName());
-			userAccount.setLastName(userSignUpDto.getLastName());
-			userAccount.setDateOfBirth(userSignUpDto.getDob());
-			userAccount.setPassword(userSignUpDto.getPassword());
-		}
+//	public void createAccount(UserSignUpDto userSignUpDto) {
+//		if (!checkIfAccountExsits(userSignUpDto)) {
+//			// Map fields to user account
+//			userAccount = new UserAccount();
+//			userAccount.setEmail(userSignUpDto.getEmail());
+//			userAccount.setUserName(userSignUpDto.getUserName());
+//			userAccount.setFirstName(userSignUpDto.getFirstName());
+//			userAccount.setLastName(userSignUpDto.getLastName());
+//			userAccount.setDateOfBirth(userSignUpDto.getDob());
+//			userAccount.setPassword(userSignUpDto.getPassword());
+//		}
+//
+//		userAccountRepo.save(userAccount);
+//	}
 
-		userAccountRepo.save(userAccount);
+	//--- Form validations ---
+	public boolean checkIfAccountExsits(String email) {
+		return userAccountRepo.existsByEmail(email);
 	}
 
-	public boolean checkIfAccountExsits(UserSignUpDto userSignUpDto) {
-		if (userAccountRepo.existsByEmail(userSignUpDto.getEmail())){
-			throw new EmailAlreadyExistsException("Account already exists", userSignUpDto.getEmail());
-		} else {
-			return false;
-		}
-	}
-
-	public boolean checkIfUsernameExists() {
-		return true;
-		// ToDo: Check if username exits in db and handle exceptions so that client will
-		// be able to know on front end
+	public boolean checkIfUsernameExists(String username) {
+		return userAccountRepo.existsByUsername(username);
 	}
 
 }

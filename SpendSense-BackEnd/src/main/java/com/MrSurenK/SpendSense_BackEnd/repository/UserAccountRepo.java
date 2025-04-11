@@ -9,10 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserAccountRepo extends JpaRepository<UserAccount,Integer> {
 
-
-    @Query(value = "SELECT EXISTS(SELECT 1 FROM user_account WHERE username=:username)",nativeQuery = true)
-    int existsByUsername(String username);
-
     boolean existsByEmail(String email);
+    boolean existsByUsername(String userName);
 
 }

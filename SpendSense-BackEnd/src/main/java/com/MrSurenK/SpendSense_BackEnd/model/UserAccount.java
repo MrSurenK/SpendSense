@@ -2,6 +2,7 @@ package com.MrSurenK.SpendSense_BackEnd.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,7 +27,7 @@ public class UserAccount {
 	private String email;
 
 	@Basic(optional = false)
-	private String userName; // Must be unique in db
+	private String username; // Must be unique in db
 
 	@Basic(optional = false)
 	private String firstName;
@@ -36,7 +37,7 @@ public class UserAccount {
 
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate dateOfBirth;
+	private Date dateOfBirth;
 
 	@Basic(optional = false)
 	private String password; // Encrypt password before storing in entity

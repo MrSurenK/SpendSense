@@ -1,6 +1,7 @@
 package com.MrSurenK.SpendSense_BackEnd.dto;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,7 +15,7 @@ import lombok.Data;
 public class UserSignUpDto {
 
 	@Email(regexp = "^(?!.*\\.\\.)[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\\.[a-z0-9-]+)*\\.[a-z]{2,}$", message = "Please input a valid email")
-	@NotBlank(message = "Please provide an email")
+	@NotBlank(message = "Please provide a valid email")
 	private String email;
 
 	@NotBlank(message = "Please provide a username")
@@ -27,7 +28,7 @@ public class UserSignUpDto {
 	private String lastName;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate dob;
+	private Date dob;
 
 	@NotBlank(message = "Password Required")
 	@Size(min = 8, message = "Password should be at least 8 characters long")
