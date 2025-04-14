@@ -1,16 +1,15 @@
 package com.MrSurenK.SpendSense_BackEnd.service_test;
 
-import com.MrSurenK.SpendSense_BackEnd.Exception.EmailAlreadyExistsException;
 import com.MrSurenK.SpendSense_BackEnd.dto.UserSignUpDto;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import com.MrSurenK.SpendSense_BackEnd.service.UserAccountService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -24,7 +23,6 @@ public class UserAccountServiceTest {
 
     @InjectMocks
     private UserAccountService userAccountService;
-
 
     @Test
     @DisplayName("Test user sign-up if email account exists")
@@ -69,23 +67,59 @@ public class UserAccountServiceTest {
         verify(userAccountRepo, times(1)).existsByUsername(username);
     }
 
-    @Test
-    void testUserAccountCreated(){
 
+    @Nested
+    @DisplayName("When a user fills up the sign up form")
+    class TestAccountCreation {
+
+        UserSignUpDto userSignUpDto;
+        Map<String, String> json;
+
+        @BeforeEach
+        void setUp(){
+            String email = "test@gmail.com";
+            String username = "newUser";
+            String firstName = "firstName";
+            String lastName = "lastName";
+            String dob = "01-01-2025";
+            String password = "pass";
+
+
+            userSignUpDto = new UserSignUpDto();
+            json.put("email", email);
+            json.put("username",username);
+            json.put("firstName", firstName);
+            json.put("lastName",lastName);
+            json.put("dob",dob);
+            json.put("password",password);
+        }
+
+        @Test
+        @DisplayName("if he filled all the fields accordingly, he should have sucesssfully created an account")
+        void testUserAccountCreated(){
+
+
+        }
+
+        @Test
+        @DisplayName("If he did not fill any field then an exception should be thrown")
+        void testUserAccountCreationFail(){
+
+        }
+
+        @Test
+        @DisplayName("If he did not fill in an acceptable email format then an exception should be thrown")
+        void testUserInvalidEmail(){
+
+        }
+
+        @Test
+        @DisplayName("If the date format he gave is incorrect an exception should be thrown")
+        void testInvalidDateFormat(){
+            String newDate = "2025-01-01";
+
+
+        }
     }
 
-    @Test
-    void testUserAccountCreationFail(){
-
-    }
-
-    @Test
-    void testUserInvalidEmail(){
-
-    }
-
-    @Test
-    void testInvalidDateFormat(){
-        //ToDo: Format date time properly such that only date without time is stored in DB
-    }
 }

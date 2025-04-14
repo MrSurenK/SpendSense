@@ -1,6 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
-import com.MrSurenK.SpendSense_BackEnd.Exception.EmailAlreadyExistsException;
+import com.MrSurenK.SpendSense_BackEnd.Exception.AccountNotCreatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,20 +19,27 @@ public class UserAccountService {
 		this.userAccountRepo = userAccountRepo;
 	}
 
-//	public void createAccount(UserSignUpDto userSignUpDto) {
-//		if (!checkIfAccountExsits(userSignUpDto)) {
-//			// Map fields to user account
-//			userAccount = new UserAccount();
-//			userAccount.setEmail(userSignUpDto.getEmail());
-//			userAccount.setUserName(userSignUpDto.getUserName());
-//			userAccount.setFirstName(userSignUpDto.getFirstName());
-//			userAccount.setLastName(userSignUpDto.getLastName());
-//			userAccount.setDateOfBirth(userSignUpDto.getDob());
-//			userAccount.setPassword(userSignUpDto.getPassword());
-//		}
-//
-//		userAccountRepo.save(userAccount);
-//	}
+	public void createAccount(UserSignUpDto userSignUpDto) {
+
+		try {
+			if (!checkIfAccountExsits(userSignUpDto.getEmail()) && !checkIfUsernameExists(userSignUpDto.getUserName())) {
+				// Map fields to user account
+				userAccount = new UserAccount();
+				userAccount.setEmail(userSignUpDto.getEmail());
+				userAccount.setUsername(userSignUpDto.getUserName());
+				userAccount.setFirstName(userSignUpDto.getFirstName());
+				userAccount.setLastName(userSignUpDto.getLastName());
+				userAccount.setDateOfBirth(userSignUpDto.getDob());
+				userAccount.setPassword(userSignUpDto.getPassword());
+			}
+
+			userAccountRepo.save(userAccount);
+		} catch (AccountNotCreatedException e) {
+			if(!checkIfAccountExsits(userSignUpDto.getEmail())){
+				throw new AccountNotCreatedException("Email already in use", userAccount.getEmail())
+			}
+		}
+	}
 
 	//--- Form validations ---
 	public boolean checkIfAccountExsits(String email) {

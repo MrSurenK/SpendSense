@@ -27,8 +27,8 @@ public class UserSignUpDto {
 	@NotBlank(message = "Please provide a last name")
 	private String lastName;
 
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date dob;
+	@JsonFormat(pattern = "dd-MM-yyyy")
+	private LocalDate dob;
 
 	@NotBlank(message = "Password Required")
 	@Size(min = 8, message = "Password should be at least 8 characters long")

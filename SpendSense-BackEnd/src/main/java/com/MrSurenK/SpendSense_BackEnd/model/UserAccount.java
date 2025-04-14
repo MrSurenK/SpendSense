@@ -36,8 +36,8 @@ public class UserAccount {
 	private String lastName;
 
 
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date dateOfBirth;
+	@JsonFormat(pattern = "dd-MM-yyyy")
+	private LocalDate dateOfBirth;
 
 	@Basic(optional = false)
 	private String password; // Encrypt password before storing in entity
