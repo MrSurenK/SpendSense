@@ -12,5 +12,15 @@ public class AccountNotCreatedException extends RuntimeException{
         this.EMAIL = email;
         this.USERNAME = username;
     }
+
+
+    public static AccountNotCreatedException emailError(String message, String email){
+        return new AccountNotCreatedException(message, email, null);
+    }
+
+
+    public static AccountNotCreatedException userNameError(String message, String username){
+        return new AccountNotCreatedException(message, null, username);
+    }
 //ToDo: Write an exception for it any of the fields are not accoridng to validation
 }

@@ -1,19 +1,27 @@
 package com.MrSurenK.SpendSense_BackEnd.service_test;
 
 import com.MrSurenK.SpendSense_BackEnd.dto.UserSignUpDto;
+import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import com.MrSurenK.SpendSense_BackEnd.service.UserAccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Test User Account Service Layer")
 public class UserAccountServiceTest {
@@ -74,6 +82,7 @@ public class UserAccountServiceTest {
 
         UserSignUpDto userSignUpDto;
         Map<String, String> json;
+        UserAccount userAccount;
 
         @BeforeEach
         void setUp(){
@@ -82,22 +91,44 @@ public class UserAccountServiceTest {
             String firstName = "firstName";
             String lastName = "lastName";
             String dob = "01-01-2025";
+            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate dateTime = null;
+            try {
+                dateTime = LocalDate.parse(dob, pattern);
+                System.out.println(dateTime);
+            } catch (DateTimeParseException e) {
+                // DateTimeParseException - Text '2019-nov-12' could not be parsed at index 5
+                log.error("e: ", e);
+                // Exception handling message/mechanism/logging as per company standard
+            }
             String password = "pass";
 
-
             userSignUpDto = new UserSignUpDto();
-            json.put("email", email);
-            json.put("username",username);
-            json.put("firstName", firstName);
-            json.put("lastName",lastName);
-            json.put("dob",dob);
-            json.put("password",password);
+            userSignUpDto.setEmail(email);
+            userSignUpDto.setUserName(username);
+            userSignUpDto.setFirstName(firstName);
+            userSignUpDto.setLastName(lastName);
+            userSignUpDto.setDob(dateTime);
+            userSignUpDto.setPassword(password);
         }
 
         @Test
         @DisplayName("if he filled all the fields accordingly, he should have sucesssfully created an account")
         void testUserAccountCreated(){
 
+
+            when(userAccountRepo.save(userAccount)).thenReturn(userAccount);
+            when(userAccountRepo.existsByEmail(userSignUpDto.getEmail())).thenReturn(false);
+            when(userAccountRepo.existsByUsername(userSignUpDto.getUserName())).thenReturn(false);
+
+            userAccountService.createAccount(userSignUpDto);
+
+            assertEquals(userAccount.getEmail(),userSignUpDto.getEmail());
+            assertEquals(userAccount.getUsername(), userSignUpDto.getUserName());
+            assertEquals(userAccount.getFirstName(),userSignUpDto.getFirstName());
+            assertEquals(userAccount.getLastName(),userSignUpDto.getLastName());
+            assertEquals(userAccount.getDateOfBirth(),userSignUpDto.getDob());
+            assertEquals(userAccount.getPassword(),userSignUpDto.getPassword());
 
         }
 

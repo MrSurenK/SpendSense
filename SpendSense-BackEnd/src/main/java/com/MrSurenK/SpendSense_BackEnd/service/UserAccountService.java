@@ -21,24 +21,31 @@ public class UserAccountService {
 
 	public void createAccount(UserSignUpDto userSignUpDto) {
 
-		try {
-			if (!checkIfAccountExsits(userSignUpDto.getEmail()) && !checkIfUsernameExists(userSignUpDto.getUserName())) {
-				// Map fields to user account
-				userAccount = new UserAccount();
-				userAccount.setEmail(userSignUpDto.getEmail());
-				userAccount.setUsername(userSignUpDto.getUserName());
-				userAccount.setFirstName(userSignUpDto.getFirstName());
-				userAccount.setLastName(userSignUpDto.getLastName());
-				userAccount.setDateOfBirth(userSignUpDto.getDob());
-				userAccount.setPassword(userSignUpDto.getPassword());
-			}
+		String email = userSignUpDto.getEmail();
+		String username = userSignUpDto.getUserName();
 
-			userAccountRepo.save(userAccount);
-		} catch (AccountNotCreatedException e) {
-			if(!checkIfAccountExsits(userSignUpDto.getEmail())){
-				throw new AccountNotCreatedException("Email already in use", userAccount.getEmail())
-			}
+
+		if(checkIfAccountExsits(email)){
+			throw AccountNotCreatedException.emailError("Email already in use", email);
 		}
+
+		if(checkIfUsernameExists(username)){
+			throw AccountNotCreatedException.userNameError("Username already exists", username);
+		}
+
+
+		// Map fields to user account
+		userAccount = new UserAccount();
+		userAccount.setEmail(email);
+		userAccount.setUsername(username);
+		userAccount.setFirstName(userSignUpDto.getFirstName());
+		userAccount.setLastName(userSignUpDto.getLastName());
+		userAccount.setDateOfBirth(userSignUpDto.getDob());
+		userAccount.setPassword(userSignUpDto.getPassword());
+
+
+		userAccountRepo.save(userAccount);
+
 	}
 
 	//--- Form validations ---
