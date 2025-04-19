@@ -1,6 +1,5 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
-import com.MrSurenK.SpendSense_BackEnd.Exception.AccountNotCreatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +23,13 @@ public class UserAccountService {
 		String email = userSignUpDto.getEmail();
 		String username = userSignUpDto.getUserName();
 
-
-		if(checkIfAccountExsits(email)){
-			throw AccountNotCreatedException.emailError("Email already in use", email);
+		if(checkIfEmailExsits(email)){
+			throw new RuntimeException("Email already exists: " + email);
 		}
 
 		if(checkIfUsernameExists(username)){
-			throw AccountNotCreatedException.userNameError("Username already exists", username);
+			throw new RuntimeException("Username already exists: " + username);
 		}
-
 
 		// Map fields to user account
 		userAccount = new UserAccount();
@@ -43,13 +40,12 @@ public class UserAccountService {
 		userAccount.setDateOfBirth(userSignUpDto.getDob());
 		userAccount.setPassword(userSignUpDto.getPassword());
 
-
-		userAccountRepo.save(userAccount);
+		userAccountRepo.save(userAccount); //Will throw runtime exceptions, no need to catch exceptions
 
 	}
 
 	//--- Form validations ---
-	public boolean checkIfAccountExsits(String email) {
+	public boolean checkIfEmailExsits(String email) {
 		return userAccountRepo.existsByEmail(email);
 	}
 

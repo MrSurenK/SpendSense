@@ -6,12 +6,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Basic;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -24,9 +19,11 @@ public class UserAccount {
 	private int id;
 
 	@Basic(optional = false)
+	@Column(unique = true)
 	private String email;
 
 	@Basic(optional = false)
+	@Column(unique = true)
 	private String username; // Must be unique in db
 
 	@Basic(optional = false)
@@ -34,7 +31,6 @@ public class UserAccount {
 
 	@Basic(optional = false)
 	private String lastName;
-
 
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate dateOfBirth;
