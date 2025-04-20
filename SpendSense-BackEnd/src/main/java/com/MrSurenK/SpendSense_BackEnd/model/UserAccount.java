@@ -9,10 +9,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Data
 @Entity
-public class UserAccount {
+public class UserAccount extends UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,4 +45,6 @@ public class UserAccount {
 
 	@OneToMany(mappedBy = Transaction_.USER_ACCOUNT)
 	Set<Transaction> transactions;
+
+
 }
