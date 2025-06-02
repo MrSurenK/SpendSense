@@ -2,19 +2,22 @@ package com.MrSurenK.SpendSense_BackEnd.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Data
 @Entity
-public class UserAccount extends UserDetails {
+public class UserAccount implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,5 +49,19 @@ public class UserAccount extends UserDetails {
 	@OneToMany(mappedBy = Transaction_.USER_ACCOUNT)
 	Set<Transaction> transactions;
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of();
+	}
+
+	@Override
+	public String getPassword(){
+		return this.password;
+	}
+
+	@Override
+	public String getUsername(){
+		return this.username;
+	}
 
 }
