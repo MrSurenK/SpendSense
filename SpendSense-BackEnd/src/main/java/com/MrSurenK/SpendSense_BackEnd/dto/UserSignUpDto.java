@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 public class UserSignUpDto {
 
-	@Email(regexp = "^(?!.*\\.\\.)[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\\.[a-z0-9-]+)*\\.[a-z]{2,}$", message = "Please input a valid email")
+	@Email(regexp = "^(?!.*\\.\\.)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$", message = "Please input a valid email")
 	@NotBlank(message = "Please provide a valid email")
 	private String email;
 

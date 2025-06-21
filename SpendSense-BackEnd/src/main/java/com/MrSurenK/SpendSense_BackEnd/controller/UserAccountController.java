@@ -57,7 +57,7 @@ public class UserAccountController {
     }
 
     //Throw 400 Bad Request if server not able to process request
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     public ResponseEntity newAccount(@Valid @RequestBody UserSignUpDto userSignUpDto){
         System.out.println(userSignUpDto);
         userAccountService.createAccount(userSignUpDto);
