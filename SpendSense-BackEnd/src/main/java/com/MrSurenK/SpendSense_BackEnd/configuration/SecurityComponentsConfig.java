@@ -24,7 +24,7 @@ public class SecurityComponentsConfig {
     //Define implementation logic when functional interface is called in application
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> userAccountRepo.findByEmail(username)
+        return username -> userAccountRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
