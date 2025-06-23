@@ -30,7 +30,7 @@ public class EndPointConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        //Spring Security 6 onwards has deprecated fluetn API style, use lambda as shown below
+        //Spring Security 6 onwards has deprecated fluent API style, use lambda as shown below
         http
                 .csrf(AbstractHttpConfigurer::disable) //JWT is stateless and does not use any cookie for authentication
                 .cors(Customizer.withDefaults()) //Enable cors configuration
@@ -41,7 +41,7 @@ public class EndPointConfig {
                 .sessionManagement((sessionManagement)->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //JWT is stateless, do not require sessions
                 .authenticationProvider(authenticationProvider) //Previously configured bean to instantiate DaoAuthenicationProvider
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) //Add custom JWTFilter before UsernamePassword filter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); //Add custom JWTFilter before UsernamePassword filter
 
         return http.build(); //Build and return the SecurityFilterChain object after setting all the configurations above
     }
