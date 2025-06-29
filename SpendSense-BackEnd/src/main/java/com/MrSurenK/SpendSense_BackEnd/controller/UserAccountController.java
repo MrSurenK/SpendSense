@@ -1,7 +1,11 @@
 package com.MrSurenK.SpendSense_BackEnd.controller;
 
+import com.MrSurenK.SpendSense_BackEnd.dto.LoginDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.LoginResponse;
 import com.MrSurenK.SpendSense_BackEnd.dto.UserSignUpDto;
+import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
+import com.MrSurenK.SpendSense_BackEnd.service.JwtService;
 import com.MrSurenK.SpendSense_BackEnd.service.UserAccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +20,23 @@ import java.util.Map;
 
 @RestController
 public class UserAccountController {
-
-    @Autowired
-    public UserAccountController(UserAccountRepo userAccountRepo,
-                                 UserAccountService userAccountService
-                                 ){
-        this.userAccountRepo = userAccountRepo;
-        this.userAccountService = userAccountService;
-    }
-
     UserAccountRepo userAccountRepo;
 
     UserAccountService userAccountService;
 
     UserSignUpDto userSignUpDto;
+
+    private final JwtService jwtService;
+
+    public UserAccountController(UserAccountRepo userAccountRepo,
+                                 UserAccountService userAccountService,
+                                 JwtService jwtService
+                                 ){
+        this.userAccountRepo = userAccountRepo;
+        this.userAccountService = userAccountService;
+        this.jwtService = jwtService;
+    }
+
 
     @PostMapping("/checkEmail")
     public ResponseEntity<Map<String,Object>> checkEmail(@RequestBody Map<String,String> request){
@@ -64,4 +71,14 @@ public class UserAccountController {
         return ResponseEntity.status(HttpStatus.OK).body("Account successfully created");
     }
 
+    //Log user in
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDto logindto){
+        UserAccount authenticatedUser = userAccountService.authenticate(logindto);
+
+        String jwtToken = jwtService.generateToken(authenticatedUser);
+
+        LoginResponse loginResponse = new LoginResponse();
+
+        return ResponseEntity.ok(loginResponse);
+    }
 }

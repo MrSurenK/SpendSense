@@ -55,7 +55,7 @@ public class EndPointConfig {
         corsConfiguration.setAllowedMethods(List.of("Authorization","Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/",corsConfiguration);
+        source.registerCorsConfiguration("/**",corsConfiguration);
 
         return source;
     }
