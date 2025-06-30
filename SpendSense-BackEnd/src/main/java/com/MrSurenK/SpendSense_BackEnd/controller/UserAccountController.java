@@ -72,12 +72,15 @@ public class UserAccountController {
     }
 
     //Log user in
+    @PostMapping("/auth/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDto logindto){
         UserAccount authenticatedUser = userAccountService.authenticate(logindto);
 
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setToken(jwtToken);
+        loginResponse.setExpiresIn(jwtService.getJwtExpiration());
 
         return ResponseEntity.ok(loginResponse);
     }
