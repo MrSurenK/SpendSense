@@ -37,7 +37,7 @@ public class EndPointConfig {
                 .authorizeHttpRequests((authorizeHttpRequests)->
                       authorizeHttpRequests
                               .requestMatchers("/auth/**","/checkEmail","checkUsername").permitAll() //These endpoints do not need authentication
-                              .anyRequest().permitAll()) //All other endpoint need to be authenticated
+                              .anyRequest().authenticated()) //All other endpoint need to be authenticated
                 .sessionManagement((sessionManagement)->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //JWT is stateless, do not require sessions
                 .authenticationProvider(authenticationProvider) //Previously configured bean to instantiate DaoAuthenicationProvider

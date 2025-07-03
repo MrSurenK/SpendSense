@@ -11,6 +11,9 @@ import com.MrSurenK.SpendSense_BackEnd.dto.UserSignUpDto;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserAccountService {
 
@@ -72,6 +75,13 @@ public class UserAccountService {
 		);
 
 		return userAccountRepo.findByUsername(input.getUsername()).orElseThrow();
+	}
+
+	//Get all user service (For testing JWT protected endpoint)
+	public List<UserAccount> allUsers(){
+
+        List<UserAccount> users = new ArrayList<>(userAccountRepo.findAll());
+		return users;
 	}
 
 }
