@@ -1,5 +1,8 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
+import com.MrSurenK.SpendSense_BackEnd.model.RefreshToken;
+import com.MrSurenK.SpendSense_BackEnd.repository.RefreshTokenRepo;
+import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -8,15 +11,19 @@ import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
+
 
 @Getter
 @Service
@@ -30,6 +37,17 @@ public class JwtService {
 
     @Value("${security.jwt.refresh-expiration}")
     private long refreshExpiration;
+
+    private UserAccountRepo userAccountRepo;
+
+    private RefreshTokenRepo refreshTokenRepo;
+
+    public JwtService(UserAccountRepo userAccountRepo, RefreshTokenRepo refreshTokenRepo){
+        this.userAccountRepo = userAccountRepo;
+        this.refreshTokenRepo = refreshTokenRepo;
+    }
+
+    //JWT Access Token Methods
 
     public String extractUsername(String token){
         return extractClaim(token, Claims::getSubject);
@@ -96,11 +114,16 @@ public class JwtService {
     }
 
 
+    //JWT Refresh Token Methods
+    public RefreshToken createNewRefreshToken(Integer userId){
+        RefreshToken token = new RefreshToken();
+        token.setUserAccount(userAccountRepo.findById(userId).get());
+        token.setExpiryDate(Instant.now().plusMillis(refreshExpiration));
+        token.setRefreshToken(UUID.randomUUID().toString());
+        return refreshTokenRepo.save(token);
+    }
 
-
-
-
-
-
-
+    public boolean isRefreshTokenExpired(RefreshToken token){
+        return token.getExpiryDate().isBefore(Instant.now());
+    }
 }

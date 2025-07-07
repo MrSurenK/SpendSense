@@ -23,7 +23,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    //ToDo: Refactor http exceptions to be clearner and more specofic. Only use Exception.class for catch-all
+    //ToDo: Refactor http exceptions to be clearer and more specific. Only use Exception.class for catch-all
 
     //Handle Validation errors(DTO @Valid)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -92,7 +92,7 @@ public class GlobalExceptionHandler {
         }
 
         else if (exception instanceof ExpiredJwtException) {
-            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
             errorDetail.setProperty("description", "The JWT token has expired");
         }
 
@@ -111,19 +111,4 @@ public class GlobalExceptionHandler {
         return errorDetail;
 
      }
-
-
-
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<Map<String, String>> handleGenericExceptions(Exception ex){
-//        Map<String, String> error = new HashMap<>();
-//        error.put("message","Something went wrong: " + ex.getMessage());
-//
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-//    }
-
-
-
-
-
 }
