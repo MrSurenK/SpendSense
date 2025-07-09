@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,14 +25,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final RedisTemplate<String, String> redisTemplate;
 
     //Inject dependencies in constructor
     public JwtAuthenticationFilter(JwtService jwtService,
                                    UserDetailsService userDetailsService,
-                                   HandlerExceptionResolver handlerExceptionResolver){
+                                   HandlerExceptionResolver handlerExceptionResolver,
+                                   RedisTemplate<String,String> redisTemplate){
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.handlerExceptionResolver = handlerExceptionResolver;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -53,6 +57,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             //Get jwt from header and from it get username to pass to usernamePasswordAuthenticationToken
             final String jwtToken = authHeader.substring(7);
+
+            //Check if String is blacklisted and if so return back out of filter and return unauthorized response
+            if(redisTemplate.hasKey("blacklist:" + jwtToken)){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Access token has been revoked");
+                return;
+            }
+
             final String username = jwtService.extractUsername(jwtToken);
 
             //Check if authentication object is already stored in security context, if so we do not want to overwrite

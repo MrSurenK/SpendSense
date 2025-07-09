@@ -1,8 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.controller;
 
-import com.MrSurenK.SpendSense_BackEnd.dto.LoginDto;
-import com.MrSurenK.SpendSense_BackEnd.dto.LoginResponse;
-import com.MrSurenK.SpendSense_BackEnd.dto.UserSignUpDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.*;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import com.MrSurenK.SpendSense_BackEnd.service.JwtService;
@@ -11,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +24,6 @@ import java.util.Map;
 
 @RestController
 public class UserAccountController {
-    UserAccountRepo userAccountRepo;
 
     UserAccountService userAccountService;
 
@@ -32,11 +31,11 @@ public class UserAccountController {
 
     private final JwtService jwtService;
 
-    public UserAccountController(UserAccountRepo userAccountRepo,
+    public UserAccountController(
                                  UserAccountService userAccountService,
                                  JwtService jwtService
                                  ){
-        this.userAccountRepo = userAccountRepo;
+
         this.userAccountService = userAccountService;
         this.jwtService = jwtService;
     }
@@ -80,18 +79,49 @@ public class UserAccountController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDto logindto){
         UserAccount authenticatedUser = userAccountService.authenticate(logindto);
 
+        //if login was successful then generate refresh token and JWT access token
         String jwtToken = jwtService.generateToken(authenticatedUser);
+        String refreshToken = jwtService.generateRefreshToken(logindto.getUsername());
 
+        //Useful meta data for front end dev
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);
-        loginResponse.setExpiresIn(jwtService.getJwtExpiration());
-
+        loginResponse.setRefreshToken(refreshToken);
+        loginResponse.setAccessTokenExpiresIn(jwtService.getJwtExpiration());
+        loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshExpiration());
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/auth/refreshToken")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshRequest request){
+        String username = jwtService.extractUsername(request.expiredAccessToken());
+
+        if(jwtService.validateRefreshToken(username, request.refreshToken())){
+            UserAccount userAccount = userAccountService.getUserAccount(username);
+            String newAccessToken = jwtService.generateToken(userAccount);
+
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setToken(newAccessToken);
+            loginResponse.setAccessTokenExpiresIn(jwtService.getJwtExpiration());
+            loginResponse.setRefreshToken(request.refreshToken());
+            loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshExpiration());
+
+            return ResponseEntity.ok(loginResponse); //Successfully logged in again
+        }
+        return ResponseEntity.status(401).build(); //Refresh token is not valid, get user to log in again
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logOut(@RequestBody LogOutRequest request){
+        //Get username from jwt claims
+        String username = jwtService.extractUsername(request.accessToken());
+        jwtService.deleteRefreshToken(request.accessToken());
+        return ResponseEntity.ok("Logged out successfully!");
     }
 
 
 
-
+    //For testing auth only: Remove endpoint before deploying!
     @GetMapping("/members")
     public ResponseEntity<List<UserAccount>>getUsers(){
         List<UserAccount> users = userAccountService.allUsers();

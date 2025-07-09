@@ -77,6 +77,11 @@ public class UserAccountService {
 		return userAccountRepo.findByUsername(input.getUsername()).orElseThrow();
 	}
 
+	//Generic method to get user account outside of login
+	public UserAccount getUserAccount(String username){
+		return userAccountRepo.findByUsername(username).orElseThrow();
+	}
+
 	//Get all user service (For testing JWT protected endpoint)
 	public List<UserAccount> allUsers(){
 

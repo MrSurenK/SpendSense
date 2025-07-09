@@ -7,5 +7,11 @@ public class LoginResponse {
 
     private String token;
 
-    private long expiresIn;
+    private long accessTokenExpiresIn;
+
+    private String refreshToken;
+
+    private long refreshTokenExpiresIn;
+
+
 }

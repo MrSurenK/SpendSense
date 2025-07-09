@@ -1,22 +1,18 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
-import com.MrSurenK.SpendSense_BackEnd.model.RefreshToken;
-import com.MrSurenK.SpendSense_BackEnd.repository.RefreshTokenRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,15 +32,15 @@ public class JwtService {
     private long jwtExpiration;
 
     @Value("${security.jwt.refresh-expiration}")
-    private long refreshExpiration;
+    private long refreshExpiration; //change it to days after testing it out
 
-    private UserAccountRepo userAccountRepo;
+    private final UserAccountRepo userAccountRepo;
 
-    private RefreshTokenRepo refreshTokenRepo;
+    private final RedisTemplate<String, String>  redisTemplate;
 
-    public JwtService(UserAccountRepo userAccountRepo, RefreshTokenRepo refreshTokenRepo){
+    public JwtService(UserAccountRepo userAccountRepo, RedisTemplate<String,String> redisTemplate){
         this.userAccountRepo = userAccountRepo;
-        this.refreshTokenRepo = refreshTokenRepo;
+        this.redisTemplate = redisTemplate;
     }
 
     //JWT Access Token Methods
@@ -113,17 +109,31 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    // --- Refresh token methods using Redis ---
 
-    //JWT Refresh Token Methods
-    public RefreshToken createNewRefreshToken(Integer userId){
-        RefreshToken token = new RefreshToken();
-        token.setUserAccount(userAccountRepo.findById(userId).get());
-        token.setExpiryDate(Instant.now().plusMillis(refreshExpiration));
-        token.setRefreshToken(UUID.randomUUID().toString());
-        return refreshTokenRepo.save(token);
+    //Generate Refresh Token
+    public String generateRefreshToken(String username){
+        String refreshToken = UUID.randomUUID().toString();
+        redisTemplate.opsForValue().set("refresh:" + username, refreshToken, Duration.ofMillis(refreshExpiration));
+        return refreshToken;
     }
 
-    public boolean isRefreshTokenExpired(RefreshToken token){
-        return token.getExpiryDate().isBefore(Instant.now());
+    //Validate refresh Tokens
+    public boolean validateRefreshToken(String username, String token){
+        String storedToken = redisTemplate.opsForValue().get("refresh:" + username);
+        return storedToken != null && storedToken.equals(token);
     }
+
+    //Invalidate RefreshTokens
+    public void deleteRefreshToken(String accessToken){
+        String username = extractUsername(accessToken);
+        redisTemplate.delete("refresh:" + username);
+        //If upon log out access token is still valid we want to blacklist it so that endpoints cannot be accessed directly
+        long expiry = extractExpiration(accessToken).getTime() - System.currentTimeMillis();
+        redisTemplate.opsForValue().set("blacklist: " + accessToken, "logout", Duration.ofMillis(expiry));
+    }
+
+
+
+
 }
