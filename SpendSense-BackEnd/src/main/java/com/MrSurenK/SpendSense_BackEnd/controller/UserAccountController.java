@@ -2,15 +2,12 @@ package com.MrSurenK.SpendSense_BackEnd.controller;
 
 import com.MrSurenK.SpendSense_BackEnd.dto.*;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
-import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import com.MrSurenK.SpendSense_BackEnd.service.JwtService;
 import com.MrSurenK.SpendSense_BackEnd.service.UserAccountService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -85,7 +82,7 @@ public class UserAccountController {
 
         //Useful meta data for front end dev
         LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken(jwtToken);
+        loginResponse.setAccessToken(jwtToken);
         loginResponse.setRefreshToken(refreshToken);
         loginResponse.setAccessTokenExpiresIn(jwtService.getJwtExpiration());
         loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshExpiration());
@@ -94,14 +91,15 @@ public class UserAccountController {
 
     @PostMapping("/auth/refreshToken")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshRequest request){
-        String username = jwtService.extractUsername(request.expiredAccessToken());
+
+        String username = jwtService.extractUsernameFromExpiredJWT(request.expiredAccessToken());
 
         if(jwtService.validateRefreshToken(username, request.refreshToken())){
             UserAccount userAccount = userAccountService.getUserAccount(username);
             String newAccessToken = jwtService.generateToken(userAccount);
 
             LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setToken(newAccessToken);
+            loginResponse.setAccessToken(newAccessToken);
             loginResponse.setAccessTokenExpiresIn(jwtService.getJwtExpiration());
             loginResponse.setRefreshToken(request.refreshToken());
             loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshExpiration());
@@ -112,11 +110,25 @@ public class UserAccountController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logOut(@RequestBody LogOutRequest request){
-        //Get username from jwt claims
-        String username = jwtService.extractUsername(request.accessToken());
-        jwtService.deleteRefreshToken(request.accessToken());
-        return ResponseEntity.ok("Logged out successfully!");
+    public ResponseEntity<?> logOut(HttpServletRequest request){
+//        //Get username from jwt claims
+//        String username = jwtService.extractUsername(request.accessToken());
+//        jwtService.deleteRefreshToken(request.accessToken());
+//        return ResponseEntity.ok("Logged out successfully!");
+        String authHeader = request.getHeader("Authorization");
+
+        if(authHeader != null && authHeader.startsWith("Bearer ")){
+            String token = authHeader.substring(7);
+
+            //Blacklist access token in redis and delete refresh token
+            jwtService.deleteRefreshTokenAndBlacklistAccessToken(token);
+
+            return ResponseEntity.ok("Logged out successfully");
+
+        }
+
+        return ResponseEntity.badRequest().body("Authorization header missing or invalid");
+
     }
 
 

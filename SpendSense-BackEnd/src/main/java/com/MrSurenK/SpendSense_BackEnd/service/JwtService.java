@@ -2,6 +2,7 @@ package com.MrSurenK.SpendSense_BackEnd.service;
 
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -125,13 +126,21 @@ public class JwtService {
     }
 
     //Invalidate RefreshTokens
-    public void deleteRefreshToken(String accessToken){
+    public void deleteRefreshTokenAndBlacklistAccessToken(String accessToken){
         String username = extractUsername(accessToken);
         redisTemplate.delete("refresh:" + username);
         //If upon log out access token is still valid we want to blacklist it so that endpoints cannot be accessed directly
         long expiry = extractExpiration(accessToken).getTime() - System.currentTimeMillis();
-        redisTemplate.opsForValue().set("blacklist: " + accessToken, "logout", Duration.ofMillis(expiry));
+        redisTemplate.opsForValue().set("blacklist:" + accessToken, "logout", Duration.ofMillis(expiry));
     }
+
+    public String extractUsernameFromExpiredJWT(String token) {
+    try {
+        return extractAllClaims(token).getSubject();
+    } catch (ExpiredJwtException e) {
+        return e.getClaims().getSubject(); // still safe to extract subject
+    }
+}
 
 
 

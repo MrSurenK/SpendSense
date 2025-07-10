@@ -38,6 +38,8 @@ public class EndPointConfig {
                       authorizeHttpRequests
                               .requestMatchers("/auth/**","/checkEmail","checkUsername").permitAll() //These endpoints do not need authentication
                               .anyRequest().authenticated()) //All other endpoint need to be authenticated
+                .formLogin(AbstractHttpConfigurer::disable) //Disable default Spring form login
+                .logout(AbstractHttpConfigurer::disable) // Disable default Spring form logout
                 .sessionManagement((sessionManagement)->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //JWT is stateless, do not require sessions
                 .authenticationProvider(authenticationProvider) //Previously configured bean to instantiate DaoAuthenicationProvider
