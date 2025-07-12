@@ -2,9 +2,11 @@ package com.MrSurenK.SpendSense_BackEnd.model;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.metamodel.EntityType;
+import jakarta.persistence.metamodel.ListAttribute;
 import jakarta.persistence.metamodel.SetAttribute;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
+import java.sql.Blob;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -16,8 +18,10 @@ public abstract class UserAccount_ {
 	public static final String LAST_NAME = "lastName";
 	public static final String LAST_LOGIN = "lastLogin";
 	public static final String PASSWORD = "password";
+	public static final String DISPLAY_PIC = "displayPic";
 	public static final String DATE_OF_BIRTH = "dateOfBirth";
 	public static final String ID = "id";
+	public static final String CATEGORIES = "categories";
 	public static final String TRANSACTIONS = "transactions";
 	public static final String EMAIL = "email";
 	public static final String USERNAME = "username";
@@ -44,6 +48,11 @@ public abstract class UserAccount_ {
 	public static volatile SingularAttribute<UserAccount, String> password;
 	
 	/**
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.UserAccount#displayPic
+	 **/
+	public static volatile SingularAttribute<UserAccount, Blob> displayPic;
+	
+	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.UserAccount#dateOfBirth
 	 **/
 	public static volatile SingularAttribute<UserAccount, LocalDate> dateOfBirth;
@@ -52,6 +61,11 @@ public abstract class UserAccount_ {
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.UserAccount#id
 	 **/
 	public static volatile SingularAttribute<UserAccount, Integer> id;
+	
+	/**
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.UserAccount#categories
+	 **/
+	public static volatile ListAttribute<UserAccount, Category> categories;
 	
 	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.UserAccount#transactions

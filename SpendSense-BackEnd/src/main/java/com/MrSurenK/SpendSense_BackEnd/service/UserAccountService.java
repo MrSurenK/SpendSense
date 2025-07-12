@@ -11,6 +11,7 @@ import com.MrSurenK.SpendSense_BackEnd.dto.UserSignUpDto;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,13 @@ public class UserAccountService {
 				)
 		);
 
-		return userAccountRepo.findByUsername(input.getUsername()).orElseThrow();
+		UserAccount user = userAccountRepo.findByUsername(input.getUsername()).orElseThrow();
+
+		user.setLastLogin(LocalDateTime.now()); //Update the last login in Db
+
+		userAccountRepo.save(user);
+
+		return user;
 	}
 
 	//Generic method to get user account outside of login

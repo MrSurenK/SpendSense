@@ -16,9 +16,9 @@ public abstract class Transaction_ {
 	public static final String AMOUNT = "amount";
 	public static final String RECURRING = "recurring";
 	public static final String USER_ACCOUNT = "userAccount";
+	public static final String ID = "id";
 	public static final String TRANSACTION_DATE = "transactionDate";
 	public static final String CATEGORY = "category";
-	public static final String TRANSACTION_ID = "transactionId";
 	public static final String REMARKS = "remarks";
 
 	
@@ -43,6 +43,11 @@ public abstract class Transaction_ {
 	public static volatile SingularAttribute<Transaction, UserAccount> userAccount;
 	
 	/**
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#id
+	 **/
+	public static volatile SingularAttribute<Transaction, UUID> id;
+	
+	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#transactionDate
 	 **/
 	public static volatile SingularAttribute<Transaction, LocalDate> transactionDate;
@@ -56,11 +61,6 @@ public abstract class Transaction_ {
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction
 	 **/
 	public static volatile EntityType<Transaction> class_;
-	
-	/**
-	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#transactionId
-	 **/
-	public static volatile SingularAttribute<Transaction, UUID> transactionId;
 	
 	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#remarks

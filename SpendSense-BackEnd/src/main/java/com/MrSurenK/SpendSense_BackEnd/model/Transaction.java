@@ -15,7 +15,7 @@ public class Transaction {
 
     @Id
     @GeneratedValue
-    private UUID transactionId;
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
