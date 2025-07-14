@@ -5,18 +5,23 @@ import jakarta.persistence.metamodel.EntityType;
 import jakarta.persistence.metamodel.SetAttribute;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
-import java.math.BigInteger;
 
 @StaticMetamodel(Category.class)
 @Generated("org.hibernate.processor.HibernateProcessor")
 public abstract class Category_ {
 
+	public static final String TRANSACTION_TYPE = "transactionType";
 	public static final String IS_DELETED = "isDeleted";
 	public static final String USER_ACCOUNT = "userAccount";
+	public static final String NAME = "name";
 	public static final String ID = "id";
-	public static final String TITLE = "title";
 	public static final String TRANSACTIONS = "transactions";
 
+	
+	/**
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.Category#transactionType
+	 **/
+	public static volatile SingularAttribute<Category, TransactionType> transactionType;
 	
 	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Category#isDeleted
@@ -29,14 +34,14 @@ public abstract class Category_ {
 	public static volatile SingularAttribute<Category, UserAccount> userAccount;
 	
 	/**
-	 * @see com.MrSurenK.SpendSense_BackEnd.model.Category#id
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.Category#name
 	 **/
-	public static volatile SingularAttribute<Category, BigInteger> id;
+	public static volatile SingularAttribute<Category, String> name;
 	
 	/**
-	 * @see com.MrSurenK.SpendSense_BackEnd.model.Category#title
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.Category#id
 	 **/
-	public static volatile SingularAttribute<Category, String> title;
+	public static volatile SingularAttribute<Category, Long> id;
 	
 	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Category#transactions
