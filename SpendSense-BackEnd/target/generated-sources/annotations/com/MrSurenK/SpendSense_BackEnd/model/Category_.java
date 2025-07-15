@@ -10,6 +10,7 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 @Generated("org.hibernate.processor.HibernateProcessor")
 public abstract class Category_ {
 
+	public static final String IS_SYSTEM = "isSystem";
 	public static final String TRANSACTION_TYPE = "transactionType";
 	public static final String IS_DELETED = "isDeleted";
 	public static final String USER_ACCOUNT = "userAccount";
@@ -17,6 +18,11 @@ public abstract class Category_ {
 	public static final String ID = "id";
 	public static final String TRANSACTIONS = "transactions";
 
+	
+	/**
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.Category#isSystem
+	 **/
+	public static volatile SingularAttribute<Category, Boolean> isSystem;
 	
 	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Category#transactionType

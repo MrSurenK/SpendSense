@@ -16,13 +16,18 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Basic(optional = false)
+
+    @Column(nullable = false)
     private String name;
 
     @ColumnDefault("false")
     private boolean isDeleted;
 
+    @ColumnDefault("false")
+    private boolean isSystem; //Indicator for default values
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TransactionType transactionType;
 
     @OneToMany(mappedBy = Transaction_.CATEGORY)

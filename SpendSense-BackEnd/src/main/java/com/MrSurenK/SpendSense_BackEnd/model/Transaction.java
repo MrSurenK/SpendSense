@@ -2,6 +2,7 @@ package com.MrSurenK.SpendSense_BackEnd.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,24 +18,26 @@ public class Transaction {
     @GeneratedValue
     private UUID id;
 
-    @Enumerated(EnumType.STRING)
-    private TransactionType transactionType;
 
-    @Basic(optional = false)
+    @Column(nullable = false)
     private BigDecimal amount;
 
     private String remarks;
 
-    private boolean recurring = false; //Default value of false in new instances
+    @ColumnDefault("false")
+    @Column(nullable = false)
+    private Boolean recurring;//Default value of false in new instances
 
-    @Basic(optional = false)
+
+    @Column(nullable = false)
     private LocalDate transactionDate;
 
-    @Basic(optional = false)
+
     @ManyToOne(fetch=LAZY)
     private UserAccount userAccount;
 
-    @Basic(optional = false)
+
+    @Column(nullable = false)
     @ManyToOne(fetch=LAZY)
     private Category category;
 

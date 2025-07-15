@@ -25,19 +25,19 @@ public class UserAccount implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Basic(optional = false)
+
 	@Column(unique = true, nullable = false)
 	private String email;
 
-	@Basic(optional = false)
+
 	@Column(unique = true,nullable = false)
 	private String username; // Must be unique in db
 
-	@Basic(optional = false)
+
 	@Column(nullable = false)
 	private String firstName;
 
-	@Basic(optional = false)
+
 	@Column(nullable = false)
 	private String lastName;
 
@@ -45,7 +45,7 @@ public class UserAccount implements UserDetails {
 	@Column(nullable = false)
 	private LocalDate dateOfBirth;
 
-	@Basic(optional = false)
+
 	@Column(nullable = false)
 	private String password; // Encrypt password before storing in entity
 
