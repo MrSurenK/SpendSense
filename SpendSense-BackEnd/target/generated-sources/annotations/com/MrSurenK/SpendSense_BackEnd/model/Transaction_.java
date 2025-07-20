@@ -12,7 +12,6 @@ import java.util.UUID;
 @Generated("org.hibernate.processor.HibernateProcessor")
 public abstract class Transaction_ {
 
-	public static final String TRANSACTION_TYPE = "transactionType";
 	public static final String AMOUNT = "amount";
 	public static final String RECURRING = "recurring";
 	public static final String USER_ACCOUNT = "userAccount";
@@ -21,11 +20,6 @@ public abstract class Transaction_ {
 	public static final String CATEGORY = "category";
 	public static final String REMARKS = "remarks";
 
-	
-	/**
-	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#transactionType
-	 **/
-	public static volatile SingularAttribute<Transaction, TransactionType> transactionType;
 	
 	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#amount

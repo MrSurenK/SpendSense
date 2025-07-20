@@ -2,6 +2,7 @@ package com.MrSurenK.SpendSense_BackEnd.service_test;
 
 import com.MrSurenK.SpendSense_BackEnd.dto.TransactionDto;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
+import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.CategoryRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.TransactionRepo;
@@ -14,7 +15,10 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,7 +28,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static io.lettuce.core.GeoArgs.Sort.desc;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -44,15 +50,15 @@ public class TransactionServiceTest {
     private TransactionService transactionService;
 
 
-
-
-
+    @Nested
     class TransactonCRUD {
 
          TransactionDto transactionDto;
 
-        @BeforeTestMethod
-        void fillDto(){
+
+        @Test
+        @DisplayName("Test functionality to add transaction")
+        void addTransaction(){
             transactionDto = new TransactionDto();
 
             BigDecimal amount = new BigDecimal("100.00");
@@ -67,9 +73,6 @@ public class TransactionServiceTest {
             transactionDto.setRecurring(false);
             transactionDto.setDate(date);
             transactionDto.setCategory(catObject);
-        }
-
-        void addTransaction(){
 
             UserAccount dummyAccount = new UserAccount();
             dummyAccount.setId(1);
@@ -80,9 +83,18 @@ public class TransactionServiceTest {
             when(userAccountRepo.findByUsername("testUser")).thenReturn(Optional.of(dummyAccount));
 
             transactionService.addItem(transactionDto,token);
+            ArgumentCaptor<Transaction> captor = ArgumentCaptor.forClass(Transaction.class);
 
+            verify(transactionRepo,times(1)).save(captor.capture());
 
+            Transaction transaction = captor.getValue();
 
+            assertEquals(transactionDto.getAmount(),transaction.getAmount());
+            assertEquals(transactionDto.getCategory(),transaction.getCategory());
+            assertEquals(transactionDto.getDate(),transaction.getTransactionDate());
+            assertEquals(transactionDto.getRecurring(),transaction.getRecurring());
+            assertEquals(transactionDto.getRemarks(),transaction.getRemarks());
+            assertEquals(dummyAccount,transaction.getUserAccount());
 
         }
 

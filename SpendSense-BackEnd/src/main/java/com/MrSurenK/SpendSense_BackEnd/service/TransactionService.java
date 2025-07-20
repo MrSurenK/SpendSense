@@ -29,7 +29,7 @@ public class TransactionService {
         newItem.setAmount(transactionDto.getAmount());
         newItem.setCategory(transactionDto.getCategory());
         newItem.setTransactionDate(transactionDto.getDate());
-        newItem.setRecurring(transactionDto.getRecurring() != null);
+        newItem.setRecurring(transactionDto.getRecurring() != null ? transactionDto.getRecurring(): false);
 
         //Get userAccount from jwt token
         String username = jwtService.extractUsername(token);
