@@ -1,16 +1,15 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
 import com.MrSurenK.SpendSense_BackEnd.dto.TransactionDto;
+import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.TransactionRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
-import io.jsonwebtoken.Claims;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigInteger;
 
 public class TransactionService {
 
@@ -52,13 +51,20 @@ public class TransactionService {
     public Page<Transaction> getAllTransactions(UserAccount user, Pageable page){
         //Get the user id from user account
         int userId = user.getId();
-        return transactionRepo.findByUserAccountId(userId,page);
+        return transactionRepo.findAllByUserAccountId(userId,page);
     }
+
+    public Page<Transaction>getByCategory(UserAccount user, Long catId, Pageable page){
+        int userId = user.getId();
+        return transactionRepo.findAllByCategoryIdAndUserAccountId(catId,userId,page);
+    }
+
 
     public void editTransaction(){
         //Get transaction that is being edited
         //Update new information in form
         //Save transaction
+
     }
 
     public void deleteTransaction(){

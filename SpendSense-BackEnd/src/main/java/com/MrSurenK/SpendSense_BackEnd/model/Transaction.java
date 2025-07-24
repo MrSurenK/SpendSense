@@ -6,6 +6,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -32,6 +33,8 @@ public class Transaction {
     @Column(nullable = false)
     private LocalDate transactionDate;
 
+    @Column(nullable = false)
+    private LocalDateTime lastUpdated;
 
     @ManyToOne(fetch=LAZY)
     private UserAccount userAccount;
