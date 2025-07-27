@@ -1,16 +1,21 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
-import com.MrSurenK.SpendSense_BackEnd.dto.TransactionDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionDto;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
+import com.MrSurenK.SpendSense_BackEnd.repository.CategoryRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.TransactionRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+@Service
 public class TransactionService {
 
 
@@ -20,50 +25,72 @@ public class TransactionService {
 
     private final JwtService jwtService;
 
-    public TransactionService(TransactionRepo transactionRepo, UserAccountRepo userAccountRepo, JwtService jwtService){
+    private final CategoryRepo categoryRepo;
+
+    public TransactionService(TransactionRepo transactionRepo, UserAccountRepo userAccountRepo, JwtService jwtService
+    ,CategoryRepo categoryRepo){
         this.transactionRepo = transactionRepo;
         this.userAccountRepo = userAccountRepo;
         this.jwtService = jwtService;
+        this.categoryRepo = categoryRepo;
     }
 
     //CRUD Functionality
 
-    public void addItem(TransactionDto transactionDto, String token
+    public Transaction addItem(TransactionDto transactionDto, UserAccount userAccount
                         ){
         Transaction newItem = new Transaction();
 
-        newItem.setAmount(transactionDto.getAmount());
-        newItem.setCategory(transactionDto.getCategory());
+        newItem.setAmount(transactionDto.getAmount().setScale(2, RoundingMode.HALF_UP));
+
+        Category cat = categoryRepo.getReferenceById(transactionDto.getCategoryId());
+        newItem.setCategory(cat);
         newItem.setTransactionDate(transactionDto.getDate());
         newItem.setRecurring(transactionDto.getRecurring() != null ? transactionDto.getRecurring(): false);
 
         //Get userAccount from jwt token
-        String username = jwtService.extractUsername(token);
-        UserAccount userAcc = userAccountRepo.findByUsername(username).orElseThrow();
-        newItem.setUserAccount(userAcc);
+
+        newItem.setUserAccount(userAccount);
 
         newItem.setRemarks(transactionDto.getRemarks());
 
+        newItem.setLastUpdated(LocalDateTime.now());
+
         transactionRepo.save(newItem);
+
+        return newItem;
     }
+
+    //Getting and sorting transactions by specific filters
 
     //Pass JWT token to extract username and get User Id and also Pageable object with page details in controller
-    public Page<Transaction> getAllTransactions(UserAccount user, Pageable page){
+    public Page<Transaction> getAllTransactions(UserAccount userAccount, Pageable page){
         //Get the user id from user account
-        int userId = user.getId();
-        return transactionRepo.findAllByUserAccountId(userId,page);
+        return transactionRepo.findAllByUserAccountId(userAccount,page);
     }
 
-    public Page<Transaction>getByCategory(UserAccount user, Long catId, Pageable page){
-        int userId = user.getId();
-        return transactionRepo.findAllByCategoryIdAndUserAccountId(catId,userId,page);
+    public Page<Transaction>getByCategoryFilter(UserAccount userAccount, Long catId, Pageable page){
+        return transactionRepo.findAllByCategoryIdAndUserAccountId(catId,userAccount,page);
     }
+
+    public Page<Transaction>getBetweenDatesFilter(LocalDate startDate, LocalDate endDate, UserAccount userAccount,
+                                                  Pageable page){
+        return transactionRepo.findAllByUserAccountIdAndTransactionDateBetween(startDate, endDate, userAccount, page);
+    }
+
+
+
+
+
+
+
 
 
     public void editTransaction(){
         //Get transaction that is being edited
         //Update new information in form
         //Save transaction
+
 
     }
 

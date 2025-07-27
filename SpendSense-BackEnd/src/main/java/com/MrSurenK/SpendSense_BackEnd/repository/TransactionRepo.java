@@ -14,10 +14,10 @@ import java.util.UUID;
 @Repository
 public interface TransactionRepo extends JpaRepository<Transaction, UUID> {
 
-    Page<Transaction> findAllByUserAccountId(Integer userId, Pageable page);
-    Page<Transaction>findAllByCategoryIdAndUserAccountId(Long catId, Integer userId, Pageable page);
-    Page<Transaction>findAllByUserAccountIdAndTransactionDate(UserAccount userAccount, Pageable page);
+    Page<Transaction> findAllByUserAccountId(UserAccount userAccount, Pageable page);
+    Page<Transaction>findAllByCategoryIdAndUserAccountId(Long catId, UserAccount userAccount, Pageable page);
     Page<Transaction> findAllByUserAccountIdAndTransactionDateBetween(LocalDate startDate, LocalDate endDate,
-                                                                   Integer userId, Pageable page);
+                                                                      UserAccount userAccount, Pageable page);
+
 
 }

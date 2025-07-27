@@ -1,13 +1,12 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
-import com.MrSurenK.SpendSense_BackEnd.dto.LoginDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.LoginDto;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.MrSurenK.SpendSense_BackEnd.dto.UserSignUpDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.UserSignUpDto;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 

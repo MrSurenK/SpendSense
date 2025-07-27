@@ -1,5 +1,7 @@
-package com.MrSurenK.SpendSense_BackEnd.model;
+package com.MrSurenK.SpendSense_BackEnd.dto.responseDto;
 
+import com.MrSurenK.SpendSense_BackEnd.model.Category;
+import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,34 +15,19 @@ import java.util.UUID;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Data
-@Entity
-public class Transaction {
+public class NewTransactionResponse {
 
-    @Id
-    @GeneratedValue
     private UUID id;
 
-    @Column(nullable = false)
     private BigDecimal amount;
 
     private String remarks;
 
-    @ColumnDefault("false")
-    @Column(nullable = false)
     private Boolean recurring;//Default value of false in new instances
 
-    @Column(nullable = false)
-    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate transactionDate;
 
-    @Column(nullable = false)
     private LocalDateTime lastUpdated;
 
-    @ManyToOne(fetch=LAZY)
-    private UserAccount userAccount;
-
-    @JoinColumn(nullable = false)
-    @ManyToOne(fetch=LAZY)
-    private Category category;
-
+    private String catName;
 }

@@ -1,9 +1,7 @@
-package com.MrSurenK.SpendSense_BackEnd.dto;
+package com.MrSurenK.SpendSense_BackEnd.dto.requestDto;
 
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class LoginDto {

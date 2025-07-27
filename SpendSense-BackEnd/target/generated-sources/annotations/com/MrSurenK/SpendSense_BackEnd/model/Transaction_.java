@@ -6,12 +6,14 @@ import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @StaticMetamodel(Transaction.class)
 @Generated("org.hibernate.processor.HibernateProcessor")
 public abstract class Transaction_ {
 
+	public static final String LAST_UPDATED = "lastUpdated";
 	public static final String AMOUNT = "amount";
 	public static final String RECURRING = "recurring";
 	public static final String USER_ACCOUNT = "userAccount";
@@ -20,6 +22,11 @@ public abstract class Transaction_ {
 	public static final String CATEGORY = "category";
 	public static final String REMARKS = "remarks";
 
+	
+	/**
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#lastUpdated
+	 **/
+	public static volatile SingularAttribute<Transaction, LocalDateTime> lastUpdated;
 	
 	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#amount

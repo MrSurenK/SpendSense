@@ -1,23 +1,19 @@
 package com.MrSurenK.SpendSense_BackEnd.service_test;
 
-import com.MrSurenK.SpendSense_BackEnd.dto.UserSignUpDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.UserSignUpDto;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import com.MrSurenK.SpendSense_BackEnd.service.UserAccountService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

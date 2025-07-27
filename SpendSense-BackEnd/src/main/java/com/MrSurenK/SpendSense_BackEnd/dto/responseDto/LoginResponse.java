@@ -1,4 +1,4 @@
-package com.MrSurenK.SpendSense_BackEnd.dto;
+package com.MrSurenK.SpendSense_BackEnd.dto.responseDto;
 
 import lombok.Data;
 

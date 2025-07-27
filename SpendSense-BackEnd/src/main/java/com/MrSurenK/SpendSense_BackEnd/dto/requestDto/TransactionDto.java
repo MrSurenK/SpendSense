@@ -1,6 +1,6 @@
-package com.MrSurenK.SpendSense_BackEnd.dto;
+package com.MrSurenK.SpendSense_BackEnd.dto.requestDto;
 
-import com.MrSurenK.SpendSense_BackEnd.model.Category;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -19,8 +19,9 @@ public class TransactionDto {
     private Boolean recurring;
 
     @NotNull(message = "Date must not be null")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
 
     @NotNull(message = "Category must not be null")
-    private Category category;
+    private Long categoryId;
 }

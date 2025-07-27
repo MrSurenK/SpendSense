@@ -1,10 +1,8 @@
-package com.MrSurenK.SpendSense_BackEnd.dto;
+package com.MrSurenK.SpendSense_BackEnd.dto.requestDto;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,9 @@
 package com.MrSurenK.SpendSense_BackEnd.controller;
 
-import com.MrSurenK.SpendSense_BackEnd.dto.*;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.LoginDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.RefreshRequest;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.UserSignUpDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.LoginResponse;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.service.JwtService;
 import com.MrSurenK.SpendSense_BackEnd.service.UserAccountService;
@@ -65,7 +68,7 @@ public class UserAccountController {
 
     //Throw 400 Bad Request if server not able to process request
     @PostMapping("/auth/register")
-    public ResponseEntity newAccount(@Valid @RequestBody UserSignUpDto userSignUpDto){
+    public ResponseEntity<String> newAccount(@Valid @RequestBody UserSignUpDto userSignUpDto){
         System.out.println(userSignUpDto);
         userAccountService.createAccount(userSignUpDto);
         return ResponseEntity.status(HttpStatus.OK).body("Account successfully created");
@@ -131,8 +134,6 @@ public class UserAccountController {
 
     }
 
-
-
     //For testing auth only: Remove endpoint before deploying!
     @GetMapping("/members")
     public ResponseEntity<List<UserAccount>>getUsers(){
@@ -140,9 +141,4 @@ public class UserAccountController {
 
         return ResponseEntity.ok(users);
     }
-
-
-
-
-
 }
