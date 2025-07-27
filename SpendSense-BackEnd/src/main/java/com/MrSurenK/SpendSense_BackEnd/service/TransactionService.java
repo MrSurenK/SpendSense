@@ -48,7 +48,7 @@ public class TransactionService {
         newItem.setTransactionDate(transactionDto.getDate());
         newItem.setRecurring(transactionDto.getRecurring() != null ? transactionDto.getRecurring(): false);
 
-        //Get userAccount from jwt token
+        //Get userAccount from Security Context
 
         newItem.setUserAccount(userAccount);
 
