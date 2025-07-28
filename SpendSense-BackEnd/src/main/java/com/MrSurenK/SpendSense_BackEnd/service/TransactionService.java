@@ -1,5 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.EditTransactionDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionRequestDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.TransactionResponse;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
@@ -8,6 +9,7 @@ import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.CategoryRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.TransactionRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TransactionService {
@@ -68,29 +72,43 @@ public class TransactionService {
     public Page<Transaction> getAllTransactions(Integer userId, Pageable page){
         //Get the user id from user account
         return transactionRepo.findAllByUserAccountId(userId,page);
-
-    }
-
-    public Page<Transaction>getByCategoryFilter(Integer userId, Long catId, Pageable page){
-        return transactionRepo.findAllByCategoryIdAndUserAccountId(catId,userId,page);
-    }
-
-    public Page<Transaction>getBetweenDatesFilter(LocalDate startDate, LocalDate endDate, Integer userId,
-                                                  Pageable page){
-        return transactionRepo.findAllByUserAccountIdAndTransactionDateBetween(startDate, endDate, userId, page);
     }
 
 
+    //ToDo: More filter options to retrieve transactions by
+//    public Page<Transaction>getByCategoryFilter(Integer userId, Long catId, Pageable page){
+//        return transactionRepo.findAllByCategoryIdAndUserAccountId(catId,userId,page);
+//    }
+//
+//    public Page<Transaction>getBetweenDatesFilter(LocalDate startDate, LocalDate endDate, Integer userId,
+//                                                  Pageable page){
+//        return transactionRepo.findAllByUserAccountIdAndTransactionDateBetween(startDate, endDate, userId, page);
+//    }
 
 
 
-
-
-
-
-    public void editTransaction(){
+    public void editTransaction(UUID transactionId, EditTransactionDto dto){
         //Get transaction that is being edited
+        Transaction currTransaction = transactionRepo.findById(transactionId)
+                .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
         //Update new information in form
+        if(dto.getAmount() != null){
+            currTransaction.setAmount(dto.getAmount());
+        }
+        if(dto.getDate() != null){
+            currTransaction.setTransactionDate(dto.getDate());
+        }
+        if(dto.getRemarks() != null){
+            currTransaction.setRemarks(dto.getRemarks());
+        }
+        if(dto.getRecurring() != null){
+            currTransaction.setRecurring(dto.getRecurring());
+        }
+        if(dto.getCategoryId() != null){
+            Category newCat = categoryRepo.findById(dto.getCategoryId());
+//            currTransaction.setCategory(); Update category checks
+        }
+
         //Save transaction
 
 

@@ -36,7 +36,7 @@ public class EndPointConfig {
                 .cors(Customizer.withDefaults()) //Enable cors configuration
                 .authorizeHttpRequests((authorizeHttpRequests)->
                       authorizeHttpRequests
-                              .requestMatchers("/auth/**","/checkEmail","checkUsername").permitAll() //These endpoints do not need authentication
+                              .requestMatchers("/auth/**","/checkEmail","/checkUsername").permitAll() //These endpoints do not need authentication
                               .anyRequest().authenticated()) //All other endpoint need to be authenticated
                 .formLogin(AbstractHttpConfigurer::disable) //Disable default Spring form login
                 .logout(AbstractHttpConfigurer::disable) // Disable default Spring form logout

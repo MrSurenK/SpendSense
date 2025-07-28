@@ -19,6 +19,7 @@ public class TransactionMapper {
          if (cat != null) {
             transactionResponse.setCatId(cat.getId());
             transactionResponse.setCatName(cat.getName());
+            transactionResponse.setTransactionType(cat.getTransactionType());
         }
 
         return transactionResponse;

@@ -1,5 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.dto.responseDto;
 
+import com.MrSurenK.SpendSense_BackEnd.model.TransactionType;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -25,4 +26,6 @@ public class TransactionResponse {
     private Long catId;
 
     private String catName;
+
+    private TransactionType transactionType;
 }

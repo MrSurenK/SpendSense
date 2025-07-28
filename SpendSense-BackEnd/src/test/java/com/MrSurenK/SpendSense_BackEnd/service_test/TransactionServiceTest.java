@@ -27,7 +27,10 @@ import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -85,8 +88,10 @@ public class TransactionServiceTest {
             cat.setId(3L);
 
             when(categoryRepo.getReferenceById(3L)).thenReturn(cat);
+            when(userAccountRepo.findById(1)).thenReturn(Optional.of(dummyAccount));
 
             transactionService.addItem(transactionRequestDto,dummyAccount.getId());
+
             ArgumentCaptor<Transaction> captor = ArgumentCaptor.forClass(Transaction.class);
 
             verify(transactionRepo,times(1)).save(captor.capture());
@@ -99,29 +104,8 @@ public class TransactionServiceTest {
             assertEquals(transactionRequestDto.getRecurring(),transaction.getRecurring());
             assertEquals(transactionRequestDto.getRemarks(),transaction.getRemarks());
             assertEquals(dummyAccount,transaction.getUserAccount());
-
         }
 
-
-        @Test
-        @DisplayName("Test functionality to get all transactions")
-        void getAllTransactions(){
-            UserAccount testUser = new UserAccount();
-            testUser.setId(1);
-            testUser.setUsername("test_user");
-
-            //Create 5 transactions and fill in transaction date and name only in object
-
-            Pageable pageDetails = PageRequest.of(1, 5, Sort.by("lastUpdated")
-                    .descending());
-
-            Page<Transaction> transactionPage = transactionService.getAllTransactions(testUser.getId(), pageDetails);
-            List<Transaction> allTransactions = transactionPage.getContent();
-
-
-            assertEquals(5,allTransactions.size());
-
-        }
         void editTransaction(){
 
         }

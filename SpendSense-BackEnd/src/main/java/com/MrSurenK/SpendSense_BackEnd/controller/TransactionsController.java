@@ -78,13 +78,14 @@ public class TransactionsController {
         Page<Transaction> allTransactions = transactionService.getAllTransactions(userId,page);
         List<Transaction> getTransactions = allTransactions.getContent();
 
+              //Pass data to generif response dto
+        PaginatedResponse<TransactionResponse> res = new PaginatedResponse<>();
+
         List<TransactionResponse> getListOfTransactions = getTransactions.stream()
             .map(TransactionMapper::mapEntityToTransactionResponseDto)
             .collect(Collectors.toList());
 
 
-        //Pass data to generif response dto
-        PaginatedResponse<TransactionResponse> res = new PaginatedResponse<>();
         res.setSuccess(true);
         res.setMessage("Successfully retrieved all transactions");
         res.setContent(getListOfTransactions); //Mapped to response object to prevent exposing entity in JSON
