@@ -1,21 +1,14 @@
 package com.MrSurenK.SpendSense_BackEnd.dto.responseDto;
 
-import com.MrSurenK.SpendSense_BackEnd.model.Category;
-import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static jakarta.persistence.FetchType.LAZY;
-
 @Data
-public class NewTransactionResponse {
+public class TransactionResponse {
 
     private UUID id;
 
@@ -28,6 +21,8 @@ public class NewTransactionResponse {
     private LocalDate transactionDate;
 
     private LocalDateTime lastUpdated;
+
+    private Long catId;
 
     private String catName;
 }

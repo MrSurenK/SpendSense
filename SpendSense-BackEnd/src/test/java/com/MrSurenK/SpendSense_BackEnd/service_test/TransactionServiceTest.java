@@ -1,6 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.service_test;
 
-import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionRequestDto;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
@@ -20,9 +20,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -49,15 +54,15 @@ public class TransactionServiceTest {
 
 
     @Nested
-    class TransactonCRUD {
+    class TransactionCRUD {
 
-         TransactionDto transactionDto;
+         TransactionRequestDto transactionRequestDto;
 
 
         @Test
         @DisplayName("Test functionality to add transaction")
         void addTransaction(){
-            transactionDto = new TransactionDto();
+            transactionRequestDto = new TransactionRequestDto();
 
             BigDecimal amount = new BigDecimal("100.00");
             String remarks = "Test new transaction record added.";
@@ -66,11 +71,11 @@ public class TransactionServiceTest {
             catObject.setId(3L);
             catObject.setName("Test Category");
 
-            transactionDto.setAmount(amount);
-            transactionDto.setRemarks(remarks);
-            transactionDto.setRecurring(false);
-            transactionDto.setDate(date);
-            transactionDto.setCategoryId(3L);
+            transactionRequestDto.setAmount(amount);
+            transactionRequestDto.setRemarks(remarks);
+            transactionRequestDto.setRecurring(false);
+            transactionRequestDto.setDate(date);
+            transactionRequestDto.setCategoryId(3L);
 
             UserAccount dummyAccount = new UserAccount();
             dummyAccount.setId(1);
@@ -79,30 +84,42 @@ public class TransactionServiceTest {
             Category cat = new Category();
             cat.setId(3L);
 
-//            String token = "token";
-//            when(jwtService.extractUsername(token)).thenReturn("testUser");
-//            when(userAccountRepo.findByUsername("testUser")).thenReturn(Optional.of(dummyAccount));
             when(categoryRepo.getReferenceById(3L)).thenReturn(cat);
 
-            transactionService.addItem(transactionDto,dummyAccount);
+            transactionService.addItem(transactionRequestDto,dummyAccount.getId());
             ArgumentCaptor<Transaction> captor = ArgumentCaptor.forClass(Transaction.class);
 
             verify(transactionRepo,times(1)).save(captor.capture());
 
             Transaction transaction = captor.getValue();
 
-            assertEquals(transactionDto.getAmount(),transaction.getAmount());
-            assertEquals(transactionDto.getCategoryId(),transaction.getCategory().getId());
-            assertEquals(transactionDto.getDate(),transaction.getTransactionDate());
-            assertEquals(transactionDto.getRecurring(),transaction.getRecurring());
-            assertEquals(transactionDto.getRemarks(),transaction.getRemarks());
+            assertEquals(transactionRequestDto.getAmount(),transaction.getAmount());
+            assertEquals(transactionRequestDto.getCategoryId(),transaction.getCategory().getId());
+            assertEquals(transactionRequestDto.getDate(),transaction.getTransactionDate());
+            assertEquals(transactionRequestDto.getRecurring(),transaction.getRecurring());
+            assertEquals(transactionRequestDto.getRemarks(),transaction.getRemarks());
             assertEquals(dummyAccount,transaction.getUserAccount());
 
         }
 
 
-
+        @Test
+        @DisplayName("Test functionality to get all transactions")
         void getAllTransactions(){
+            UserAccount testUser = new UserAccount();
+            testUser.setId(1);
+            testUser.setUsername("test_user");
+
+            //Create 5 transactions and fill in transaction date and name only in object
+
+            Pageable pageDetails = PageRequest.of(1, 5, Sort.by("lastUpdated")
+                    .descending());
+
+            Page<Transaction> transactionPage = transactionService.getAllTransactions(testUser.getId(), pageDetails);
+            List<Transaction> allTransactions = transactionPage.getContent();
+
+
+            assertEquals(5,allTransactions.size());
 
         }
         void editTransaction(){

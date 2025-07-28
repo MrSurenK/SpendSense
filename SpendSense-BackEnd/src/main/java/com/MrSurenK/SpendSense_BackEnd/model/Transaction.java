@@ -3,6 +3,7 @@ package com.MrSurenK.SpendSense_BackEnd.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;

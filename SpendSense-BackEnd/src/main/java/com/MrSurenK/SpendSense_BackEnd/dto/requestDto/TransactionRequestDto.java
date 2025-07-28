@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class TransactionDto {
+public class TransactionRequestDto {
 
     @NotNull(message = "amount must not be null")
     private BigDecimal amount;

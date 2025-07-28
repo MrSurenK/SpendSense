@@ -1,6 +1,7 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
-import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionRequestDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.TransactionResponse;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
@@ -37,22 +38,22 @@ public class TransactionService {
 
     //CRUD Functionality
 
-    public Transaction addItem(TransactionDto transactionDto, UserAccount userAccount
+    public Transaction addItem(TransactionRequestDto transactionRequestDto, Integer userId
                         ){
         Transaction newItem = new Transaction();
 
-        newItem.setAmount(transactionDto.getAmount().setScale(2, RoundingMode.HALF_UP));
+        newItem.setAmount(transactionRequestDto.getAmount().setScale(2, RoundingMode.HALF_UP));
 
-        Category cat = categoryRepo.getReferenceById(transactionDto.getCategoryId());
+        Category cat = categoryRepo.getReferenceById(transactionRequestDto.getCategoryId());
         newItem.setCategory(cat);
-        newItem.setTransactionDate(transactionDto.getDate());
-        newItem.setRecurring(transactionDto.getRecurring() != null ? transactionDto.getRecurring(): false);
+        newItem.setTransactionDate(transactionRequestDto.getDate());
+        newItem.setRecurring(transactionRequestDto.getRecurring() != null ? transactionRequestDto.getRecurring(): false);
 
         //Get userAccount from Security Context
 
-        newItem.setUserAccount(userAccount);
+        newItem.setUserAccount(userAccountRepo.findById(userId).orElseThrow());
 
-        newItem.setRemarks(transactionDto.getRemarks());
+        newItem.setRemarks(transactionRequestDto.getRemarks());
 
         newItem.setLastUpdated(LocalDateTime.now());
 
@@ -64,18 +65,19 @@ public class TransactionService {
     //Getting and sorting transactions by specific filters
 
     //Pass JWT token to extract username and get User Id and also Pageable object with page details in controller
-    public Page<Transaction> getAllTransactions(UserAccount userAccount, Pageable page){
+    public Page<Transaction> getAllTransactions(Integer userId, Pageable page){
         //Get the user id from user account
-        return transactionRepo.findAllByUserAccountId(userAccount,page);
+        return transactionRepo.findAllByUserAccountId(userId,page);
+
     }
 
-    public Page<Transaction>getByCategoryFilter(UserAccount userAccount, Long catId, Pageable page){
-        return transactionRepo.findAllByCategoryIdAndUserAccountId(catId,userAccount,page);
+    public Page<Transaction>getByCategoryFilter(Integer userId, Long catId, Pageable page){
+        return transactionRepo.findAllByCategoryIdAndUserAccountId(catId,userId,page);
     }
 
-    public Page<Transaction>getBetweenDatesFilter(LocalDate startDate, LocalDate endDate, UserAccount userAccount,
+    public Page<Transaction>getBetweenDatesFilter(LocalDate startDate, LocalDate endDate, Integer userId,
                                                   Pageable page){
-        return transactionRepo.findAllByUserAccountIdAndTransactionDateBetween(startDate, endDate, userAccount, page);
+        return transactionRepo.findAllByUserAccountIdAndTransactionDateBetween(startDate, endDate, userId, page);
     }
 
 

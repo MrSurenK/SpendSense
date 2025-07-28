@@ -134,11 +134,11 @@ public class UserAccountController {
 
     }
 
-    //For testing auth only: Remove endpoint before deploying!
-    @GetMapping("/members")
-    public ResponseEntity<List<UserAccount>>getUsers(){
-        List<UserAccount> users = userAccountService.allUsers();
-
-        return ResponseEntity.ok(users);
-    }
+//    //For testing auth only: Remove endpoint before deploying!
+//    @GetMapping("/members")
+//    public ResponseEntity<List<UserAccount>>getUsers(){
+//        List<UserAccount> users = userAccountService.allUsers();
+//
+//        return ResponseEntity.ok(users);
+//    }
 }
