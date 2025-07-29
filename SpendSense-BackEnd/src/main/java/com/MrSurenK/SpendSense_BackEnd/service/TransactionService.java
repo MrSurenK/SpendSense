@@ -121,8 +121,9 @@ public class TransactionService {
 
     }
 
-    public void deleteTransaction(){
+    public void deleteTransaction(UUID transactionId){
         //Get transaction id
+        transactionRepo.deleteById(transactionId);
         //Perform delete operation of transaction record from db
     }
 

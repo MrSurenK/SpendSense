@@ -51,14 +51,6 @@ public class TransactionsController {
 
         ApiResponse<TransactionResponse> res = new ApiResponse<TransactionResponse>();
         TransactionResponse receipt = TransactionMapper.mapEntityToTransactionResponseDto(newTransaction);
-//        TransactionResponse reciept = new TransactionResponse();
-//        reciept.setId(newTransaction.getId());
-//        reciept.setAmount(newTransaction.getAmount());
-//        reciept.setTransactionDate(newTransaction.getTransactionDate());
-//        reciept.setCatName(newTransaction.getCategory().getName());
-//        reciept.setRecurring(newTransaction.getRecurring());
-//        reciept.setRemarks(newTransaction.getRemarks());
-//        reciept.setLastUpdated(newTransaction.getLastUpdated());
 
         res.setSuccess(true);
         res.setMessage("Transaction added successfully!");
@@ -119,6 +111,17 @@ public class TransactionsController {
         res.setMessage("Transaction successfully modified");
         res.setData(showChanged);
 
+
+        return ResponseEntity.ok(res);
+    }
+
+    @DeleteMapping("/transactions/{transactionId}")
+    public ResponseEntity<ApiResponse<Void>> deleteTransaction(@PathVariable("transactionId") UUID transactionId){
+        transactionService.deleteTransaction(transactionId);
+
+        ApiResponse<Void> res = new ApiResponse();
+        res.setSuccess(true);
+        res.setMessage("Transaction successfully deleted!");
 
         return ResponseEntity.ok(res);
     }
