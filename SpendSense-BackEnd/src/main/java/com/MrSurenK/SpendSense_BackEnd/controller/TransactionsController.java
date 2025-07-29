@@ -1,5 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.controller;
 
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.EditTransactionDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.ApiResponse;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionRequestDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.PaginatedResponse;
@@ -12,7 +13,7 @@ import com.MrSurenK.SpendSense_BackEnd.service.SecurityContextService;
 import com.MrSurenK.SpendSense_BackEnd.service.TransactionService;
 import com.MrSurenK.SpendSense_BackEnd.util.TransactionMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,15 +32,13 @@ public class TransactionsController {
 
     private final JwtService jwtService;
 
-    private final UserAccountRepo userAccountRepo;
 
     private final SecurityContextService securityContextService;
 
     public TransactionsController(TransactionService transactionService, JwtService jwtService,
-                                  UserAccountRepo userAccountRepo, SecurityContextService securityContextService){
+                   SecurityContextService securityContextService){
         this.transactionService = transactionService;
         this.jwtService = jwtService;
-        this.userAccountRepo = userAccountRepo;
         this.securityContextService = securityContextService;
     }
 
@@ -97,6 +97,33 @@ public class TransactionsController {
 
         return ResponseEntity.ok(res);
     }
+
+
+    @PatchMapping("/transactions/{transactionId}")
+    public ResponseEntity<ApiResponse<TransactionResponse>> patchTransaction(@PathVariable("transactionId") UUID transactionId,
+                                                                @RequestBody EditTransactionDto dto){
+
+        //Get user id from security context
+        UserAccount user = securityContextService.getUserFromSecurityContext();
+        int userId = user.getId();
+
+        //Perform logic
+        Transaction updated = transactionService.editTransaction(dto, userId, transactionId);
+
+        //Get the transaction object and place into response
+        TransactionResponse showChanged = TransactionMapper.mapEntityToTransactionResponseDto(updated);
+
+        //Return response DTO with Transaction
+        ApiResponse<TransactionResponse> res = new ApiResponse();
+        res.setSuccess(true);
+        res.setMessage("Transaction successfully modified");
+        res.setData(showChanged);
+
+
+        return ResponseEntity.ok(res);
+    }
+
+
 
 
 

@@ -11,8 +11,6 @@ import java.util.UUID;
 @Data
 public class EditTransactionDto {
 
-    private UUID transactionId;
-
     private BigDecimal amount;
 
     private String remarks;

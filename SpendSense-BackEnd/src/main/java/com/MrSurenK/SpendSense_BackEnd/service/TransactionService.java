@@ -88,9 +88,9 @@ public class TransactionService {
 
 
 
-    public void editTransaction(EditTransactionDto dto, int userId){
+    public Transaction editTransaction(EditTransactionDto dto, int userId, UUID transactionId){
         //Get transaction that is being edited
-        Transaction currTransaction = transactionRepo.findById(dto.getTransactionId())
+        Transaction currTransaction = transactionRepo.findById(transactionId)
                 .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
         //Update new information in form
         if(dto.getAmount() != null){
@@ -116,6 +116,8 @@ public class TransactionService {
 
         //Save and update transaction uin database
         transactionRepo.save(currTransaction);
+
+        return currTransaction;
 
     }
 

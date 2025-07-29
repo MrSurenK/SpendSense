@@ -137,7 +137,6 @@ public class TransactionServiceTest {
             testTransaction.setRecurring(false);
 
             EditTransactionDto editForm = new EditTransactionDto();
-            editForm.setTransactionId(id);
             editForm.setRemarks("New remark");
             editForm.setRecurring(true);
             editForm.setAmount(new BigDecimal("555.00"));
@@ -147,10 +146,10 @@ public class TransactionServiceTest {
             //Act
             when(transactionRepo.findById(id)).thenReturn(Optional.of(testTransaction));
             when(categoryRepo.getValidCat(1, 3L)).thenReturn(Optional.of(newCat));
-            transactionService.editTransaction(editForm, user.getId());
+            transactionService.editTransaction(editForm, user.getId(), id);
 
             //Assert
-            assertEquals(editForm.getTransactionId(),testTransaction.getId());
+            assertEquals(id,testTransaction.getId());
             assertEquals(editForm.getRemarks(),testTransaction.getRemarks());
             assertEquals(editForm.getAmount(),testTransaction.getAmount());
             assertEquals(editForm.getCategoryId(), testTransaction.getCategory().getId());
