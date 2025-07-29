@@ -1,5 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.service_test;
 
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.EditTransactionDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionRequestDto;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
@@ -31,8 +32,10 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.*;
 
 @Slf4j
@@ -87,7 +90,7 @@ public class TransactionServiceTest {
             Category cat = new Category();
             cat.setId(3L);
 
-            when(categoryRepo.getReferenceById(3L)).thenReturn(cat);
+            when(categoryRepo.getValidCat(1,3L)).thenReturn(Optional.of(cat));
             when(userAccountRepo.findById(1)).thenReturn(Optional.of(dummyAccount));
 
             transactionService.addItem(transactionRequestDto,dummyAccount.getId());
@@ -106,7 +109,56 @@ public class TransactionServiceTest {
             assertEquals(dummyAccount,transaction.getUserAccount());
         }
 
+        @Test
+        @DisplayName("Test functionality of editing existing transaction")
         void editTransaction(){
+            //Arrange
+            Transaction testTransaction = new Transaction();
+
+            Category cat = new Category();
+            cat.setId(2L);
+            cat.setName("First Cat");
+
+            Category newCat = new Category();
+            newCat.setId(3L);
+            newCat.setName("New Cat");
+
+            UserAccount user = new UserAccount();
+            user.setId(1);
+
+            UUID id = UUID.randomUUID();
+            testTransaction.setId(id);
+            testTransaction.setTransactionDate(LocalDate.of(2025, 07, 29));
+            testTransaction.setLastUpdated(LocalDateTime.of(2025, 07, 20,10,5));
+
+            testTransaction.setCategory(cat);
+            testTransaction.setAmount(new BigDecimal("123.45"));
+            testTransaction.setRemarks("Test case");
+            testTransaction.setRecurring(false);
+
+            EditTransactionDto editForm = new EditTransactionDto();
+            editForm.setTransactionId(id);
+            editForm.setRemarks("New remark");
+            editForm.setRecurring(true);
+            editForm.setAmount(new BigDecimal("555.00"));
+            editForm.setCategoryId(3L);
+            editForm.setDate(LocalDate.of(2025, 04, 03));
+
+            //Act
+            when(transactionRepo.findById(id)).thenReturn(Optional.of(testTransaction));
+            when(categoryRepo.getValidCat(1, 3L)).thenReturn(Optional.of(newCat));
+            transactionService.editTransaction(editForm, user.getId());
+
+            //Assert
+            assertEquals(editForm.getTransactionId(),testTransaction.getId());
+            assertEquals(editForm.getRemarks(),testTransaction.getRemarks());
+            assertEquals(editForm.getAmount(),testTransaction.getAmount());
+            assertEquals(editForm.getCategoryId(), testTransaction.getCategory().getId());
+            assertEquals(editForm.getRecurring(),testTransaction.getRecurring());
+            assertEquals(editForm.getDate(), testTransaction.getTransactionDate());
+            assertNotEquals(testTransaction.getLastUpdated(),LocalDateTime
+                    .of(2025, 07, 20,10,5));
+
 
         }
 

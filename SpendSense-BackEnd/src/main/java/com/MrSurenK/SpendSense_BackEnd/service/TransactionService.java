@@ -48,7 +48,8 @@ public class TransactionService {
 
         newItem.setAmount(transactionRequestDto.getAmount().setScale(2, RoundingMode.HALF_UP));
 
-        Category cat = categoryRepo.getReferenceById(transactionRequestDto.getCategoryId());
+        Category cat = categoryRepo.getValidCat(userId, transactionRequestDto.getCategoryId()).orElseThrow(()
+                ->new EntityNotFoundException("Category not found"));
         newItem.setCategory(cat);
         newItem.setTransactionDate(transactionRequestDto.getDate());
         newItem.setRecurring(transactionRequestDto.getRecurring() != null ? transactionRequestDto.getRecurring(): false);
@@ -87,9 +88,9 @@ public class TransactionService {
 
 
 
-    public void editTransaction(UUID transactionId, EditTransactionDto dto){
+    public void editTransaction(EditTransactionDto dto, int userId){
         //Get transaction that is being edited
-        Transaction currTransaction = transactionRepo.findById(transactionId)
+        Transaction currTransaction = transactionRepo.findById(dto.getTransactionId())
                 .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
         //Update new information in form
         if(dto.getAmount() != null){
@@ -105,12 +106,16 @@ public class TransactionService {
             currTransaction.setRecurring(dto.getRecurring());
         }
         if(dto.getCategoryId() != null){
-            Category newCat = categoryRepo.findById(dto.getCategoryId());
-//            currTransaction.setCategory(); Update category checks
+            Category newCat = categoryRepo.getValidCat(userId, dto.getCategoryId()).orElseThrow(()
+                    -> new EntityNotFoundException("Category not found"));
+            currTransaction.setCategory(newCat);
         }
 
-        //Save transaction
+        //Update lastUpdated field
+        currTransaction.setLastUpdated(LocalDateTime.now());
 
+        //Save and update transaction uin database
+        transactionRepo.save(currTransaction);
 
     }
 
