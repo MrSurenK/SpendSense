@@ -12,4 +12,5 @@ public interface CategoryRepo extends JpaRepository<Category,Long> {
     @Query(value = "Select c from Category c where c.id = :catId and (c.userAccount.id = :userId or c.userAccount.id is null)")
     Optional<Category> getValidCat(@Param("userId")Integer userId, @Param("catId")Long catId);
 
+    boolean existsByUserIdAndName(Integer userId, String name);
 }

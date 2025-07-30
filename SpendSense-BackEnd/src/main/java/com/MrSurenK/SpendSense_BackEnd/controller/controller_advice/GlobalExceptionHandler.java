@@ -1,5 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.controller.controller_advice;
 
+import com.MrSurenK.SpendSense_BackEnd.CustomExceptions.ConflictException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.parsing.Problem;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -45,6 +46,14 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
      }
+
+     @ExceptionHandler(ConflictException.class)
+     public ResponseEntity<Object> handleConflict(ConflictException ex){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error",ex.getMessage()));
+     }
+
+
+
 
      /*
       Do not use generic runtime exceptoons for HTTP error responses as it overwrites the real HTTP status codes and

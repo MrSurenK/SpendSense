@@ -21,10 +21,12 @@ public class Category {
     private String name;
 
     @ColumnDefault("false")
-    private boolean isDeleted;
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 
     @ColumnDefault("false")
-    private boolean isSystem; //Indicator for default values
+    @Column(nullable = false)
+    private boolean isSystem = false; //Indicator for default values
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

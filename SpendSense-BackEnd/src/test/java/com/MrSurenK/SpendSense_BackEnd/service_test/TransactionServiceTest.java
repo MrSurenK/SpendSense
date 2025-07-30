@@ -161,10 +161,6 @@ public class TransactionServiceTest {
 
         }
 
-        void deleteTransaction(){
-
-        }
-
     }
 
     class NegativeTransactionInputTests{
@@ -198,22 +194,6 @@ public class TransactionServiceTest {
         }
 
         void invalidDateFormat(){
-
-        }
-
-    }
-
-    class CategoryCRUDTests{
-
-        void addCat(){
-
-        }
-
-        void updateCat(){
-
-        }
-
-        void deleteCat(){
 
         }
 

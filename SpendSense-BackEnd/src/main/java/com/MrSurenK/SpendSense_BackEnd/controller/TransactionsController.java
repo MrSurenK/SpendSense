@@ -7,7 +7,6 @@ import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.PaginatedResponse;
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.TransactionResponse;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
-import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import com.MrSurenK.SpendSense_BackEnd.service.JwtService;
 import com.MrSurenK.SpendSense_BackEnd.service.SecurityContextService;
 import com.MrSurenK.SpendSense_BackEnd.service.TransactionService;

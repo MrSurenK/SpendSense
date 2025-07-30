@@ -28,15 +28,12 @@ public class TransactionService {
 
     private final UserAccountRepo userAccountRepo;
 
-    private final JwtService jwtService;
-
     private final CategoryRepo categoryRepo;
 
     public TransactionService(TransactionRepo transactionRepo, UserAccountRepo userAccountRepo, JwtService jwtService
     ,CategoryRepo categoryRepo){
         this.transactionRepo = transactionRepo;
         this.userAccountRepo = userAccountRepo;
-        this.jwtService = jwtService;
         this.categoryRepo = categoryRepo;
     }
 
