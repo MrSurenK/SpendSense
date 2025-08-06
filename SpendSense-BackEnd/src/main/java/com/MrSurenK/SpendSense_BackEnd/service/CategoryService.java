@@ -1,6 +1,7 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
 import com.MrSurenK.SpendSense_BackEnd.CustomExceptions.ConflictException;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.EditCatDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.NewCatDto;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
@@ -8,8 +9,6 @@ import com.MrSurenK.SpendSense_BackEnd.repository.CategoryRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -33,7 +32,7 @@ public class CategoryService {
         //Check if the same user has already created a similar cat name and disallow
         String catName = dto.getName();
 
-        if(categoryRepo.existsByUserIdAndName(userId, catName)){
+        if(categoryRepo.existsByUserAccount_IdAndName(userId, catName)){
             throw new ConflictException("This category created by user already exists");
         }
 
@@ -55,7 +54,23 @@ public class CategoryService {
     }
 
 
+    public Category editCat(EditCatDto dto, int userId, Long catId){
+        //Get the cat to be edited
+        Category cat = categoryRepo.getValidCat(userId, catId).orElseThrow(
+                ()-> new EntityNotFoundException("Category does not exist"));
+        //Send dto form to edit information in category
+        if(dto.getName()!=null){
+            cat.setName(dto.getName());
+        }
+        if(dto.getTransactionType()!= null){
+            cat.setTransactionType(dto.getTransactionType());
+        }
+        if(dto.getName() == null && dto.getTransactionType() ==null){
+            throw new IllegalArgumentException("No inputs were given to category");
+        }
+        //save category
+        categoryRepo.save(cat);
 
-
-
+        return cat; //So that front end can debug easier
+    }
 }

@@ -9,8 +9,9 @@ import java.util.Optional;
 
 public interface CategoryRepo extends JpaRepository<Category,Long> {
     //JPQL to ensure user only has access to default cats and user created cats
+    //Todo: Also ensure that the cat has not been deleted (check deleted flag)
     @Query(value = "Select c from Category c where c.id = :catId and (c.userAccount.id = :userId or c.userAccount.id is null)")
     Optional<Category> getValidCat(@Param("userId")Integer userId, @Param("catId")Long catId);
 
-    boolean existsByUserIdAndName(Integer userId, String name);
+    boolean existsByUserAccount_IdAndName(Integer userId, String name);
 }

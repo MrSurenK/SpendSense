@@ -1,5 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.service_test;
 
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.EditCatDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.NewCatDto;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.TransactionType;
@@ -48,7 +49,7 @@ public class CategoryServiceTest {
         user.setId(1);
 
         //Act
-        when(categoryRepo.existsByUserIdAndName(user.getId(),dto.getName())).thenReturn(false);
+        when(categoryRepo.existsByUserAccount_IdAndName(user.getId(),dto.getName())).thenReturn(false);
         when(userAccountRepo.findById(user.getId())).thenReturn(Optional.of(user));
         Category newCat = categoryService.createCat(dto, user.getId());
 
@@ -62,8 +63,26 @@ public class CategoryServiceTest {
 
     }
 
+    @Test
+    @DisplayName("Edit an existing category")
     void editCategory(){
+        EditCatDto dto = new EditCatDto();
 
+        dto.setName("New_Category");
+        dto.setTransactionType(TransactionType.EXPENSE);
+
+        int userId = 1;
+
+        Category oldCat = new Category();
+        oldCat.setId(100L);
+        oldCat.setName("Old_Category");
+        oldCat.setTransactionType(TransactionType.INCOME);
+
+        when(categoryRepo.getValidCat(userId, oldCat.getId())).thenReturn(Optional.of(oldCat));
+        categoryService.editCat(dto, userId, oldCat.getId());
+
+        assertEquals(dto.getName(),oldCat.getName());
+        assertEquals(dto.getTransactionType(),oldCat.getTransactionType());
     }
 
 
