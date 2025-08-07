@@ -10,6 +10,9 @@ import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CategoryService {
 
@@ -32,8 +35,13 @@ public class CategoryService {
         //Check if the same user has already created a similar cat name and disallow
         String catName = dto.getName();
 
-        if(categoryRepo.existsByUserAccount_IdAndName(userId, catName)){
+        if(categoryRepo.isActiveUserCreatedCat(userId, catName)){
             throw new ConflictException("This category created by user already exists");
+        }
+
+        if(categoryRepo.isDeletedUserCreatedCat(userId, catName)){
+            Category existingCat = categoryRepo.findByNameAndUserAccount_id(catName,userId);
+            existingCat.setDeleted(false); //Reactivate the category so as not to have duplicate entries
         }
 
         //Pass in dto details to new object
@@ -73,4 +81,15 @@ public class CategoryService {
 
         return cat; //So that front end can debug easier
     }
+
+
+    public List<Category> getAllCats(int userId){
+
+        return categoryRepo.getAllValidCats(userId);
+    }
+
+//    public Category softDeleteCat(int userId, Long catId){
+//        //Verify that cat is created by user and is not a system created or other user created cat
+//
+//    }
 }

@@ -10,7 +10,7 @@ import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.service.JwtService;
 import com.MrSurenK.SpendSense_BackEnd.service.SecurityContextService;
 import com.MrSurenK.SpendSense_BackEnd.service.TransactionService;
-import com.MrSurenK.SpendSense_BackEnd.util.TransactionMapper;
+import com.MrSurenK.SpendSense_BackEnd.util.EntityToDtoMapper;
 import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.Pageable;
@@ -19,7 +19,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -49,7 +48,7 @@ public class TransactionsController {
         Transaction newTransaction = transactionService.addItem(dto, userId);
 
         ApiResponse<TransactionResponse> res = new ApiResponse<TransactionResponse>();
-        TransactionResponse receipt = TransactionMapper.mapEntityToTransactionResponseDto(newTransaction);
+        TransactionResponse receipt = EntityToDtoMapper.mapEntityToTransactionResponseDto(newTransaction);
 
         res.setSuccess(true);
         res.setMessage("Transaction added successfully!");
@@ -73,7 +72,7 @@ public class TransactionsController {
         PaginatedResponse<TransactionResponse> res = new PaginatedResponse<>();
 
         List<TransactionResponse> getListOfTransactions = getTransactions.stream()
-            .map(TransactionMapper::mapEntityToTransactionResponseDto)
+            .map(EntityToDtoMapper::mapEntityToTransactionResponseDto)
             .collect(Collectors.toList());
 
 
@@ -102,7 +101,7 @@ public class TransactionsController {
         Transaction updated = transactionService.editTransaction(dto, userId, transactionId);
 
         //Get the transaction object and place into response
-        TransactionResponse showChanged = TransactionMapper.mapEntityToTransactionResponseDto(updated);
+        TransactionResponse showChanged = EntityToDtoMapper.mapEntityToTransactionResponseDto(updated);
 
         //Return response DTO with Transaction
         ApiResponse<TransactionResponse> res = new ApiResponse();

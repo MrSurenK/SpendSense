@@ -49,7 +49,8 @@ public class CategoryServiceTest {
         user.setId(1);
 
         //Act
-        when(categoryRepo.existsByUserAccount_IdAndName(user.getId(),dto.getName())).thenReturn(false);
+        when(categoryRepo.isActiveUserCreatedCat(user.getId(),dto.getName())).thenReturn(false);
+        when(categoryRepo.isDeletedUserCreatedCat(user.getId(),dto.getName())).thenReturn(false);
         when(userAccountRepo.findById(user.getId())).thenReturn(Optional.of(user));
         Category newCat = categoryService.createCat(dto, user.getId());
 

@@ -1,11 +1,11 @@
 package com.MrSurenK.SpendSense_BackEnd.util;
 
-import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionRequestDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.CategoryResponse;
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.TransactionResponse;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 
-public class TransactionMapper {
+public class EntityToDtoMapper {
 
     public static TransactionResponse mapEntityToTransactionResponseDto(Transaction entity){
         TransactionResponse transactionResponse = new TransactionResponse();
@@ -23,6 +23,18 @@ public class TransactionMapper {
         }
 
         return transactionResponse;
+    }
+
+
+    public static CategoryResponse mapEntityToCatResponseDto(Category entity){
+        CategoryResponse res = new CategoryResponse();
+        res.setId(entity.getId());
+        res.setName(entity.getName());
+        res.setDeleted(entity.isDeleted());
+        res.setSystem(entity.isSystem());
+        res.setTransactionType(entity.getTransactionType());
+
+        return res;
     }
 
 }
