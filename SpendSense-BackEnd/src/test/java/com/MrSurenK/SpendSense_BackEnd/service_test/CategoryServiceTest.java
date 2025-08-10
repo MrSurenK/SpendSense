@@ -18,8 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -86,6 +85,27 @@ public class CategoryServiceTest {
         assertEquals(dto.getTransactionType(),oldCat.getTransactionType());
     }
 
+    @Test
+    @DisplayName("Delete a user created category")
+    void deleteCategory() throws IllegalAccessException {
+
+        //Arrange
+        Category cat = new Category();
+        cat.setDeleted(false);
+        cat.setId(1L);
+
+        int userId = 2;
+
+
+        //Act
+        when(categoryRepo.getValidCat(userId, cat.getId())).thenReturn(Optional.of(cat));
+        categoryService.softDeleteCat(userId, cat.getId());
+
+
+        //Assert
+        assertTrue(cat.isDeleted());
+
+    }
 
 
 }
