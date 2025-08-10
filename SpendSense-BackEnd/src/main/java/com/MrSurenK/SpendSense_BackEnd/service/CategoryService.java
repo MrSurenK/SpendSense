@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -35,13 +36,25 @@ public class CategoryService {
         //Check if the same user has already created a similar cat name and disallow
         String catName = dto.getName();
 
-        if(categoryRepo.isActiveUserCreatedCat(userId, catName)){
-            throw new ConflictException("This category created by user already exists");
-        }
+//        if(categoryRepo.isActiveUserCreatedCat(userId, catName)){
+//            throw new ConflictException("This category created by user already exists");
+//        }
+//
+//        if(categoryRepo.isDeletedUserCreatedCat(userId, catName)){
+//            Category existingCat = categoryRepo.findByNameAndUserAccount_id(catName,userId);
+//            existingCat.setDeleted(false); //Reactivate the category so as not to have duplicate entries
+//        }
 
-        if(categoryRepo.isDeletedUserCreatedCat(userId, catName)){
-            Category existingCat = categoryRepo.findByNameAndUserAccount_id(catName,userId);
-            existingCat.setDeleted(false); //Reactivate the category so as not to have duplicate entries
+        Optional<Category> catOpt = categoryRepo.findByNameAndUserIdAnyStatus(userId, catName);
+
+        if (catOpt.isPresent()) {
+            Category cat = catOpt.get();
+            if (!cat.isDeleted()) {
+                throw new ConflictException("This category already exists");
+        } else {
+            cat.setDeleted(false);
+            return categoryRepo.save(cat);
+            }
         }
 
         //Pass in dto details to new object
@@ -88,8 +101,21 @@ public class CategoryService {
         return categoryRepo.getAllValidCats(userId);
     }
 
-//    public Category softDeleteCat(int userId, Long catId){
-//        //Verify that cat is created by user and is not a system created or other user created cat
-//
-//    }
+    public Category softDeleteCat(int userId, Long catId) throws IllegalAccessException {
+
+        //Get user created cat from catId
+        Category cat = categoryRepo.getValidCat(userId, catId).orElseThrow(
+                ()-> new EntityNotFoundException("Category does not exist"));
+
+        //Verify that cat is created by user and is not a system created or other user created cat
+        if(cat.isSystem()){
+            throw new IllegalAccessException("Can't delete default categories.");
+        }
+        //Switch deleted switch to deleted
+        cat.setDeleted(true);
+
+        categoryRepo.save(cat);
+
+        return cat; //Show front-end that isDeleted swithc has been set to true;
+    }
 }

@@ -1,8 +1,10 @@
 com/MrSurenK/SpendSense_BackEnd/repository/TransactionRepo.class
 com/MrSurenK/SpendSense_BackEnd/SpendSenseBackEndApplication.class
 com/MrSurenK/SpendSense_BackEnd/controller/controller_advice/GlobalExceptionHandler.class
+com/MrSurenK/SpendSense_BackEnd/dto/responseDto/CategoryResponse.class
 com/MrSurenK/SpendSense_BackEnd/model/UserAccount.class
 com/MrSurenK/SpendSense_BackEnd/controller/UserAccountController.class
+com/MrSurenK/SpendSense_BackEnd/controller/CategoryController.class
 com/MrSurenK/SpendSense_BackEnd/model/TransactionType.class
 com/MrSurenK/SpendSense_BackEnd/configuration/EndPointConfig.class
 com/MrSurenK/SpendSense_BackEnd/model/UserAccount_.class
@@ -12,6 +14,7 @@ com/MrSurenK/SpendSense_BackEnd/configuration/JwtAuthenticationFilter.class
 com/MrSurenK/SpendSense_BackEnd/repository/UserAccountRepo.class
 com/MrSurenK/SpendSense_BackEnd/service/TransactionService.class
 com/MrSurenK/SpendSense_BackEnd/util/ImageUtil.class
+com/MrSurenK/SpendSense_BackEnd/util/EntityToDtoMapper.class
 com/MrSurenK/SpendSense_BackEnd/model/Category.class
 com/MrSurenK/SpendSense_BackEnd/dto/requestDto/EditTransactionDto.class
 com/MrSurenK/SpendSense_BackEnd/model/Transaction.class

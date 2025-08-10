@@ -23,4 +23,7 @@ public interface CategoryRepo extends JpaRepository<Category,Long> {
     boolean isDeletedUserCreatedCat(@Param("userId")Integer userId, @Param("catName")String name);
 
     Category findByNameAndUserAccount_id(String name,Integer userId);
+
+    @Query("select c from Category c where c.userAccount.id = :userId and c.name = :name")
+    Optional<Category> findByNameAndUserIdAnyStatus(@Param("userId") Integer userId, @Param("name") String name);
 }

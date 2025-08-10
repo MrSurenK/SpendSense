@@ -38,8 +38,7 @@ public class CategoryController {
         Category newCat = categoryService.createCat(dto, userId);
 
         CategoryResponse res = EntityToDtoMapper.mapEntityToCatResponseDto(newCat);
-        //Get the username of the user that created the cat
-        res.setUserName(user.getUsername());
+
 
         //Send the response to API response
         ApiResponse<CategoryResponse> apiRes = new ApiResponse<>();
@@ -79,8 +78,6 @@ public class CategoryController {
         Category editedCat = categoryService.editCat(dto,userId,catId);
 
         CategoryResponse res = EntityToDtoMapper.mapEntityToCatResponseDto(editedCat);
-        //Get the username of the user that created the cat
-        res.setUserName(user.getUsername());
 
         ApiResponse<CategoryResponse> apiRes = new ApiResponse<>();
 
@@ -92,7 +89,23 @@ public class CategoryController {
     }
 
     //Soft delete
+    @PatchMapping("/cat/deleteCat/{catId}")
+    public ResponseEntity<ApiResponse<CategoryResponse>> deleteCatApi(@PathVariable Long catId)
+            throws IllegalAccessException {
+        UserAccount user = securityContextService.getUserFromSecurityContext();
+        int userId = user.getId();
 
+        Category deleteThisCat = categoryService.softDeleteCat(userId, catId);
 
+        CategoryResponse res = EntityToDtoMapper.mapEntityToCatResponseDto(deleteThisCat);
+
+        ApiResponse<CategoryResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setSuccess(true);
+        apiResponse.setMessage("Category succesfully deleted");
+        apiResponse.setData(res);
+
+        return ResponseEntity.ok(apiResponse);
+    }
 
 }

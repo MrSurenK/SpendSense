@@ -33,6 +33,9 @@ public class EntityToDtoMapper {
         res.setDeleted(entity.isDeleted());
         res.setSystem(entity.isSystem());
         res.setTransactionType(entity.getTransactionType());
+        if(entity.getUserAccount() != null){
+            res.setUserName(entity.getUserAccount().getUsername());
+        }
 
         return res;
     }
