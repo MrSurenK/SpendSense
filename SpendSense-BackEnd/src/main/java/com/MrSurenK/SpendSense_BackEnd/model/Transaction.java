@@ -1,6 +1,7 @@
 package com.MrSurenK.SpendSense_BackEnd.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.lettuce.core.dynamic.annotation.CommandNaming;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,10 +16,12 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Data
 @Entity
+@Table(name="user_transactions")
 public class Transaction {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @Column(nullable = false)
