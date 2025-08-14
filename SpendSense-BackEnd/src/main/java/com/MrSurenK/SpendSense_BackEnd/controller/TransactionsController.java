@@ -59,13 +59,13 @@ public class TransactionsController {
 
     @GetMapping("/getAllTransactions")
     public ResponseEntity<PaginatedResponse<TransactionResponse>> getTranactionsSortedByLastUpdated(
-            @PageableDefault(page = 0, size = 5, sort = "lastUpdated", direction = Sort.Direction.DESC) Pageable page){
+            @PageableDefault(page = 0, size = 10, sort = "lastUpdated", direction = Sort.Direction.DESC) Pageable page){
 //        Pageable pageDetails = PageRequest.of(1, 5, Sort.by("lastUpdated")
 //                    .descending());
 
         UserAccount user = securityContextService.getUserFromSecurityContext();
         Integer userId = user.getId();
-        Page<Transaction> allTransactions = transactionService.getAllTransactions(userId,page);
+        Page<Transaction> allTransactions = transactionService.getTransactions(userId,page);
         List<Transaction> getTransactions = allTransactions.getContent();
 
               //Pass data to generif response dto

@@ -2,10 +2,8 @@ package com.MrSurenK.SpendSense_BackEnd.service;
 
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.EditTransactionDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionRequestDto;
-import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.TransactionResponse;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
-import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.CategoryRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.TransactionRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
@@ -15,9 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -67,7 +63,7 @@ public class TransactionService {
     //Getting and sorting transactions by specific filters
 
     //Pass JWT token to extract username and get User Id and also Pageable object with page details in controller
-    public Page<Transaction> getAllTransactions(Integer userId, Pageable page){
+    public Page<Transaction> getTransactions(Integer userId, Pageable page){
         //Get the user id from user account
         return transactionRepo.findAllByUserAccountId(userId,page);
     }
