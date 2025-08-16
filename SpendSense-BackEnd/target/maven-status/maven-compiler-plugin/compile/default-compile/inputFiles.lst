@@ -19,7 +19,7 @@
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/requestDto/UserSignUpDto.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/ApiResponse.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/CategoryResponse.java
-/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/DashTopFiveSpendDto.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/DashSpendOverview.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/LoginResponse.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/PaginatedResponse.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/TransactionResponse.java

@@ -1,7 +1,7 @@
 package com.MrSurenK.SpendSense_BackEnd.util;
 
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.CategoryResponse;
-import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.DashTopFiveSpendDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.DashSpendOverview;
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.TransactionResponse;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
@@ -26,8 +26,8 @@ public class EntityToDtoMapper {
         return transactionResponse;
     }
 
-    public static DashTopFiveSpendDto mapEntityToDashTopFiveDto(Transaction entity){
-        DashTopFiveSpendDto topFiveSpend = new DashTopFiveSpendDto();
+    public static DashSpendOverview mapEntityToDashTopFiveDto(Transaction entity){
+        DashSpendOverview topFiveSpend = new DashSpendOverview();
         topFiveSpend.setAmount(entity.getAmount());
         topFiveSpend.setTransactionDate(entity.getTransactionDate());
         topFiveSpend.setDescription(entity.getRemarks());

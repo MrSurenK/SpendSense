@@ -34,6 +34,11 @@ public class DashboardService {
         return transactionRepo.findTopFiveByAmount(userId, startDate, endDate, PageRequest.of(0,5));
     }
 
+    public List<Transaction>getAllRecurringSpend(Integer userId, Pageable pageInfo){
+        return transactionRepo.allRecurringSpend(userId, pageInfo);
+    }
+
+
 
 
 }

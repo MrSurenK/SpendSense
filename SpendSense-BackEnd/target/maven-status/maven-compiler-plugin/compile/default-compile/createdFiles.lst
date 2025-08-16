@@ -3,6 +3,7 @@ com/MrSurenK/SpendSense_BackEnd/repository/TransactionRepo.class
 com/MrSurenK/SpendSense_BackEnd/SpendSenseBackEndApplication.class
 com/MrSurenK/SpendSense_BackEnd/controller/controller_advice/GlobalExceptionHandler.class
 com/MrSurenK/SpendSense_BackEnd/dto/responseDto/CategoryResponse.class
+com/MrSurenK/SpendSense_BackEnd/dto/responseDto/DashSpendOverview.class
 com/MrSurenK/SpendSense_BackEnd/model/UserAccount.class
 com/MrSurenK/SpendSense_BackEnd/dto/responseDto/PaginatedResponse.class
 com/MrSurenK/SpendSense_BackEnd/dto/requestDto/TransactionRequestDto.class
@@ -27,7 +28,6 @@ com/MrSurenK/SpendSense_BackEnd/util/EntityToDtoMapper.class
 com/MrSurenK/SpendSense_BackEnd/model/Category.class
 com/MrSurenK/SpendSense_BackEnd/dto/requestDto/EditTransactionDto.class
 com/MrSurenK/SpendSense_BackEnd/CustomExceptions/ConflictException.class
-com/MrSurenK/SpendSense_BackEnd/dto/responseDto/DashTopFiveSpendDto.class
 com/MrSurenK/SpendSense_BackEnd/controller/TransactionsController.class
 com/MrSurenK/SpendSense_BackEnd/model/Transaction.class
 com/MrSurenK/SpendSense_BackEnd/model/Category_.class

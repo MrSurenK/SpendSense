@@ -25,7 +25,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, UUID> {
     List<Transaction> findTopFiveByAmount(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
                                           @Param("endDate") LocalDate endDate, Pageable page);
 
-
-
+    @Query(value="SELECT t FROM Transaction t WHERE (t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE AND t.recurring=true)")
+    List<Transaction>allRecurringSpend(@Param("userId") Integer userId, Pageable page);
 
 }
