@@ -21,7 +21,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, UUID> {
                                                                       int userId, Pageable page);
 
     //More efficient than using MONTH and YEAR filters
-    @Query(value ="SELECT t FROM Transaction t WHERE (t.userAccount.id = :userId AND t.transactionDate >=:startDate AND t.transactionDate < :endDate) ORDER BY t.amount DESC")
+    @Query(value ="SELECT t FROM Transaction t WHERE (t.userAccount.id = :userId AND t.transactionDate >=:startDate AND t.transactionDate < :endDate AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE) ORDER BY t.amount DESC")
     List<Transaction> findTopFiveByAmount(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
                                           @Param("endDate") LocalDate endDate, Pageable page);
 

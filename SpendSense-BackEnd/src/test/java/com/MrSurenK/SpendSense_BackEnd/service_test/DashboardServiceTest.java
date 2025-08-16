@@ -1,7 +1,7 @@
-package com.MrSurenK.SpendSense_BackEnd.service;
-
+package com.MrSurenK.SpendSense_BackEnd.service_test;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 import com.MrSurenK.SpendSense_BackEnd.repository.TransactionRepo;
+import com.MrSurenK.SpendSense_BackEnd.service.DashboardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -44,7 +44,7 @@ class DashboardServiceTest {
 
         // Act
         List<Transaction> result = dashboardService.getTop5TransactionsByAmountForMonthOrYear(
-                userId, month, year, PageRequest.of(0, 5));
+                userId, month, year);
 
         // Assert
         assertThat(result).hasSize(2);
@@ -69,7 +69,7 @@ class DashboardServiceTest {
 
         // Act
         List<Transaction> result = dashboardService.getTop5TransactionsByAmountForMonthOrYear(
-                userId, month, year, PageRequest.of(0, 5));
+                userId, month, year);
 
         // Assert
         assertThat(result).hasSize(1);

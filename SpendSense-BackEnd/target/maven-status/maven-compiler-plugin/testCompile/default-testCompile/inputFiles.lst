@@ -1,4 +1,5 @@
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/test/java/com/MrSurenK/SpendSense_BackEnd/SpendSenseBackEndApplicationTests.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/test/java/com/MrSurenK/SpendSense_BackEnd/service_test/CategoryServiceTest.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/test/java/com/MrSurenK/SpendSense_BackEnd/service_test/DashboardServiceTest.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/test/java/com/MrSurenK/SpendSense_BackEnd/service_test/TransactionServiceTest.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/test/java/com/MrSurenK/SpendSense_BackEnd/service_test/UserAccountServiceTest.java

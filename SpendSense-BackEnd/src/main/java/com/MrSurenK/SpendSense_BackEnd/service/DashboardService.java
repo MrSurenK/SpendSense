@@ -19,8 +19,8 @@ public class DashboardService {
     }
 
     //Give month then it will get for the month, else it will get for the year
-    public List<Transaction> getTop5TransactionsByAmountForMonthOrYear(Integer userId, Integer month, Integer year,
-                                                                       Pageable page){
+    public List<Transaction> getTop5TransactionsByAmountForMonthOrYear(Integer userId, Integer month, Integer year
+                                                                    ){
         LocalDate startDate;
         LocalDate endDate;
 
