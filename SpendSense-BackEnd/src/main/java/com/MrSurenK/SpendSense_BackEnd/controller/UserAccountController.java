@@ -3,19 +3,21 @@ package com.MrSurenK.SpendSense_BackEnd.controller;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.LoginDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.RefreshRequest;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.UserSignUpDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.ApiResponse;
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.LoginResponse;
+import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.UserSummary;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.service.JwtService;
+import com.MrSurenK.SpendSense_BackEnd.service.SecurityContextService;
 import com.MrSurenK.SpendSense_BackEnd.service.UserAccountService;
+import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +33,17 @@ public class UserAccountController {
 
     private final JwtService jwtService;
 
+    private final SecurityContextService securityContextService;
+
     public UserAccountController(
                                  UserAccountService userAccountService,
-                                 JwtService jwtService
+                                 JwtService jwtService,
+                                 SecurityContextService securityContextService
                                  ){
 
         this.userAccountService = userAccountService;
         this.jwtService = jwtService;
+        this.securityContextService = securityContextService;
     }
 
 
@@ -132,6 +138,21 @@ public class UserAccountController {
 
         return ResponseEntity.badRequest().body("Authorization header missing or invalid");
 
+    }
+
+    @GetMapping("/user/accountSummary")
+    public ResponseEntity<ApiResponse<UserSummary>> getUserSummary(@RequestParam LocalDate date){
+
+        int userId = securityContextService.getUserFromSecurityContext().getId();
+
+        UserSummary accountSummary = userAccountService.userSummary(userId,date);
+
+        ApiResponse<UserSummary> res = new ApiResponse<>();
+        res.setSuccess(true);
+        res.setMessage("User Summary successfully fetched");
+        res.setData(accountSummary);
+
+        return ResponseEntity.ok(res);
     }
 
 //    //For testing auth only: Remove endpoint before deploying!

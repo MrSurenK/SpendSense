@@ -24,6 +24,8 @@
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/PaginatedResponse.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/TransactionResponse.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/UserAccountResponse.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/UserSummary.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/UserTakeHomeIncomeDto.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/model/Category.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/model/Transaction.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/model/TransactionType.java

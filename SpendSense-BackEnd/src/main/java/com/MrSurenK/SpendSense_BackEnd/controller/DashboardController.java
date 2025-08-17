@@ -2,6 +2,7 @@ package com.MrSurenK.SpendSense_BackEnd.controller;
 
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.ApiResponse;
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.DashSpendOverview;
+import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.UserTakeHomeIncomeDto;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 import com.MrSurenK.SpendSense_BackEnd.service.DashboardService;
 import com.MrSurenK.SpendSense_BackEnd.service.SecurityContextService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,12 +78,27 @@ public class DashboardController {
            recurringSpend.add(newEntry);
         }
 
-        ApiResponse<List<DashSpendOverview>> apiResponse = new ApiResponse();
+        ApiResponse<List<DashSpendOverview>> apiResponse = new ApiResponse<>();
         apiResponse.setSuccess(true);
-        apiResponse.setMessage("Top 5 transactions retrieved");
+        apiResponse.setMessage("All subscriptions retrieved");
         apiResponse.setData(recurringSpend);
 
         return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/dash/incomeSummary")
+    public ResponseEntity<ApiResponse<UserTakeHomeIncomeDto>> getUserDisposableIncome(
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate
+    ){
+        Integer userId = securityContextService.getUserFromSecurityContext().getId();
+        UserTakeHomeIncomeDto takeHomeIncome = dashboardService.getTakeHomeSalary(userId,startDate, endDate);
+        ApiResponse<UserTakeHomeIncomeDto> res = new ApiResponse<>();
+        res.setSuccess(true);
+        res.setMessage("Income details successfully fetched!");
+        res.setData(takeHomeIncome);
+
+        return ResponseEntity.ok(res);
     }
 
 }

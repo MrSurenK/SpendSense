@@ -1,6 +1,7 @@
 package com.MrSurenK.SpendSense_BackEnd.service_test;
 
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.UserSignUpDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.UserSummary;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import com.MrSurenK.SpendSense_BackEnd.service.UserAccountService;
@@ -12,8 +13,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -126,5 +129,37 @@ public class UserAccountServiceTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testUserSummary_Success() {
+        // Arrange
+        int userId = 1;
+        LocalDate dob = LocalDate.of(1990, 5, 15);
+        LocalDate currYear = LocalDate.of(2025, 1, 1);
+
+        UserAccount mockUser = new UserAccount();
+        mockUser.setId(userId);
+        mockUser.setFirstName("John");
+        mockUser.setLastName("Doe");
+        mockUser.setDateOfBirth(dob);
+        mockUser.setLastLogin(LocalDate.of(2024, 12, 31).atStartOfDay());
+        mockUser.setOccupation("Engineer");
+
+        when(userAccountRepo.findById(userId)).thenReturn(Optional.of(mockUser));
+
+        // Act
+        UserSummary result = userAccountService.userSummary(userId, currYear);
+
+        // Age calculation
+        int expectedAge = Period.between(dob, currYear).getYears();
+
+        // Assert
+        assertEquals(userId, result.getId());
+        assertEquals("John", result.getFirstName());
+        assertEquals("Doe", result.getLastName());
+        assertEquals(mockUser.getLastLogin(), result.getLastLogin());
+        assertEquals(expectedAge, result.getAge());
+        assertEquals("Engineer", result.getOccupation());
     }
 }

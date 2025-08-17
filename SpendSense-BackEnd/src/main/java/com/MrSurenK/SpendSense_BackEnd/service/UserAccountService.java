@@ -1,6 +1,8 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.LoginDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.UserSummary;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,17 +12,18 @@ import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.UserSignUpDto;
 import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserAccountService {
 
-	private UserAccountRepo userAccountRepo;
-	private UserAccount userAccount;
-	private PasswordEncoder passwordEncoder;
-	private AuthenticationManager authenticationManager;
+	private final UserAccountRepo userAccountRepo;
+    private final PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
 
 
 	private UserAccountService(UserAccountRepo userAccountRepo, PasswordEncoder passwordEncoder,
@@ -44,7 +47,7 @@ public class UserAccountService {
 		}
 
 		// Map fields to user account
-		userAccount = new UserAccount();
+        UserAccount userAccount = new UserAccount();
 		userAccount.setEmail(email);
 		userAccount.setUsername(username);
 		userAccount.setFirstName(userSignUpDto.getFirstName());
@@ -95,4 +98,29 @@ public class UserAccountService {
 		return users;
 	}
 
+	//ToDO: UserAccount summary
+	/*
+	* Name
+	* Age
+	* Occupation
+	* Income
+	*/
+	public UserSummary userSummary(int userId, LocalDate currYear){
+
+		UserAccount user = userAccountRepo.findById(userId).orElseThrow(()
+				-> new EntityNotFoundException("User not found"));
+
+		UserSummary userSummary = new UserSummary();
+		userSummary.setId(user.getId());
+		userSummary.setFirstName(user.getFirstName());
+		userSummary.setLastName(user.getLastName());
+		userSummary.setLastLogin(user.getLastLogin());
+		LocalDate dob = user.getDateOfBirth();
+		Period period = Period.between(dob, currYear);
+		int age = period.getYears();
+		userSummary.setAge(age);
+		userSummary.setOccupation(user.getOccupation());
+
+		return userSummary;
+	}
 }

@@ -1,5 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.model;
 
+import java.math.BigDecimal;
 import java.sql.Blob;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,26 +27,24 @@ public class UserAccount implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-
 	@Column(unique = true, nullable = false)
 	private String email;
-
 
 	@Column(unique = true,nullable = false)
 	private String username; // Must be unique in db
 
-
 	@Column(nullable = false)
 	private String firstName;
-
 
 	@Column(nullable = false)
 	private String lastName;
 
+	@Column(nullable = false, length = 100)
+	private String occupation;
+
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	@Column(nullable = false)
 	private LocalDate dateOfBirth;
-
 
 	@Column(nullable = false)
 	private String password; // Encrypt password before storing in entity
