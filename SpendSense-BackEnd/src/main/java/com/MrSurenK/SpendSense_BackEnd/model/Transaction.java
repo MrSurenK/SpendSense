@@ -5,6 +5,7 @@ import io.lettuce.core.dynamic.annotation.CommandNaming;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Check;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Data
 @Entity
+@Check(constraints = "recurring = false OR next_due_date IS NOT NULL")
 @Table(name="user_transactions")
 public class Transaction {
 
@@ -36,6 +38,8 @@ public class Transaction {
     @Column(nullable = false)
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate transactionDate;
+
+    private LocalDate nextDueDate; //if recurring is true this will help with the implementation of cron job
 
     @Column(nullable = false)
     private LocalDateTime lastUpdated;

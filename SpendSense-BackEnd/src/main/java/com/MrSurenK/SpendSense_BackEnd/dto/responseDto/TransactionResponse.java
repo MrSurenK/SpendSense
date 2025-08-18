@@ -21,6 +21,8 @@ public class TransactionResponse {
 
     private LocalDate transactionDate;
 
+    private LocalDate nextDueDate;
+
     private LocalDateTime lastUpdated;
 
     private Long catId;

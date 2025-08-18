@@ -13,9 +13,11 @@ public class EntityToDtoMapper {
         transactionResponse.setId(entity.getId());
         transactionResponse.setTransactionDate(entity.getTransactionDate());
         transactionResponse.setRecurring(entity.getRecurring());
+        transactionResponse.setNextDueDate(entity.getNextDueDate());
         transactionResponse.setRemarks(entity.getRemarks());
         transactionResponse.setAmount(entity.getAmount());
         transactionResponse.setLastUpdated(entity.getLastUpdated());
+
         Category cat = entity.getCategory();
          if (cat != null) {
             transactionResponse.setCatId(cat.getId());

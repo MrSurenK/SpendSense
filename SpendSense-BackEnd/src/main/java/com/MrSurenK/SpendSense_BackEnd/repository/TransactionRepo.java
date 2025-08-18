@@ -9,10 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -20,8 +18,10 @@ public interface TransactionRepo extends JpaRepository<Transaction, UUID> {
 
     Page<Transaction> findAllByUserAccountId(int userId, Pageable page);
     Page<Transaction>findAllByCategoryIdAndUserAccountId(Long catId, int userId, Pageable page);
-    Page<Transaction> findAllByUserAccountIdAndTransactionDateBetween(LocalDate startDate, LocalDate endDate,
-                                                                      int userId, Pageable page);
+    Page<Transaction> findAllByUserAccountIdAndTransactionDateBetween(int userId,LocalDate startDate, LocalDate endDate,
+                                                                      Pageable page);
+
+    List<Transaction> findByRecurringTrueAndNextDueDate(LocalDate date);
 
     //More efficient than using MONTH and YEAR filters
     @Query(value ="SELECT t FROM Transaction t WHERE (t.userAccount.id = :userId AND t.transactionDate >=:startDate AND t.transactionDate < :endDate AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE) ORDER BY t.amount DESC")

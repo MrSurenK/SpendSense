@@ -19,6 +19,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -58,11 +59,10 @@ public class TransactionsController {
     }
 
     @GetMapping("/getAllTransactions")
-    public ResponseEntity<PaginatedResponse<TransactionResponse>> getTranactionsSortedByLastUpdated(
+    public ResponseEntity<PaginatedResponse<TransactionResponse>> getAllTranactionsSortedByLastUpdated(
             @PageableDefault(page = 0, size = 10, sort = "lastUpdated", direction = Sort.Direction.DESC) Pageable page){
 //        Pageable pageDetails = PageRequest.of(1, 5, Sort.by("lastUpdated")
 //                    .descending());
-
         UserAccount user = securityContextService.getUserFromSecurityContext();
         Integer userId = user.getId();
         Page<Transaction> allTransactions = transactionService.getTransactions(userId,page);
@@ -84,6 +84,36 @@ public class TransactionsController {
         res.setFirst(allTransactions.isFirst());
         res.setLast(allTransactions.isLast());
         res.setTotalPages(allTransactions.getTotalPages());
+
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/txn/getTxnWithinDateRange")
+    public ResponseEntity<PaginatedResponse<TransactionResponse>> getTransactionsInRange(
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate,
+            @PageableDefault(page = 0, size = 10, sort = "lastUpdated", direction = Sort.Direction.DESC) Pageable page
+    ){
+        int userid = securityContextService.getUserFromSecurityContext().getId();
+
+        Page<Transaction> getFilteredTxn = transactionService.getTransactionWithDateRange(userid,startDate,endDate,page);
+
+        List<Transaction> txns = getFilteredTxn.getContent();
+
+        PaginatedResponse<TransactionResponse> res = new PaginatedResponse<>();
+
+        List<TransactionResponse> getListOfTransactions = txns.stream()
+                .map(EntityToDtoMapper::mapEntityToTransactionResponseDto)
+                .toList();
+
+        res.setSuccess(true);
+        res.setMessage("Successfully retrieved transactions from" + startDate + "to" + endDate);
+        res.setContent(getListOfTransactions); //Mapped to response object to prevent exposing entity in JSON
+        res.setPage(getFilteredTxn.getNumber());
+        res.setSize(getFilteredTxn.getSize());
+        res.setFirst(getFilteredTxn.isFirst());
+        res.setLast(getFilteredTxn.isLast());
+        res.setTotalPages(getFilteredTxn.getTotalPages());
 
         return ResponseEntity.ok(res);
     }
@@ -123,9 +153,4 @@ public class TransactionsController {
 
         return ResponseEntity.ok(res);
     }
-
-
-
-
-
 }

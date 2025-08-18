@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -44,11 +45,16 @@ public class TransactionService {
         Category cat = categoryRepo.getValidCat(userId, transactionRequestDto.getCategoryId()).orElseThrow(()
                 ->new EntityNotFoundException("Category not found"));
         newItem.setCategory(cat);
-        newItem.setTransactionDate(transactionRequestDto.getDate());
+        LocalDate txnDate = transactionRequestDto.getDate();
+        newItem.setTransactionDate(txnDate);
         newItem.setRecurring(transactionRequestDto.getRecurring() != null ? transactionRequestDto.getRecurring(): false);
 
-        //Get userAccount from Security Context
+        if(transactionRequestDto.getRecurring()==true){
+            //Add 1 mth to due date field
+            newItem.setNextDueDate(txnDate.plusMonths(1));
+        }
 
+        //Get userAccount from Security
         newItem.setUserAccount(userAccountRepo.findById(userId).orElseThrow());
 
         newItem.setRemarks(transactionRequestDto.getRemarks());
@@ -70,6 +76,12 @@ public class TransactionService {
 
 
     //ToDo: More filter options to retrieve transactions by
+
+    public Page<Transaction> getTransactionWithDateRange(Integer userId, LocalDate startDate, LocalDate endDate,
+                                                         Pageable page){
+        return transactionRepo.findAllByUserAccountIdAndTransactionDateBetween(userId,startDate,endDate,page);
+    }
+
 //    public Page<Transaction>getByCategoryFilter(Integer userId, Long catId, Pageable page){
 //        return transactionRepo.findAllByCategoryIdAndUserAccountId(catId,userId,page);
 //    }
@@ -90,13 +102,24 @@ public class TransactionService {
             currTransaction.setAmount(dto.getAmount());
         }
         if(dto.getDate() != null){
-            currTransaction.setTransactionDate(dto.getDate());
+            LocalDate newDate = dto.getDate();
+            currTransaction.setTransactionDate(newDate);
+            //Check if recurring is true in entity and if so update the next Due Date as well
+            if(currTransaction.getRecurring() == true){
+                currTransaction.setNextDueDate(newDate.plusMonths(1));
+            }
         }
         if(dto.getRemarks() != null){
             currTransaction.setRemarks(dto.getRemarks());
         }
         if(dto.getRecurring() != null){
             currTransaction.setRecurring(dto.getRecurring());
+            //remove next due date if recurring changed to false
+            if(dto.getRecurring() == false){
+                if(!(currTransaction.getNextDueDate() == null)){
+                    currTransaction.setNextDueDate(null);
+                }
+            }
         }
         if(dto.getCategoryId() != null){
             Category newCat = categoryRepo.getValidCat(userId, dto.getCategoryId()).orElseThrow(()
