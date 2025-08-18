@@ -107,7 +107,7 @@ public class TransactionsController {
                 .toList();
 
         res.setSuccess(true);
-        res.setMessage("Successfully retrieved transactions from" + startDate + "to" + endDate);
+        res.setMessage("Successfully retrieved transactions from " + startDate + " to " + endDate);
         res.setContent(getListOfTransactions); //Mapped to response object to prevent exposing entity in JSON
         res.setPage(getFilteredTxn.getNumber());
         res.setSize(getFilteredTxn.getSize());

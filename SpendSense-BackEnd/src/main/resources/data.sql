@@ -25,22 +25,22 @@ INSERT INTO category (name,transaction_type,is_system) VALUES('Allowance','INCOM
 --Insert Dummy Transactions for Sam Smith--
 INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
 UUID(),125.50, 'Groceries from supermarket',false,'2025-08-09',NOW(),1,2);
-INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID(),4000.00, 'Salary',false,'2025-08-31',NOW(),1,7);
-INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID(),5000.00, 'Bonus',false,'2025-08-31',NOW(),1,10);
+INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+UUID(),4000.00, 'Salary',true,'2025-08-31','2025-09-30',NOW(),1,7);
 INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
 UUID(),5000.00, 'Bonus',false,'2025-08-31',NOW(),1,10);
 INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID(),80.00, 'Phone bill',true,'2025-08-05',NOW(),1,3);
+UUID(),5000.00, 'Bonus',false,'2025-08-31',NOW(),1,10);
+INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+UUID(),80.00, 'Phone bill',true,'2025-08-05','2025-09-05',NOW(),1,3);
 INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
 UUID(),5, 'Transportation to work and back',false,'2025-08-09',NOW(),1,4);
 INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
 UUID(),5, 'Transportation to work and back',false,'2025-08-10',NOW(),1,4);
 INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
 UUID(),7.50, 'Dinner',false,'2025-08-09',NOW(),1,6);
-INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID(),100.00, 'Health Insurance',true,'2025-08-09',NOW(),1,5);
+INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+UUID(),100.00, 'Health Insurance',true,'2025-08-09','2025-09-30',NOW(),1,5);
 INSERT INTO user_transactions (id,amount,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
 UUID(),40.00, "Grab to friend's place",false,'2025-08-11',NOW(),1,4);
 

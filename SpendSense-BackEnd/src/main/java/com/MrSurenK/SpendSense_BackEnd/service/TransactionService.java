@@ -8,13 +8,16 @@ import com.MrSurenK.SpendSense_BackEnd.repository.CategoryRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.TransactionRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -143,15 +146,28 @@ public class TransactionService {
         //Perform delete operation of transaction record from db
     }
 
-    //Filter functionalities
-    public void filterByDate(){
+    @Transactional
+    public void generateNewRecurringTransactions(){
+        LocalDate today = LocalDate.now();
 
+        List<Transaction> templatesDueToday = transactionRepo.findByRecurringTrueAndNextDueDate(today);
+
+        for(Transaction template: templatesDueToday){
+
+            Transaction copy = new Transaction();
+            copy.setParentTransaction(template);
+            copy.setUserAccount(template.getUserAccount());
+            copy.setAmount(template.getAmount());
+            copy.setCategory(template.getCategory());
+            copy.setTransactionDate(today);
+            copy.setRecurring(false); //copies shd never be recurring to prevent infiinite cascade of copies
+            copy.setLastUpdated(LocalDateTime.now());
+            copy.setRemarks(template.getRemarks());
+
+            transactionRepo.save(copy);
+
+            template.setNextDueDate(today.plusMonths(1));
+            transactionRepo.save(template);
+        }
     }
-
-    public void filterByCat(){
-
-    }
-
-
-
 }

@@ -15,7 +15,9 @@ public abstract class Transaction_ {
 
 	public static final String LAST_UPDATED = "lastUpdated";
 	public static final String AMOUNT = "amount";
+	public static final String PARENT_TRANSACTION = "parentTransaction";
 	public static final String RECURRING = "recurring";
+	public static final String NEXT_DUE_DATE = "nextDueDate";
 	public static final String USER_ACCOUNT = "userAccount";
 	public static final String ID = "id";
 	public static final String TRANSACTION_DATE = "transactionDate";
@@ -34,9 +36,19 @@ public abstract class Transaction_ {
 	public static volatile SingularAttribute<Transaction, BigDecimal> amount;
 	
 	/**
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#parentTransaction
+	 **/
+	public static volatile SingularAttribute<Transaction, Transaction> parentTransaction;
+	
+	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#recurring
 	 **/
 	public static volatile SingularAttribute<Transaction, Boolean> recurring;
+	
+	/**
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#nextDueDate
+	 **/
+	public static volatile SingularAttribute<Transaction, LocalDate> nextDueDate;
 	
 	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#userAccount

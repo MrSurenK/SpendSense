@@ -26,6 +26,9 @@ public class Transaction {
     @Column(columnDefinition = "VARCHAR(36)")
     private UUID id;
 
+    @ManyToOne
+    private Transaction parentTransaction; //null for templates
+
     @Column(nullable = false)
     private BigDecimal amount;
 

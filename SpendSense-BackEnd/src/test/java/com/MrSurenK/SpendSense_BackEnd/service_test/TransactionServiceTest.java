@@ -161,41 +161,60 @@ public class TransactionServiceTest {
 
         }
 
-    }
+        @Test
+        void generateNewRecurringTransactions_shouldCreateCopyAndUpdateNextDueDate() {
+        // Arrange
+        LocalDate today = LocalDate.now();
 
-    class NegativeTransactionInputTests{
+        Transaction template = new Transaction();
+        template.setId(java.util.UUID.randomUUID());
+        template.setAmount(new BigDecimal("100.00"));
+        template.setCategory(new Category());
+        template.setUserAccount(new UserAccount());
+        template.setTransactionDate(today.minusMonths(1));
+        template.setRecurring(true);
+        template.setNextDueDate(today);
+        template.setRemarks("Monthly Rent");
+        template.setLastUpdated(LocalDateTime.now());
 
-        void nullType(){
+        when(transactionRepo.findByRecurringTrueAndNextDueDate(today))
+                .thenReturn(List.of(template));
 
+        // Act
+        transactionService.generateNewRecurringTransactions();
+
+        // Assert: template should be updated
+        assert template.getNextDueDate().equals(today.plusMonths(1));
+
+        // Verify repo interactions
+        verify(transactionRepo, times(1)).findByRecurringTrueAndNextDueDate(today);
+
+        // Capture the saved transactions
+        ArgumentCaptor<Transaction> captor = ArgumentCaptor.forClass(Transaction.class);
+        verify(transactionRepo, times(2)).save(captor.capture());
+
+        List<Transaction> savedTransactions = captor.getAllValues();
+
+        // One should be the copy, one should be the template
+        Transaction savedCopy = savedTransactions.stream()
+                .filter(t -> !t.getRecurring()) // the generated copy
+                .findFirst()
+                .orElseThrow();
+
+        Transaction savedTemplate = savedTransactions.stream()
+                .filter(Transaction::getRecurring) // the updated template
+                .findFirst()
+                .orElseThrow();
+
+        // Validate copy
+        assert savedCopy.getTransactionDate().equals(today);
+        assert savedCopy.getParentTransaction().equals(template);
+
+        // Validate template
+        assert savedTemplate.getNextDueDate().equals(today.plusMonths(1));
         }
 
-        void nullAmount(){
 
-        }
-
-        void nullCat(){
-
-        }
-
-        void nullDate(){
-
-        }
-
-        void nullRecurring(){
-
-        }
-
-        void nullUserId(){
-
-        }
-
-        void negativeAmount(){
-
-        }
-
-        void invalidDateFormat(){
-
-        }
 
     }
 

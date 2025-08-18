@@ -1,6 +1,5 @@
+com/MrSurenK/SpendSense_BackEnd/service_test/UserAccountServiceTest.class
 com/MrSurenK/SpendSense_BackEnd/SpendSenseBackEndApplicationTests.class
 com/MrSurenK/SpendSense_BackEnd/service_test/CategoryServiceTest.class
 com/MrSurenK/SpendSense_BackEnd/service_test/TransactionServiceTest.class
-com/MrSurenK/SpendSense_BackEnd/service_test/UserAccountServiceTest.class
-com/MrSurenK/SpendSense_BackEnd/service_test/TransactionServiceTest$NegativeTransactionInputTests.class
 com/MrSurenK/SpendSense_BackEnd/service_test/TransactionServiceTest$TransactionCRUD.class

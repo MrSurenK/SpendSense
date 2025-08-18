@@ -33,6 +33,7 @@
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/repository/CategoryRepo.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/repository/TransactionRepo.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/repository/UserAccountRepo.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/scheduler/RecurringTransactionScheduler.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/CategoryService.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/DashboardService.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/JwtService.java
