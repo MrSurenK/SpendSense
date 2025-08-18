@@ -53,6 +53,7 @@ public class UserAccountService {
 		userAccount.setFirstName(userSignUpDto.getFirstName());
 		userAccount.setLastName(userSignUpDto.getLastName());
 		userAccount.setDateOfBirth(userSignUpDto.getDob());
+		userAccount.setOccupation(userSignUpDto.getOccupation());
 		userAccount.setPassword(passwordEncoder.encode(userSignUpDto.getPassword()));
 
 		userAccountRepo.save(userAccount); //Will throw runtime exceptions, no need to catch exceptions

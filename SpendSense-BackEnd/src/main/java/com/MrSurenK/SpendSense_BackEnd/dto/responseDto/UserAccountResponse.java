@@ -19,6 +19,7 @@ public class UserAccountResponse {
     private String username; // Must be unique in db
     private String firstName;
     private String lastName;
+    private String occupation;
 	private LocalDate dateOfBirth;
     private LocalDateTime lastLogin;
 }
