@@ -1,8 +1,10 @@
 import "./App.css";
-import Button from "./components/Button/Button";
+import Login from "./features/user-account/LogIn";
+import InputBox from "./components/input-box/InputBox";
+import LogIn from "./features/user-account/LogIn";
 
 function App() {
-  return <Button text={"Hello World"} size={"sm"}></Button>;
+  return <LogIn></LogIn>;
 }
 
 export default App;
