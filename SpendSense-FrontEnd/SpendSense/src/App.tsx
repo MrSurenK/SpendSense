@@ -1,10 +1,17 @@
 import "./App.css";
 import Login from "./features/user-account/LogIn";
-import InputBox from "./components/input-box/InputBox";
-import LogIn from "./features/user-account/LogIn";
+import { BrowserRouter, Routes, Route } from "react-router";
+import Registration from "./features/user-account/Registration";
 
 function App() {
-  return <LogIn></LogIn>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />}></Route>
+        <Route path="/register" element={<Registration />}></Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

@@ -1,6 +1,7 @@
 import Button from "../../components/btn/Button.tsx";
 import Input from "../../components/input-box/InputBox.tsx";
 import styles from "./LogIn.module.css";
+import { NavLink } from "react-router";
 
 function LogIn() {
   //create Sign in form
@@ -25,9 +26,11 @@ function LogIn() {
             <Button text="Sign In" size="sm"></Button>
           </div>
           <div className={styles.spacing}>
-            <a className={styles.link} href="#">
-              Not a member? Sign up here!
-            </a>
+            <nav>
+              <NavLink className={styles.link} to="/register">
+                Not a member? Sign up here!
+              </NavLink>
+            </nav>
           </div>
         </div>
         <div className={styles.background}></div>
