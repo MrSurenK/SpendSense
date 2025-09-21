@@ -84,17 +84,31 @@
 }
 
 /* Sizes */
-.sm {
-  font-size: 0.8rem;
-  padding: 0.4rem 0.8rem;
+@media (min-width: 1368px) {
+  .sm {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .md {
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .lg {
+    font-size: 1.125rem; /* 18px */
+    padding: 0.8rem 1.6rem; /* ~13px 26px */
+  }
 }
 
-.md {
-  font-size: 1rem;
-  padding: 0.6rem 1.2rem;
-}
+@media (max-width: 1368px) {
+  .sm {
+    font-size: 1.125rem; /* 18px */
+    padding: 0.8rem 1.6rem; /* ~13px 26px */
+  }
 
-.lg {
-  font-size: 1.25rem;
-  padding: 0.8rem 1.6rem;
+  .md {
+    font-size: 1.5rem;
+    padding: 1rem 1.8rem;
+  }
 }

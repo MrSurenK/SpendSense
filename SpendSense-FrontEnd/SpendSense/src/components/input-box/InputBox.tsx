@@ -2,7 +2,7 @@ import styles from "./InputBox.module.css";
 
 interface inputFields {
   type?: string;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   placeholder?: string;
   disabled?: boolean; //This is for disabled styling
 }

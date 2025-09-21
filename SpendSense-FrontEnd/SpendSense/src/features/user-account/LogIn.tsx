@@ -15,11 +15,11 @@ function LogIn() {
           <div>
             <div className={styles.fieldsGap}>
               <label className={styles.labels}>Email</label>
-              <Input placeholder="johnSmith@gmail.com" size="sm"></Input>
+              <Input placeholder="johnSmith@gmail.com" size="md"></Input>
             </div>
             <div className={styles.fieldsGap}>
               <label className={styles.labels}>Password</label>
-              <Input type="password" placeholder="password"></Input>
+              <Input type="password" placeholder="password" size="md"></Input>
             </div>
           </div>
           <div>

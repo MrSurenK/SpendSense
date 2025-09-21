@@ -35,11 +35,15 @@
 }
 
 .sm {
-  width: clamp(200px, 100%, 250px);
+  width: clamp(120px, 100%, 150px);
 }
 
 .md {
-  width: clamp(280px, 100%, 480px);
+  width: clamp(200px, 100%, 250px);
+}
+
+.lg {
+  width: clamp(320px, 100%, 380px);
 }
 
 .disabled {
@@ -47,4 +51,24 @@
   color: #a0a0a0; /* Lighter text color */
   cursor: not-allowed; /* Change cursor to indicate non-interactivity */
   opacity: 0.7; /* Slightly faded appearance */
+}
+
+@media screen and (max-width: 1368px) {
+  .sm {
+    padding: 0.9rem 1rem; /* taller */
+    font-size: 1.125rem;
+    width: 50vw;
+  }
+
+  .md {
+    padding: 0.9rem 1rem; /* taller */
+    font-size: 1.125rem;
+    width: 90vw;
+  }
+
+  .lg {
+    padding: 0.9rem 1rem; /* taller */
+    font-size: 1.125rem;
+    width: 90vw;
+  }
 }
