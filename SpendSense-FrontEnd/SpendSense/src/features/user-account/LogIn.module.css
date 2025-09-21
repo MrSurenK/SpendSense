@@ -1,25 +1,25 @@
-.link {
-  font-size: 0.75rem;
-}
-
-.browserContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  height: 100vh;
-  width: 100vw;
-}
-
-.card {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
 /* Anything larger than ipad */
 @media screen and (min-width: 1368px) {
+  .link {
+    font-size: 0.75rem;
+  }
+
+  .browserContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .card {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
   .background {
     background-image: url(../../assets/cash.jpg);
     background-size: cover;
