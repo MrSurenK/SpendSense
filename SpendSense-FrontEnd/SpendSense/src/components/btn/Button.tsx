@@ -5,7 +5,8 @@ interface ButtonProps {
   variant?: "btn-primary" | "btn-secondary";
   size?: "sm" | "md" | "lg";
   disabled?: boolean;
-  onClick?: () => void;
+  type?: "submit" | "reset" | "button";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 function Button({
@@ -14,6 +15,7 @@ function Button({
   size = "lg",
   disabled = false,
   onClick,
+  type,
 }: ButtonProps) {
   const buttonStyles = [
     styles.btn,
@@ -26,7 +28,12 @@ function Button({
 
   return (
     <>
-      <button className={buttonStyles} onClick={onClick} disabled={disabled}>
+      <button
+        className={buttonStyles}
+        onClick={onClick}
+        disabled={disabled}
+        type={type}
+      >
         <span>{text}</span>
       </button>
     </>
