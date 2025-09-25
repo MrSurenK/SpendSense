@@ -29,7 +29,39 @@ function Registration() {
     matchPassword: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [matchError, setMatchError] = useState<string | null>(null);
+  const [passSizeError, setPassSizeError] = useState<string | null>(null);
+  const [requiredCheck, setRequiredCheck] = useState<string | null>(null);
+
+  const checkPasswordMatch = (): boolean => {
+    if (formData.matchPassword != formData.password) {
+      setMatchError("Passwords do not match");
+      return false;
+    }
+    setMatchError(null);
+    return true;
+  };
+
+  const checkPasswordSize = (): boolean => {
+    const size = formData.password.length;
+    if (size < 8) {
+      setPassSizeError("Password has to be a minmum of 8 characters");
+      return false;
+    }
+    setPassSizeError(null);
+    return true;
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (e.target.name === "matchPassword") {
+      checkPasswordMatch();
+    }
+    if (e.target.name === "password") {
+      checkPasswordSize();
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     // console.log(value);
     setFormData((prev) => ({
@@ -38,15 +70,34 @@ function Registration() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { matchPassword, ...restOfFields } = formData;
-    const payload: Payload = {
-      ...restOfFields,
-      dob: formData.dob.split("-").reverse().join("-"),
-    };
-    console.log(payload);
+    //check if all fields have been filled
+    if (
+      !formData.email ||
+      !formData.dob ||
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.occupation ||
+      !formData.password ||
+      !formData.userName ||
+      !formData.matchPassword
+    ) {
+      setRequiredCheck("Please fill in all required fields!");
+      return;
+    } else {
+      setRequiredCheck(null);
+    }
+
+    if (checkPasswordMatch() && checkPasswordSize()) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { matchPassword, ...restOfFields } = formData;
+      const payload: Payload = {
+        ...restOfFields,
+        dob: formData.dob.split("-").reverse().join("-"),
+      };
+      console.log(payload);
+    }
   };
 
   return (
@@ -54,72 +105,106 @@ function Registration() {
       <div className={`${styles.formContainer} ${styles.buttonPos}`}>
         <h1 className={`${styles.header}`}>Registration</h1>
         <form className={styles.form}>
+          {requiredCheck && <p style={{ color: "red" }}>{requiredCheck}</p>}
           <div>
-            <label>Email</label>
+            <label>
+              Email<span className={styles.required}>*</span>
+            </label>
             <InputBox
               size="md"
               type="text"
               name="email"
               onChange={handleChange}
+              required={true}
             ></InputBox>
           </div>
           <div>
-            <label>Username</label>
+            <label>
+              Username <span className={styles.required}>*</span>
+            </label>
             <InputBox
               size="md"
               type="text"
               name="userName"
               onChange={handleChange}
+              required={true}
             ></InputBox>
           </div>
           <div>
-            <label>First Name</label>
+            <label>
+              First Name<span className={styles.required}>*</span>
+            </label>
             <InputBox
               size="md"
               type="text"
               name="firstName"
               onChange={handleChange}
+              required={true}
             ></InputBox>
           </div>
           <div>
-            <label>Last Name</label>
+            <label>
+              Last Name<span className={styles.required}>*</span>
+            </label>
             <InputBox
               size="md"
               type="text"
               name="lastName"
               onChange={handleChange}
+              required={true}
             ></InputBox>
           </div>
           <div>
-            <label>Occupation</label>
+            <label>
+              Occupation<span className={styles.required}>*</span>
+            </label>
             <InputBox
               size="md"
               type="text"
               name="occupation"
               onChange={handleChange}
+              required={true}
             ></InputBox>
           </div>
           <div className={`${styles.dob}`}>
-            <label>Date of Birth</label>
+            <label>
+              Date of Birth<span className={styles.required}>*</span>
+            </label>
             <InputBox
               size="sm"
               type="date"
               name="dob"
               onChange={handleChange}
+              required={true}
             ></InputBox>
           </div>
           <div>
-            <label>New Password</label>
-            <InputBox size="md" type="password" name="password"></InputBox>
+            <label>
+              Password<span className={styles.required}>*</span>
+            </label>
+            <InputBox
+              size="md"
+              type="password"
+              name="password"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              required={true}
+            ></InputBox>
+            {passSizeError && <p style={{ color: "red" }}>{passSizeError}</p>}
           </div>
           <div>
-            <label>Repeat password</label>
+            <label>
+              Repeat password<span className={styles.required}>*</span>
+            </label>
             <InputBox
               size="md"
               type="password"
               name="matchPassword"
               onChange={handleChange}
+              onBlur={handleBlur}
+              required={true}
             ></InputBox>
+            {matchError && <p style={{ color: "red" }}>{matchError}</p>}
           </div>
         </form>
         <div className={`${styles.buttonPos}`}>

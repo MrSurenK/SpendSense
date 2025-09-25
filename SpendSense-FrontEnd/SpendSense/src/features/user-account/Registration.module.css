@@ -100,3 +100,7 @@
     align-self: center;
   }
 }
+
+.required {
+  color: red;
+}

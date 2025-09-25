@@ -7,8 +7,10 @@ interface InputFields {
   type?: string;
   size?: "sm" | "md" | "lg";
   placeholder?: string;
+  required?: boolean;
   disabled?: boolean; //This is for disabled styling
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 }
 
 function InputBox({
@@ -20,6 +22,8 @@ function InputBox({
   placeholder = "",
   disabled = false,
   onChange,
+  onBlur,
+  required,
 }: InputFields) {
   const inputStyles = [
     styles.input,
@@ -40,6 +44,8 @@ function InputBox({
         placeholder={placeholder}
         disabled={disabled}
         onChange={onChange}
+        onBlur={onBlur}
+        required={required}
       />
     </>
   );
