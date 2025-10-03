@@ -25,7 +25,7 @@ public class UserSignUpDto {
 	@NotBlank(message = "Please provide a last name")
 	private String lastName;
 
-	@NotBlank(message = "Please provide a last name")
+	@NotBlank(message = "Please provide a occupation")
 	private String occupation;
 
 	@JsonFormat(pattern = "dd-MM-yyyy")

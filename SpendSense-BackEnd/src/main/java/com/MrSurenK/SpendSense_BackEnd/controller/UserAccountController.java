@@ -13,6 +13,7 @@ import com.MrSurenK.SpendSense_BackEnd.service.UserAccountService;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +74,7 @@ public class UserAccountController {
     }
 
     //Throw 400 Bad Request if server not able to process request
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/auth/register")
     public ResponseEntity<String> newAccount(@Valid @RequestBody UserSignUpDto userSignUpDto){
         System.out.println(userSignUpDto);
@@ -112,6 +114,8 @@ public class UserAccountController {
             loginResponse.setAccessTokenExpiresIn(jwtService.getJwtExpiration());
             loginResponse.setRefreshToken(request.refreshToken());
             loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshExpiration());
+            
+            //ToDo: Store refresh token in HTTP cookie for front end to access
 
             return ResponseEntity.ok(loginResponse); //Successfully logged in again
         }

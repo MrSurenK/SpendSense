@@ -2,6 +2,7 @@ package com.MrSurenK.SpendSense_BackEnd.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,6 +37,7 @@ public class EndPointConfig {
                 .cors(Customizer.withDefaults()) //Enable cors configuration
                 .authorizeHttpRequests((authorizeHttpRequests)->
                       authorizeHttpRequests
+                              .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                               .requestMatchers("/auth/**","/checkEmail","/checkUsername").permitAll() //These endpoints do not need authentication
                               .anyRequest().authenticated()) //All other endpoint need to be authenticated
                 .formLogin(AbstractHttpConfigurer::disable) //Disable default Spring form login
@@ -52,9 +54,9 @@ public class EndPointConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
-        corsConfiguration.setAllowedMethods(List.of("GET","POST","PUT","DELETE"));
-        corsConfiguration.setAllowedMethods(List.of("Authorization","Content-Type"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
+        corsConfiguration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        corsConfiguration.setAllowedHeaders(List.of("Authorization","Content-Type","Accept"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",corsConfiguration);

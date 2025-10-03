@@ -33,6 +33,34 @@ function Registration() {
   const [passSizeError, setPassSizeError] = useState<string | null>(null);
   const [requiredCheck, setRequiredCheck] = useState<string | null>(null);
 
+  //API states
+
+  const [loading, setLoading] = useState<boolean>(null);
+  const [response, setResponse] = useState<T | null>(null);
+  const [submitError, setSubmitError] = useState<Error | null>(null);
+
+  async function postForm<T>(options: RequestInit) {
+    setLoading(true);
+    try {
+      const res = await fetch("http://127.0.0.1:8080/auth/register", options);
+      if (!res.ok) {
+        //Catch HTTP errors
+        const httpError = await res.text();
+        console.log(`HTTP error. Status: ${res.status}, body:${httpError}`);
+        throw new Error(`HTTP error. Status: ${res.status}, body:${httpError}`);
+      }
+      const result = await res.json().catch(() => null);
+      setResponse(result as T);
+    } catch (err) {
+      console.log(err);
+      setSubmitError(
+        err instanceof Error ? err : new Error("Unknown error occurred")
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const checkPasswordMatch = (): boolean => {
     if (formData.matchPassword != formData.password) {
       setMatchError("Passwords do not match");
@@ -89,15 +117,26 @@ function Registration() {
       setRequiredCheck(null);
     }
 
+    let payload: Payload = formData;
     if (checkPasswordMatch() && checkPasswordSize()) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { matchPassword, ...restOfFields } = formData;
-      const payload: Payload = {
+      payload = {
         ...restOfFields,
         dob: formData.dob.split("-").reverse().join("-"),
       };
       console.log(payload);
     }
+
+    const options: RequestInit = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    };
+
+    postForm(options);
   };
 
   return (

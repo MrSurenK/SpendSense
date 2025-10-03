@@ -22,15 +22,17 @@ function LogIn() {
               <Input type="password" placeholder="password" size="md"></Input>
             </div>
           </div>
-          <div>
-            <Button text="Sign In" size="sm"></Button>
-          </div>
-          <div className={styles.spacing}>
-            <nav>
-              <NavLink className={styles.link} to="/register">
-                Not a member? Sign up here!
-              </NavLink>
-            </nav>
+          <div className={styles.bottomElements}>
+            <div>
+              <Button text="Sign In" size="sm"></Button>
+            </div>
+            <div className={styles.spacing}>
+              <nav>
+                <NavLink className={styles.link} to="/register">
+                  Not a member? Sign up here!
+                </NavLink>
+              </nav>
+            </div>
           </div>
         </div>
         <div className={styles.background}></div>
