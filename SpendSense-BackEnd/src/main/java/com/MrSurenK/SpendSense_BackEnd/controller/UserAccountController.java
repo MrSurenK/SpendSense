@@ -74,12 +74,12 @@ public class UserAccountController {
     }
 
     //Throw 400 Bad Request if server not able to process request
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/auth/register")
-    public ResponseEntity<String> newAccount(@Valid @RequestBody UserSignUpDto userSignUpDto){
+    public ResponseEntity<Map<String,String>> newAccount(@Valid @RequestBody UserSignUpDto userSignUpDto){
         System.out.println(userSignUpDto);
         userAccountService.createAccount(userSignUpDto);
-        return ResponseEntity.status(HttpStatus.OK).body("Account successfully created");
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message", "Account successfully created"));
     }
 
     //Log user in
