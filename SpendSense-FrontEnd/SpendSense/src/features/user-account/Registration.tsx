@@ -20,6 +20,11 @@ type AccountCreationRes = {
   message: string;
 };
 
+type LogInCredentials = {
+  accessToken: string;
+  refreshToken: string;
+};
+
 function Registration() {
   //Construct the JSON from the form fields to pass to API
   const [formData, setFormData] = useState<RegistrationForm>({
@@ -33,15 +38,19 @@ function Registration() {
     matchPassword: "",
   });
 
+  //States to manage form validations
   const [matchError, setMatchError] = useState<string | null>(null);
   const [passSizeError, setPassSizeError] = useState<string | null>(null);
   const [requiredCheck, setRequiredCheck] = useState<string | null>(null);
 
-  //API states
-
+  //API states for creating account
   const [loading, setLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<AccountCreationRes | null>(null);
+  //ToDo: Modal to display error message
   const [submitError, setSubmitError] = useState<Error | null>(null);
+
+  //API states to log user in and put access and refresh token
+  const [loggedIn, setLoggedIn] = useState<LogInCredentials | null>(null);
 
   async function postForm(options: RequestInit) {
     setLoading(true);
@@ -54,9 +63,10 @@ function Registration() {
         throw new Error(`HTTP error. Status: ${res.status}, body:${httpError}`);
       }
       const result = await res.json().catch(() => null);
+      return result;
+      console.log(result);
       setResponse(result);
     } catch (err) {
-      console.log(err);
       setSubmitError(
         err instanceof Error ? err : new Error("Unknown error occurred")
       );
@@ -65,9 +75,43 @@ function Registration() {
     }
   }
 
-  useEffect(() => {
-    console.log(response?.message);
-  }, [response]);
+  async function logUserIn(username: string, password: string) {
+    setLoading(true);
+    try {
+      const res = await fetch("http://127.0.0.1:8080/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: username, password: password }),
+      });
+      if (!res.ok) {
+        const httpErrorMsg = await res.text();
+        throw new Error(
+          `HTTP error. Status: ${res.status}, body: ${httpErrorMsg}`
+        );
+      }
+      const response = await res.json();
+      console.log(response);
+
+      //Cookie expiration to match JWT access token expiration
+      const expiryDateTime = new Date();
+      const addExpiration = response.refreshTokenExpiresIn;
+      expiryDateTime.setTime(expiryDateTime.getTime() + addExpiration);
+    } catch (e) {
+      setSubmitError(
+        e instanceof Error
+          ? e
+          : new Error("Log in unsucessful.Please try again")
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // useEffect(() => {
+  //   console.log(response?.message);
+  // }, [response]);
 
   const checkPasswordMatch = (): boolean => {
     if (formData.matchPassword != formData.password) {
@@ -106,7 +150,7 @@ function Registration() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent): void => {
+  const handleSubmit = async (e: React.FormEvent): void => {
     e.preventDefault();
     //check if all fields have been filled
     if (
@@ -133,7 +177,7 @@ function Registration() {
         ...restOfFields,
         dob: formData.dob.split("-").reverse().join("-"),
       };
-      console.log(payload);
+      // console.log(payload);
     }
 
     const options: RequestInit = {
@@ -144,7 +188,11 @@ function Registration() {
       body: JSON.stringify(payload),
     };
 
-    postForm(options);
+    const result = await postForm(options);
+
+    if (result) {
+      await logUserIn(payload.userName, payload.password);
+    }
   };
 
   return (
