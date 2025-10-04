@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;
-import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,9 +62,9 @@ public class JwtService {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
-    public String generateRefreshToken(UserDetails userDetails){
-        return buildToken(new HashMap<>(),userDetails, refreshExpiration);
-    }
+//    public String generateRefreshToken(UserDetails userDetails){
+//        return buildToken(new HashMap<>(),userDetails, refreshExpiration);
+//    }
 
     private String buildToken(
             Map<String, Object> extraClaims,
@@ -112,9 +111,11 @@ public class JwtService {
 
     // --- Refresh token methods using Redis ---
 
-    //Generate Refresh Token
-    public String generateRefreshToken(String username){
-        String refreshToken = UUID.randomUUID().toString();
+    //Generate Refresh Token (deprecated in favour of stateless refreshtoken)
+    public String generateRefreshToken(UserDetails userDetails){
+        String refreshToken = generateToken(userDetails);
+        String username = userDetails.getUsername();
+//        String refreshToken = UUID.randomUUID().toString();
         redisTemplate.opsForValue().set("refresh:" + username, refreshToken, Duration.ofMillis(refreshExpiration));
         return refreshToken;
     }
@@ -134,15 +135,12 @@ public class JwtService {
         redisTemplate.opsForValue().set("blacklist:" + accessToken, "logout", Duration.ofMillis(expiry));
     }
 
-    public String extractUsernameFromExpiredJWT(String token) {
+    public String extractUsernameFromExpiredToken(String token) {
     try {
         return extractAllClaims(token).getSubject();
     } catch (ExpiredJwtException e) {
         return e.getClaims().getSubject(); // still safe to extract subject
+        }
     }
-}
-
-
-
 
 }

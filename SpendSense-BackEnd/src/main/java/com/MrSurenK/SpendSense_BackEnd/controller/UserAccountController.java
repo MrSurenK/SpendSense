@@ -1,7 +1,6 @@
 package com.MrSurenK.SpendSense_BackEnd.controller;
 
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.LoginDto;
-import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.RefreshRequest;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.UserSignUpDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.ApiResponse;
 import com.MrSurenK.SpendSense_BackEnd.dto.responseDto.LoginResponse;
@@ -10,17 +9,16 @@ import com.MrSurenK.SpendSense_BackEnd.model.UserAccount;
 import com.MrSurenK.SpendSense_BackEnd.service.JwtService;
 import com.MrSurenK.SpendSense_BackEnd.service.SecurityContextService;
 import com.MrSurenK.SpendSense_BackEnd.service.UserAccountService;
-import io.lettuce.core.dynamic.annotation.Param;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 // To Do: Clean up global exceptions
@@ -84,38 +82,73 @@ public class UserAccountController {
 
     //Log user in
     @PostMapping("/auth/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDto logindto){
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDto logindto, HttpServletResponse response){
         UserAccount authenticatedUser = userAccountService.authenticate(logindto);
+        String userName = logindto.getUsername();
 
         //if login was successful then generate refresh token and JWT access token
-        String jwtToken = jwtService.generateToken(authenticatedUser);
-        String refreshToken = jwtService.generateRefreshToken(logindto.getUsername());
+        String jwtToken = jwtService.generateToken(authenticatedUser); //access token
+        String refreshToken = jwtService.generateRefreshToken(authenticatedUser);
 
         //Useful meta data for front end dev
         LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setAccessToken(jwtToken);
-        loginResponse.setRefreshToken(refreshToken);
-        loginResponse.setAccessTokenExpiresIn(jwtService.getJwtExpiration());
-        loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshExpiration());
+
+        //Store access token in HTTP Secure cookie as well
+        Cookie accessTokenCookie = new Cookie("accessToken", jwtToken);
+        accessTokenCookie.setHttpOnly(true); //prevents javascript access
+        accessTokenCookie.setSecure(false); //Set true when deployed.. Only sent over HTTPS
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge((int)jwtService.getJwtExpiration()/1000); //Cap at 68yrs if overflow error
+        accessTokenCookie.setAttribute("SameSite","Strict");//CSRF protection
+
+        response.addCookie(accessTokenCookie);
+
+        //Store Refresh token in HTTP Secure cookie
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setHttpOnly(true); //prevents javascript access
+        refreshTokenCookie.setSecure(false); //Set true when deployed.. Only sent over HTTPS
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge((int)jwtService.getRefreshExpiration()/1000); //Cap at 68yrs if overflow error
+        refreshTokenCookie.setAttribute("SameSite","Strict");//CSRF protection
+
+        response.addCookie(refreshTokenCookie);
+
+        //Return JWT
+        loginResponse.setMessage("User logged in successfully!");
+//        loginResponse.setRefreshToken(refreshToken);
+//        loginResponse.setAccessTokenExpiresIn(jwtService.getJwtExpiration());
+//        loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshExpiration());
         return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/auth/refreshToken")
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshRequest request){
+    public ResponseEntity<?> refreshToken(
+                                          @CookieValue(name="refreshToken", required=true) String refreshToken,
+                                          HttpServletResponse response){
 
-        String username = jwtService.extractUsernameFromExpiredJWT(request.expiredAccessToken());
 
-        if(jwtService.validateRefreshToken(username, request.refreshToken())){
+        System.out.println(refreshToken);
+        String username = jwtService.extractUsernameFromExpiredToken(refreshToken);
+
+        if(jwtService.validateRefreshToken(username, refreshToken)){
             UserAccount userAccount = userAccountService.getUserAccount(username);
             String newAccessToken = jwtService.generateToken(userAccount);
 
+            //Store access token in HTTP Secure cookie as well
+            Cookie newAccessTokenCookie = new Cookie("accessToken", newAccessToken);
+            newAccessTokenCookie.setHttpOnly(true); //prevents javascript access
+            newAccessTokenCookie.setSecure(false); //Set true when deployed.. Only sent over HTTPS
+            newAccessTokenCookie.setPath("/");
+            newAccessTokenCookie.setMaxAge((int)jwtService.getJwtExpiration()/1000); //Cap at 68yrs if overflow error
+            newAccessTokenCookie.setAttribute("SameSite","Strict");//CSRF protection
+
+            response.addCookie(newAccessTokenCookie);
+
             LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setAccessToken(newAccessToken);
-            loginResponse.setAccessTokenExpiresIn(jwtService.getJwtExpiration());
-            loginResponse.setRefreshToken(request.refreshToken());
-            loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshExpiration());
-            
-            //ToDo: Store refresh token in HTTP cookie for front end to access
+            loginResponse.setMessage("JWT Access Token successfully refreshed!");
+//            loginResponse.setAccessTokenExpiresIn(jwtService.getJwtExpiration());
+//            loginResponse.setRefreshToken(request.refreshToken());
+//            loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshExpiration());
 
             return ResponseEntity.ok(loginResponse); //Successfully logged in again
         }

@@ -5,13 +5,11 @@ import lombok.Data;
 @Data
 public class LoginResponse {
 
-    private String accessToken;
+    private String message;
 
-    private long accessTokenExpiresIn;
-
-    private String refreshToken;
-
-    private long refreshTokenExpiresIn;
-
-
+//    private long accessTokenExpiresIn;
+//
+//    private String refreshToken;
+//
+//    private long refreshTokenExpiresIn;
 }
