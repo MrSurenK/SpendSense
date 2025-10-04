@@ -49,7 +49,7 @@ function Registration() {
   //ToDo: Modal to display error message
   const [submitError, setSubmitError] = useState<Error | null>(null);
 
-  //API states to log user in and put access and refresh token
+  //API states to log user in and put access and refresh token(ToDo: move state to global store)
   const [loggedIn, setLoggedIn] = useState<LogInCredentials | null>(null);
 
   async function postForm(options: RequestInit) {
