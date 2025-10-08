@@ -150,7 +150,7 @@ function Registration() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent): void => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     //check if all fields have been filled
     if (

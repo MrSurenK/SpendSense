@@ -3,6 +3,7 @@ import InputBox from "../../components/input-box/InputBox";
 import styles from "./LogIn.module.css";
 import { NavLink } from "react-router";
 import { useState } from "react";
+import { useLoginMutation } from "../../redux/rtk-queries/authService.ts";
 
 interface LogInForm {
   username: string;
@@ -16,9 +17,17 @@ function LogIn() {
     password: "",
   });
 
-  //Log In API states 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
+  interface BackendError {
+    description: string;
+  }
+
+  function isBackendError(obj: any): obj is BackendError {
+    return obj && typeof obj.description === "string";
+  }
+
+  //Log In API states
+  // const [loading, setLoading] = useState<boolean>(false);
+  // const [error, setError] = useState<Error | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -29,38 +38,56 @@ function LogIn() {
     }));
   };
 
-  async function handleSubmit = (e: React.FormEvent): void => {
-    e.preventDefault();
-    const payload = formData;
-    try{
-      const res = await fetch("http://127.0.0.1:8080/auth/login",{
-      method:"POST",
-      headers:{
-      "Content-Type":"application/json",
-      },
-      body:JSON.stringify(payload),
-    })
-    if(!res.ok){
-      const httpErrorMsg = await res.text();
-      throw new Error(
-        `HTTP Error: ${res.status}, body:${httpErrorMsg}`
-      ) 
-    }
-    const successMsg = await res.json(); 
+  const [login, { data, error, isLoading }] = useLoginMutation();
 
+  // async function handleSubmit(e: React.FormEvent): Promise<void> {
+  //   setLoading(true);
+  //   e.preventDefault();
+  //   const payload = formData;
+  //   try {
+  //     const res = await fetch("http://127.0.0.1:8080/auth/login", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(payload),
+  //     });
+  //     if (!res.ok) {
+  //       const httpErrorMsg = await res.json();
+  //       alert(`${httpErrorMsg.description}`);
+  //       // throw new Error(`HTTP Error: ${res.status},${httpErrorMsg}`);
+  //       setLoading(false);
+  //       return;
+  //     }
+  //     const successMsg = await res.json();
+  //     alert(JSON.stringify(successMsg));
+  //   } catch (err) {
+  //     alert(
+  //       err instanceof Error
+  //         ? JSON.stringify(err)
+  //         : new Error("Log in unsucessful.Please try again")
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
-    }catch(err){
-      
-    }
-    
-
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); // stops default GET request
+    await login(formData); // call RTK Query mutation
   };
 
   //create Sign in form
   return (
     <>
       <div className={styles.browserContainer}>
-        <form className={styles.card}>
+        <form className={styles.card} onSubmit={handleSubmit}>
+          {data && <div style={{ color: "green" }}>{data.message}</div>}
+          {error && "data" in error && isBackendError(error.data) && (
+            <div style={{ color: "red" }}>
+              <div>{error.data.description}</div>
+            </div>
+          )}
           <div className={`${styles.spacing} ${styles.signIn}`}>
             <span>Sign In</span>
           </div>
@@ -88,7 +115,7 @@ function LogIn() {
           </div>
           <div className={styles.bottomElements}>
             <div>
-              <Button text="Sign In" size="sm"></Button>
+              <Button text="Sign In" size="sm" disabled={isLoading}></Button>
             </div>
             <div className={styles.spacing}>
               <nav>
