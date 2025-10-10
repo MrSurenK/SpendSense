@@ -9,6 +9,11 @@ type Message = {
   message: string;
 };
 
+interface ApiResponse extends Message {
+  success: boolean;
+  data: null;
+}
+
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:8080/auth/" }),
@@ -21,13 +26,18 @@ export const authApi = createApi({
         body: credentials,
         headers: { "Content-Type": "application/json" },
       }),
-      // transformResponse: (response: { message: string }) => response,
-      // transformErrorResponse: No need to change it
+    }),
+    logout: build.mutation<ApiResponse, void>({
+      query: () => ({
+        url: "logout",
+        method: "POST",
+        credentials: "include",
+      }),
     }),
   }),
 });
 
 //export format according to redux framework : use[endpoint_name]Mutation
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useLogoutMutation } = authApi;
 
 export default authApi;

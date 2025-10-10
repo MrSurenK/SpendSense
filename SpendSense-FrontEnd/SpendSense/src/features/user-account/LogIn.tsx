@@ -40,38 +40,6 @@ function LogIn() {
 
   const [login, { data, error, isLoading }] = useLoginMutation();
 
-  // async function handleSubmit(e: React.FormEvent): Promise<void> {
-  //   setLoading(true);
-  //   e.preventDefault();
-  //   const payload = formData;
-  //   try {
-  //     const res = await fetch("http://127.0.0.1:8080/auth/login", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(payload),
-  //     });
-  //     if (!res.ok) {
-  //       const httpErrorMsg = await res.json();
-  //       alert(`${httpErrorMsg.description}`);
-  //       // throw new Error(`HTTP Error: ${res.status},${httpErrorMsg}`);
-  //       setLoading(false);
-  //       return;
-  //     }
-  //     const successMsg = await res.json();
-  //     alert(JSON.stringify(successMsg));
-  //   } catch (err) {
-  //     alert(
-  //       err instanceof Error
-  //         ? JSON.stringify(err)
-  //         : new Error("Log in unsucessful.Please try again")
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // stops default GET request
     await login(formData); // call RTK Query mutation
