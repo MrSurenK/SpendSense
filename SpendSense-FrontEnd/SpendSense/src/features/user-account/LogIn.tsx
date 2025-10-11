@@ -1,9 +1,11 @@
 import Button from "../../components/btn/Button.tsx";
 import InputBox from "../../components/input-box/InputBox";
 import styles from "./LogIn.module.css";
-import { NavLink } from "react-router";
-import { useState } from "react";
+import { NavLink, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import { useLoginMutation } from "../../redux/rtk-queries/authService.ts";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks.ts";
+import { loginState, type LoginPayload } from "../../redux/slices/authSlice.ts";
 
 interface LogInForm {
   username: string;
@@ -22,12 +24,8 @@ function LogIn() {
   }
 
   function isBackendError(obj: any): obj is BackendError {
-    return obj && typeof obj.description === "string";
+    return obj && typeof obj.message === "string";
   }
-
-  //Log In API states
-  // const [loading, setLoading] = useState<boolean>(false);
-  // const [error, setError] = useState<Error | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -38,12 +36,38 @@ function LogIn() {
     }));
   };
 
-  const [login, { data, error, isLoading }] = useLoginMutation();
+  const [login, { data, error, isLoading, isSuccess }] = useLoginMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // stops default GET request
     await login(formData); // call RTK Query mutation
   };
+
+  //Manage log in state
+  const loginInfo = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      //update redux login state
+
+      const userInfo: LoginPayload = {
+        userId: data.userId,
+        username: data.username,
+        lastLogin: new Date(data.lastLogin),
+      };
+
+      dispatch(loginState(userInfo));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, data, dispatch]);
+
+  useEffect(() => {
+    if (loginInfo.isLoggedIn) {
+      navigate("/dashboard");
+    }
+  }, [loginInfo.isLoggedIn, navigate]);
 
   //create Sign in form
   return (

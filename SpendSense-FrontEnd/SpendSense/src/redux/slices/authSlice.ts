@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../store";
 //Can use mutating logic as Immer library will detect changes and make immutable copies to satisfy reacts state rules
 
 export type AuthState = {
@@ -21,11 +22,12 @@ export type LoginPayload = {
   lastLogin: Date;
 };
 
+//define actions
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<LoginPayload>) => {
+    loginState: (state, action: PayloadAction<LoginPayload>) => {
       //user logged in
       const { userId, username, lastLogin } = action.payload;
       state.userId = userId;
@@ -33,8 +35,8 @@ export const authSlice = createSlice({
       state.lastLogIn = lastLogin;
       state.isLoggedIn = true;
     },
-    logout: (state) => {
-      //call logout endpoint
+    logoutState: (state) => {
+      //call logout endpoint and set fields to null and logIn status to false
       state.userId = null;
       state.username = null;
       state.lastLogIn = null;
@@ -43,6 +45,8 @@ export const authSlice = createSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { loginState, logoutState } = authSlice.actions;
+
+export const selectAuthStatus = (state: RootState) => state.auth;
 
 export default authSlice.reducer;
