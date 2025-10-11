@@ -3,6 +3,7 @@ package com.MrSurenK.SpendSense_BackEnd.configuration;
 import com.MrSurenK.SpendSense_BackEnd.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,19 +45,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        //get the auth information from request headers
-        final String authHeader = request.getHeader("Authorization");
 
-        //If no auth Header or Bearer token present then exit this filter and go to the next filter
-        if(authHeader == null || !authHeader.startsWith("Bearer")){
-            filterChain.doFilter(request, response);
-            return;
+        String jwtToken = null;
+
+        //Get jwt to get user details to put into Security Context
+        if(jwtToken == null){
+            if(request.getCookies() != null){
+                for(Cookie cookie: request.getCookies()){
+                    if("accessToken".equals(cookie.getName())){
+                        jwtToken = cookie.getValue();
+                        break; //exit loop
+                    }
+                }
+            }
         }
-
-        //Get user account details and put in Security Context
         try {
-            //Get jwt from header and from it get username to pass to usernamePasswordAuthenticationToken
-            final String jwtToken = authHeader.substring(7);
 
             //Check if String is blacklisted and if so return back out of filter and return unauthorized response
             if(redisTemplate.hasKey("blacklist:" + jwtToken)){

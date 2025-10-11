@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,8 +90,15 @@ public class UserAccountController {
         //if login was successful then generate refresh token and JWT access token
         String jwtToken = jwtService.generateToken(authenticatedUser); //access token
         String refreshToken = jwtService.generateRefreshToken(authenticatedUser);
+        long accessTokenExpiration = jwtService.getJwtExpiration();
+        long refreshTokenExpiration = jwtService.getRefreshExpiration();
 
         //Useful meta data for front end dev
+
+        int userId = authenticatedUser.getId();
+        String username = authenticatedUser.getUsername();
+        LocalDateTime lastLogin = authenticatedUser.getLastLogin();
+
         LoginResponse loginResponse = new LoginResponse();
 
         //Store access token in HTTP Secure cookie as well
@@ -113,11 +121,13 @@ public class UserAccountController {
 
         response.addCookie(refreshTokenCookie);
 
-        //Return JWT
+        //Return logged in user info metadata to be cached in state
+        loginResponse.setUserId(userId);
+        loginResponse.setUsername(username);
+        loginResponse.setLastLogin(lastLogin);
         loginResponse.setMessage("User logged in successfully!");
-//        loginResponse.setRefreshToken(refreshToken);
-//        loginResponse.setAccessTokenExpiresIn(jwtService.getJwtExpiration());
-//        loginResponse.setRefreshTokenExpiresIn(jwtService.getRefreshExpiration());
+        loginResponse.setAccessTokenExpiresIn(accessTokenExpiration);
+        loginResponse.setRefreshTokenExpiresIn(refreshTokenExpiration);
         return ResponseEntity.ok(loginResponse);
     }
 
@@ -156,24 +166,26 @@ public class UserAccountController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logOut(HttpServletRequest request){
-//        //Get username from jwt claims
-//        String username = jwtService.extractUsername(request.accessToken());
-//        jwtService.deleteRefreshToken(request.accessToken());
-//        return ResponseEntity.ok("Logged out successfully!");
-        String authHeader = request.getHeader("Authorization");
+    public ResponseEntity<?> logOut(@CookieValue(name="accessToken", required=true) String accessToken){
 
-        if(authHeader != null && authHeader.startsWith("Bearer ")){
-            String token = authHeader.substring(7);
+        ApiResponse<Void> apiResponse = new ApiResponse();
+
+
+        if(accessToken != null){
+//            String token = authHeader.substring(7);
 
             //Blacklist access token in redis and delete refresh token
-            jwtService.deleteRefreshTokenAndBlacklistAccessToken(token);
+            jwtService.deleteRefreshTokenAndBlacklistAccessToken(accessToken);
 
-            return ResponseEntity.ok("Logged out successfully");
-
+            apiResponse.setSuccess(true);
+            apiResponse.setMessage("Logged out successfully!");
+            apiResponse.setData(null);
+            return ResponseEntity.ok(apiResponse);
         }
 
-        return ResponseEntity.badRequest().body("Authorization header missing or invalid");
+        apiResponse.setSuccess(false);
+        apiResponse.setMessage("No JWT token found in cookie.");
+        return ResponseEntity.badRequest().body(apiResponse);
 
     }
 
