@@ -1,7 +1,16 @@
+import NavBar from "../../components/side-nav-bar/navBar";
 import { useAppSelector } from "../../hooks/reduxHooks";
 
 export function Dashboard() {
-  const loginInfo = useAppSelector((state) => state.auth);
+  // -- protected component -- //
+  // const loginInfo = useAppSelector((state) => state.auth);
 
-  return <>{loginInfo.isLoggedIn && <h1>Hello {loginInfo.username} !</h1>}</>;
+  // return <>{loginInfo.isLoggedIn && <h1>Hello {loginInfo.username} !</h1>}</>;
+  return (
+    <>
+      <div>
+        <NavBar></NavBar>
+      </div>
+    </>
+  );
 }
