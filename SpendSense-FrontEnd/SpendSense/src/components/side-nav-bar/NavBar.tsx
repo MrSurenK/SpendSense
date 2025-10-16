@@ -1,3 +1,6 @@
+import styles from "./navBar.module.css";
+import { useState } from "react";
+
 interface MenuItem {
   key: string | number;
   mainMenu: string;
@@ -9,7 +12,7 @@ type SubMenuItem = {
   menuItem: string;
 };
 
-export default function navBar() {
+export default function NavBar() {
   const menu: MenuItem[] = [
     {
       key: 1,
@@ -39,20 +42,40 @@ export default function navBar() {
     },
   ];
 
+  //State for managing selected menu item
+  const [toggleTransMenu, setToggleTransMenu] = useState<boolean>(false);
+
   return (
     <>
-      <div>
-        <h1 style={{ fontWeight: 700 }}>Main Menu</h1>
-        <nav>
-          <ul>
+      <div className={styles.sideBar}>
+        <h1 id={styles.main}>Main Menu</h1>
+        <nav className={styles.nav}>
+          <ul className={styles.menuItems}>
             {menu.map((item) => (
               <li key={item.key}>
-                {item.mainMenu}
+                {item.subMenu ? (
+                  <button
+                    onClick={() => {
+                      if (toggleTransMenu == false) {
+                        setToggleTransMenu(true);
+                      } else {
+                        setToggleTransMenu(false);
+                      }
+                    }}
+                    className={styles.dropDownBtn}
+                  >
+                    {item.mainMenu}
+                  </button>
+                ) : (
+                  <a>{item.mainMenu}</a>
+                )}
                 {/* if submenu exists */}
-                {item.subMenu && (
-                  <ul>
+                {item.subMenu && toggleTransMenu && (
+                  <ul style={{ display: toggleTransMenu ? "block" : "none" }}>
                     {item.subMenu?.map((sub) => (
-                      <li key={sub.key}>{sub.menuItem}</li>
+                      <li className={styles.dropDownContent}>
+                        <a key={sub.key}>{sub.menuItem}</a>
+                      </li>
                     ))}
                   </ul>
                 )}

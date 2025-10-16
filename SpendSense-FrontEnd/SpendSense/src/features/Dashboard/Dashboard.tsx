@@ -8,8 +8,9 @@ export function Dashboard() {
   // return <>{loginInfo.isLoggedIn && <h1>Hello {loginInfo.username} !</h1>}</>;
   return (
     <>
-      <div>
+      <div className="windowSpace">
         <NavBar></NavBar>
+        <div className="content">Dashboard</div>
       </div>
     </>
   );

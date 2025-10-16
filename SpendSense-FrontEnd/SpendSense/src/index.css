@@ -33,3 +33,13 @@ a:hover {
   color: #fff;
   box-shadow: inset 200px 0 0 0 #04435b;
 }
+
+.windowSpace {
+  display: flex;
+  height: 100vh;
+}
+
+.content {
+  flex: 1;
+  background-color: #f8f9fa;
+}
