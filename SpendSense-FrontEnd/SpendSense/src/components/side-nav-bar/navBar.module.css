@@ -4,17 +4,29 @@
   flex-direction: column;
   height: 100vh;
   width: 15em;
-  align-items: center;
+  align-items: stretch;
 }
 
 #main {
   font-weight: 700;
   color: white;
+  padding: 0 1em 0 1em;
+  margin: 1em 25% 0 25%;
 }
 
 .dropDownBtn {
-  cursor: pointer;
   color: white;
+  cursor: pointer;
+}
+
+.dropDownBtn:hover {
+  color: black;
+  background-color: white;
+  cursor: pointer;
+}
+
+.dropDownContent {
+  margin-top: 1em;
 }
 
 .nav {
@@ -22,6 +34,19 @@
   flex-direction: column;
   height: 100vh;
   margin-top: 2em;
+  align-items: center;
+}
+
+.menuWords {
+  color: white;
+  transition: none !important;
+  cursor: ;
+}
+
+.menuWords:hover {
+  color: black;
+  background-color: white;
+  box-shadow: none !important;
 }
 
 .menuItems {
@@ -30,4 +55,10 @@
   flex-direction: column;
   justify-content: flex-start;
   gap: 1em;
+}
+
+.active {
+  color: black;
+  background-color: white; /* or whatever highlight */
+  font-weight: bold;
 }

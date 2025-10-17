@@ -1,19 +1,38 @@
 import "./App.css";
 import Login from "./features/user-account/LogIn";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router";
 import Registration from "./features/user-account/Registration";
 import { Dashboard } from "./features/Dashboard/Dashboard";
+import AccountSettings from "./features/AccountMgmt/AccountSettings";
+import NavBar from "./components/side-nav-bar/navBar";
 
-function App() {
+function AppWrapper() {
+  const location = useLocation();
+
+  //Paths that do not need NavBar
+  const noNavPaths = ["/", "/register"];
+  const showNav = !noNavPaths.includes(location.pathname);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />}></Route>
-        <Route path="/register" element={<Registration />}></Route>
-        <Route path="/dashboard" element={<Dashboard />}></Route>
-      </Routes>
-    </BrowserRouter>
+    <div className="app-layout">
+      {showNav && <NavBar />}
+
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Registration />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/settings" element={<AccountSettings />} />
+        </Routes>
+      </main>
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppWrapper />
+    </BrowserRouter>
+  );
+}
