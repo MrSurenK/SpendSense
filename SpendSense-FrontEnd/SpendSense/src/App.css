@@ -11,8 +11,10 @@
   flex: 1;
   overflow-y: auto;
   background-color: #f8f9fa;
+  padding: 2rem;
 }
 
-.content {
-  padding: 2rem;
+.pageTitle {
+  font-weight: 900;
+  font-size: 2rem;
 }
