@@ -93,7 +93,7 @@ public class UserAccountController {
         long accessTokenExpiration = jwtService.getJwtExpiration();
         long refreshTokenExpiration = jwtService.getRefreshExpiration();
 
-        //Useful meta data for front end dev
+        //Useful meta data for front end devsprin
 
         int userId = authenticatedUser.getId();
         String username = authenticatedUser.getUsername();
