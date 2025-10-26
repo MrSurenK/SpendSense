@@ -15,6 +15,8 @@ public class TransactionResponse {
 
     private BigDecimal amount;
 
+    private String title;
+
     private String remarks;
 
     private Boolean recurring;//Default value of false in new instances

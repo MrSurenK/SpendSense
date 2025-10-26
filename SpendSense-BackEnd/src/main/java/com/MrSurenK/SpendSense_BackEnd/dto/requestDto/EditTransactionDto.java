@@ -13,6 +13,8 @@ public class EditTransactionDto {
 
     private BigDecimal amount;
 
+    private String title;
+
     private String remarks;
 
     private Boolean recurring;

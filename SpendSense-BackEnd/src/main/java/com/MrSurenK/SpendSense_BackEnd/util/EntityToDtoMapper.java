@@ -14,6 +14,7 @@ public class EntityToDtoMapper {
         transactionResponse.setTransactionDate(entity.getTransactionDate());
         transactionResponse.setRecurring(entity.getRecurring());
         transactionResponse.setNextDueDate(entity.getNextDueDate());
+        transactionResponse.setTitle(entity.getTitle());
         transactionResponse.setRemarks(entity.getRemarks());
         transactionResponse.setAmount(entity.getAmount());
         transactionResponse.setLastUpdated(entity.getLastUpdated());
@@ -32,6 +33,7 @@ public class EntityToDtoMapper {
         DashSpendOverview topFiveSpend = new DashSpendOverview();
         topFiveSpend.setAmount(entity.getAmount());
         topFiveSpend.setTransactionDate(entity.getTransactionDate());
+        topFiveSpend.setTitle(entity.getTitle());
         topFiveSpend.setDescription(entity.getRemarks());
         topFiveSpend.setCatName(entity.getCategory().getName());
         return topFiveSpend;

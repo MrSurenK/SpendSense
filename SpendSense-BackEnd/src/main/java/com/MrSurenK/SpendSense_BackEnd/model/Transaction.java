@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Check;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,7 +24,6 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne
@@ -31,6 +31,9 @@ public class Transaction {
 
     @Column(nullable = false)
     private BigDecimal amount;
+
+    @Column(nullable = false, length = 10)
+    private String title;
 
     private String remarks;
 

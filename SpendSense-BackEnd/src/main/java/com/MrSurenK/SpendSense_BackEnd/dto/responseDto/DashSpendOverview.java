@@ -13,6 +13,8 @@ public class DashSpendOverview {
 
     private String catName;
 
+    private String title;
+
     private String description;
 
     private LocalDate transactionDate;

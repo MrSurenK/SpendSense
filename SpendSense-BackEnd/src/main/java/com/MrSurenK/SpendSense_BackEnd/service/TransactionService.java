@@ -60,6 +60,8 @@ public class TransactionService {
         //Get userAccount from Security
         newItem.setUserAccount(userAccountRepo.findById(userId).orElseThrow());
 
+        newItem.setTitle(transactionRequestDto.getTitle());
+
         newItem.setRemarks(transactionRequestDto.getRemarks());
 
         newItem.setLastUpdated(LocalDateTime.now());
@@ -111,6 +113,9 @@ public class TransactionService {
             if(currTransaction.getRecurring() == true){
                 currTransaction.setNextDueDate(newDate.plusMonths(1));
             }
+        }
+        if(dto.getTitle() != null){
+            currTransaction.setTitle(dto.getTitle());
         }
         if(dto.getRemarks() != null){
             currTransaction.setRemarks(dto.getRemarks());

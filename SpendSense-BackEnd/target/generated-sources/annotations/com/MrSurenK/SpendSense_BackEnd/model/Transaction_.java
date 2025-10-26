@@ -20,6 +20,7 @@ public abstract class Transaction_ {
 	public static final String NEXT_DUE_DATE = "nextDueDate";
 	public static final String USER_ACCOUNT = "userAccount";
 	public static final String ID = "id";
+	public static final String TITLE = "title";
 	public static final String TRANSACTION_DATE = "transactionDate";
 	public static final String CATEGORY = "category";
 	public static final String REMARKS = "remarks";
@@ -59,6 +60,11 @@ public abstract class Transaction_ {
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#id
 	 **/
 	public static volatile SingularAttribute<Transaction, UUID> id;
+	
+	/**
+	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#title
+	 **/
+	public static volatile SingularAttribute<Transaction, String> title;
 	
 	/**
 	 * @see com.MrSurenK.SpendSense_BackEnd.model.Transaction#transactionDate

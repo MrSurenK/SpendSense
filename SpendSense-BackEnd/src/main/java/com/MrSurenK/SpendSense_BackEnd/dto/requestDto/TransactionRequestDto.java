@@ -1,6 +1,7 @@
 package com.MrSurenK.SpendSense_BackEnd.dto.requestDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -12,6 +13,9 @@ public class TransactionRequestDto {
 
     @NotNull(message = "amount must not be null")
     private BigDecimal amount;
+
+    @NotNull(message = "title must not be null")
+    private String title;
 
     private String remarks;
 
