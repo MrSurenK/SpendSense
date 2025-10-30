@@ -18,11 +18,50 @@
 }
 
 .cardTitle {
-  margin: 1rem 0 2rem 1rem;
+  margin: 1rem 0 1rem 1rem;
   font-weight: 600;
   color: Black;
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
   text-decoration-style: dotted;
+}
+
+.titleAndListSpacing {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: start;
+  justify-items: space-evenly;
+}
+
+.titleAndListSpacing ul {
+  width: 95%;
+  padding: 0;
+  margin: 0 1rem; /* Match the cardTitle margin */
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.spanSpacing {
+  display: grid;
+  grid-template-columns: 1fr auto; /* Title takes remaining space, amount takes what it needs */
+  gap: 1rem;
+  padding: 0.25rem 0;
+  width: 90%;
+}
+
+.spanSpacing span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.spanSpacing span:last-child {
+  white-space: nowrap;
+  text-align: right;
 }

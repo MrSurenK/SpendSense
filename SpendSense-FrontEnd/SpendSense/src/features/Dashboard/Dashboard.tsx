@@ -19,37 +19,41 @@ export function Dashboard() {
   const topFiveList = data?.data;
 
   // -- protected component -- //
-  // const loginInfo = useAppSelector((state) => state.auth);
+  const loginInfo = useAppSelector((state) => state.auth);
 
-  // return <>{loginInfo.isLoggedIn && <h1>Hello {loginInfo.username} !</h1>}</>;
   return (
     <>
-      <div className="pageTitle">Dashboard</div>
-      <div className={styles.cardsContainer}>
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Income</h2>
-          <div>
-            {isLoading ? (
-              <div className="loader"></div>
-            ) : (
-              topFiveList?.map((item) => (
-                <div>
-                  <li>item.title</li>
-                  <li>item.amount</li>
-                </div>
-              ))
-            )}
-            <ul></ul>
+      {loginInfo.isLoggedIn && (
+        <>
+          <div className="pageTitle">Dashboard</div>
+          <div className={styles.cardsContainer}>
+            <div className={styles.card}>
+              <h2 className={styles.cardTitle}>Income</h2>
+            </div>
+            <div className={styles.card}>
+              <div className={styles.titleAndListSpacing}>
+                <h2 className={styles.cardTitle}>Top Spend</h2>
+                {isLoading ? (
+                  <div className="loader"></div>
+                ) : (
+                  <ul>
+                    {topFiveList?.map((item, index) => (
+                      <li key={index} className={styles.spanSpacing}>
+                        <span>{item.title}</span>
+                        <span>{item.amount}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+            <div className={styles.card}>
+              <h2 className={styles.cardTitle}> Top Subscriptions</h2>
+            </div>
           </div>
-        </div>
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Top Spend</h2>
-        </div>
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}> Top Subscriptions</h2>
-        </div>
-      </div>
-      <div>Chart(s)</div>
+          <div>Chart(s)</div>
+        </>
+      )}
     </>
   );
 }
