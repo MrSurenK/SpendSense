@@ -107,7 +107,7 @@ public class UserAccountController {
         accessTokenCookie.setSecure(false); //Set true when deployed.. Only sent over HTTPS
         accessTokenCookie.setPath("/");
         accessTokenCookie.setMaxAge((int)jwtService.getJwtExpiration()/1000); //Cap at 68yrs if overflow error
-        accessTokenCookie.setAttribute("SameSite","Strict");//CSRF protection
+        accessTokenCookie.setAttribute("SameSite","Strict");//CSRF protection (allow cross-origin requests)
 
         response.addCookie(accessTokenCookie);
 
@@ -117,7 +117,7 @@ public class UserAccountController {
         refreshTokenCookie.setSecure(false); //Set true when deployed.. Only sent over HTTPS
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setMaxAge((int)jwtService.getRefreshExpiration()/1000); //Cap at 68yrs if overflow error
-        refreshTokenCookie.setAttribute("SameSite","Strict");//CSRF protection
+        refreshTokenCookie.setAttribute("SameSite","Strict");//CSRF protection (allow cross-origin requests)
 
         response.addCookie(refreshTokenCookie);
 

@@ -49,7 +49,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwtToken = null;
 
         //Get jwt to get user details to put into Security Context
-        if(jwtToken == null){
             if(request.getCookies() != null){
                 for(Cookie cookie: request.getCookies()){
                     if("accessToken".equals(cookie.getName())){
@@ -58,8 +57,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     }
                 }
             }
-        }
         try {
+
+
+            //if token is empty or missing, just continue; authentication remains null
+            if(jwtToken == null || jwtToken.isEmpty()){
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+
 
             //Check if String is blacklisted and if so return back out of filter and return unauthorized response
             if(redisTemplate.hasKey("blacklist:" + jwtToken)){
