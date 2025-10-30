@@ -39,8 +39,25 @@ function LogIn() {
   const [login, { data, error, isLoading, isSuccess }] = useLoginMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // stops default GET request
-    await login(formData); // call RTK Query mutation
+    e.preventDefault();
+    try {
+      // wait for the login mutation to finish and unwrap the result
+      const result = await login(formData).unwrap();
+      if (result) {
+        // update redux state AFTER login mutation resolves
+        const userInfo: LoginPayload = {
+          userId: result.userId,
+          username: result.username,
+          lastLogin: new Date(result.lastLogin),
+        };
+        dispatch(loginState(userInfo));
+
+        // navigate only after Redux state updated
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.error("Login failed:", err);
+    }
   };
 
   //Manage log in state
@@ -62,12 +79,6 @@ function LogIn() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, data, dispatch]);
-
-  useEffect(() => {
-    if (loginInfo.isLoggedIn) {
-      navigate("/dashboard");
-    }
-  }, [loginInfo.isLoggedIn, navigate]);
 
   //create Sign in form
   return (

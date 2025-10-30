@@ -1,19 +1,19 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-type DashboardApiResponse = {
+export type DashboardApiResponse = {
   success: boolean;
   message: string;
   data: TopSubAndSpendData[] | IncomeDetails[];
 };
 
-type TopSubAndSpendData = {
+export type TopSubAndSpendData = {
   amount: number;
   catName: string;
   description: string;
   transactionDate: Date;
 };
 
-type IncomeDetails = {
+export type IncomeDetails = {
   salary: number;
   bonus: number;
   cpf_contribution: number;
@@ -23,6 +23,7 @@ type IncomeDetails = {
 export const dashboardApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://127.0.0.1:8080/dash/",
+    credentials: "include", // ✅ important: allows cookies to be sent!
   }),
   endpoints: (builder) => ({
     getTopFiveSpend: builder.query<

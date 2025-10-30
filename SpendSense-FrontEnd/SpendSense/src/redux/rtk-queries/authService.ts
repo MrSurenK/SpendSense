@@ -31,6 +31,7 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
       }),
     }),
     logout: build.mutation<LogOutResponse, void>({
