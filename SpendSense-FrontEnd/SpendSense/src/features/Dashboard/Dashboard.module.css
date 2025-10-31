@@ -65,3 +65,37 @@
   white-space: nowrap;
   text-align: right;
 }
+
+.titleAndCurrency {
+  display: inline-grid;
+  width: 100%;
+  grid-template-columns: auto auto; /* Two columns, each sized to content */
+  align-items: center; /* Optional: vertical alignment */
+}
+
+.titleAndCurrency h2:last-child {
+  justify-self: center;
+  font-weight: 600;
+  margin-left: 1.5rem;
+}
+
+.errorPosition {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: #dc2626;
+}
+
+.loaderPosition {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin-bottom: 3rem;
+}

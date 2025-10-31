@@ -11,12 +11,16 @@ export function Dashboard() {
   const currMth = today.getMonth();
 
   //Call API to display top list
-  const { data, error, isLoading } = useGetTopFiveSpendQuery({
+  const {
+    data: topSpendData,
+    error: topSpendError,
+    isLoading: isTopSpendLoading,
+  } = useGetTopFiveSpendQuery({
     month: 8,
     year: currYear,
   });
 
-  const topFiveList = data?.data;
+  const topFiveList = topSpendData?.data;
 
   // -- protected component -- //
   const loginInfo = useAppSelector((state) => state.auth);
@@ -32,15 +36,27 @@ export function Dashboard() {
             </div>
             <div className={styles.card}>
               <div className={styles.titleAndListSpacing}>
-                <h2 className={styles.cardTitle}>Top Spend</h2>
-                {isLoading ? (
-                  <div className="loader"></div>
+                <div className={styles.titleAndCurrency}>
+                  <h2 className={styles.cardTitle}>Top Spend</h2>
+                  <h2>$</h2>
+                </div>
+                {isTopSpendLoading ? (
+                  <div className={styles.loaderPosition}>
+                    <div className="loader"></div>
+                  </div>
+                ) : topSpendError ? (
+                  <div className={styles.errorPosition}>
+                    <p>⚠️ Unable to load data</p>
+                    <small>
+                      {topSpendError.message || "Something went wrong"}
+                    </small>
+                  </div>
                 ) : (
                   <ul>
                     {topFiveList?.map((item, index) => (
                       <li key={index} className={styles.spanSpacing}>
                         <span>{item.title}</span>
-                        <span>{item.amount}</span>
+                        <span>{item.amount.toFixed(2)}</span>
                       </li>
                     ))}
                   </ul>

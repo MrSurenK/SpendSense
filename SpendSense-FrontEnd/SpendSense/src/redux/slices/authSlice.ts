@@ -19,7 +19,7 @@ const initialState: AuthState = {
 export type LoginPayload = {
   userId: number;
   username: string;
-  lastLogin: Date;
+  lastLogin: string;
 };
 
 //define actions

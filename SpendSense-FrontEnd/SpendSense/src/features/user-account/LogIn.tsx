@@ -48,7 +48,7 @@ function LogIn() {
         const userInfo: LoginPayload = {
           userId: result.userId,
           username: result.username,
-          lastLogin: new Date(result.lastLogin),
+          lastLogin: new Date(result.lastLogin).toISOString(),
         };
         dispatch(loginState(userInfo));
 
@@ -72,7 +72,7 @@ function LogIn() {
       const userInfo: LoginPayload = {
         userId: data.userId,
         username: data.username,
-        lastLogin: new Date(data.lastLogin),
+        lastLogin: new Date(data.lastLogin).toISOString(),
       };
 
       dispatch(loginState(userInfo));

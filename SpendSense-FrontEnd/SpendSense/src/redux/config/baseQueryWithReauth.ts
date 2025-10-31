@@ -4,16 +4,20 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
-import { logout } from "../slices/authSlice";
+import { loginState, logoutState } from "../slices/authSlice";
 import { Mutex } from "async-mutex";
 
 const mutex = new Mutex(); //to prevent multiple unecessary calls to refresh token endpoint
-const baseQuery = fetchBaseQuery({ baseUrl: "http://127.0.0.1:8080/auth" });
+const baseQuery = fetchBaseQuery({
+  baseUrl: "http://127.0.0.1:8080",
+  credentials: "include",
+});
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
+  // console.log("🔍 REQUEST ARGS:", args); // ← Add this
   await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
   if (result.error && result.error.status === 401) {
@@ -23,7 +27,7 @@ const baseQueryWithReauth: BaseQueryFn<
       //try to call refresh token if still valid
       try {
         const refreshResult = await baseQuery(
-          "/refreshToken",
+          "/auth/refreshToken",
           api,
           extraOptions
         );
@@ -32,7 +36,7 @@ const baseQueryWithReauth: BaseQueryFn<
           //retry the initial query
           result = await baseQuery(args, api, extraOptions);
         } else {
-          api.dispatch(logout());
+          api.dispatch(logoutState());
         }
       } finally {
         //release must be called once the mutex should be released again

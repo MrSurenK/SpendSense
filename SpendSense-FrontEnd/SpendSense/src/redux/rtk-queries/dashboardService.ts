@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import baseQueryWithReauth from "../config/baseQueryWithReauth";
 
 export type DashboardApiResponse = {
   success: boolean;
@@ -21,17 +22,14 @@ export type IncomeDetails = {
 };
 
 export const dashboardApi = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://127.0.0.1:8080/dash/",
-    credentials: "include", // ✅ important: allows cookies to be sent!
-  }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     getTopFiveSpend: builder.query<
       DashboardApiResponse,
       { month: number; year: number }
     >({
       query: ({ month, year }) => ({
-        url: "topFiveSpend",
+        url: "/dash/topFiveSpend",
         params: { month, year },
       }),
     }),
@@ -40,7 +38,7 @@ export const dashboardApi = createApi({
       { page: number; size: number }
     >({
       query: ({ page, size }) => ({
-        url: "subscriptions",
+        url: "/dash/subscriptions",
         params: { page, size },
       }),
     }),
@@ -49,7 +47,7 @@ export const dashboardApi = createApi({
       { startDate: Date; endDate: Date }
     >({
       query: ({ startDate, endDate }) => ({
-        url: "incomeSummary",
+        url: "/dash/incomeSummary",
         params: { startDate, endDate },
       }),
     }),

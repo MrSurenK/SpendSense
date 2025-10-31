@@ -8,7 +8,7 @@ type SignInCredentials = {
 type LoginResponse = {
   userId: number;
   username: string;
-  lastLogin: Date;
+  lastLogin: string;
   message: string;
   accessTokenExpiresIn: number;
   refreshTokenExpiresIn: number;
