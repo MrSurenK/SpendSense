@@ -1,6 +1,7 @@
 import NavBar from "../../components/side-nav-bar/navBar";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import {
+  useGetNetCashflowQuery,
   useGetTopFiveSpendQuery,
   useGetTopSubsQuery,
 } from "../../redux/rtk-queries/dashboardService";
@@ -34,6 +35,41 @@ export function Dashboard() {
 
   const topSubs = subData?.data;
 
+  //call API to display income details
+
+  const {
+    data: netCashFlow,
+    error: cashFlowError,
+    isLoading: isCashFlowLoading,
+  } = useGetNetCashflowQuery({
+    startDate: "2025-08-01",
+    endDate: "2025-11-30",
+  });
+
+  const cashflowDetails = netCashFlow?.data;
+  const resNetCashflow = cashflowDetails?.netCashflow;
+
+  let cashflowElement;
+
+  //format netCashflow string based on positive or negative value
+  if (resNetCashflow != undefined && resNetCashflow > 0) {
+    cashflowElement = (
+      <h1 id={styles.netCashflowValue} className={styles.positiveCashflow}>
+        +$ {resNetCashflow}
+      </h1>
+    );
+  } else if (resNetCashflow != undefined && resNetCashflow < 0) {
+    const cashflow = Math.abs(resNetCashflow);
+    cashflowElement = (
+      <h1 id={styles.netCashflowValue} className={styles.negativeCashflow}>
+        -$ {cashflow}
+      </h1>
+    );
+  }
+
+  const resInflow = cashflowDetails?.totalInflow;
+  const resOutflow = cashflowDetails?.totalOutflow;
+
   // -- protected component -- //
   const loginInfo = useAppSelector((state) => state.auth);
 
@@ -44,7 +80,44 @@ export function Dashboard() {
           <div className="pageTitle">Dashboard</div>
           <div className={styles.cardsContainer}>
             <div className={styles.card}>
-              <h2 className={styles.cardTitle}>Income</h2>
+              <div id={styles.netCashflowGrid}>
+                <h1 id={styles.netCashflowHeader}>Net Cashflow</h1>
+                {isCashFlowLoading ? (
+                  <div className={styles.cashflowErrorAndLoader}>
+                    <div className="loader"></div>
+                  </div>
+                ) : cashFlowError ? (
+                  <div className={styles.cashflowErrorAndLoader}>
+                    <p>⚠️ Unable to load data</p>
+                    <small>
+                      {cashFlowError.message || "Something went wrong"}
+                    </small>
+                  </div>
+                ) : (
+                  <>
+                    {cashflowElement}
+                    <ul id={styles.cashflowInfo}>
+                      <li>
+                        <span className={styles.cashflowLabel}>Inflow:</span>
+                        <span className={styles.cashflowValue}>
+                          {" "}
+                          ${resInflow}
+                        </span>
+                      </li>
+                      <li>
+                        <span className={styles.cashflowLabel}>Outflow:</span>
+                        {resOutflow ? (
+                          <span className={styles.cashflowValue}>
+                            ${resOutflow}
+                          </span>
+                        ) : (
+                          <span></span>
+                        )}
+                      </li>
+                    </ul>
+                  </>
+                )}
+              </div>
             </div>
             <div className={styles.card}>
               <div className={styles.titleAndListSpacing}>

@@ -4,7 +4,7 @@ import baseQueryWithReauth from "../config/baseQueryWithReauth";
 export type DashboardApiResponse = {
   success: boolean;
   message: string;
-  data: TopSubAndSpendData[] | IncomeDetails[];
+  data: TopSubAndSpendData[] | NetCashFlow;
 };
 
 export type TopSubAndSpendData = {
@@ -14,11 +14,12 @@ export type TopSubAndSpendData = {
   transactionDate: Date;
 };
 
-export type IncomeDetails = {
-  salary: number;
-  bonus: number;
-  cpf_contribution: number;
-  takeHomePay: number;
+export type NetCashFlow = {
+  data: {
+    totalInflow: number;
+    totalOutflow: number;
+    netCashflow: number;
+  };
 };
 
 export const dashboardApi = createApi({
@@ -42,12 +43,12 @@ export const dashboardApi = createApi({
         params: { page, size },
       }),
     }),
-    getUserIncomeInfo: builder.query<
-      DashboardApiResponse,
-      { startDate: Date; endDate: Date }
+    getNetCashflow: builder.query<
+      NetCashFlow,
+      { startDate: string; endDate: string }
     >({
       query: ({ startDate, endDate }) => ({
-        url: "/dash/incomeSummary",
+        url: "/dash/netCashflow",
         params: { startDate, endDate },
       }),
     }),
@@ -58,7 +59,7 @@ export const dashboardApi = createApi({
 export const {
   useGetTopFiveSpendQuery,
   useGetTopSubsQuery,
-  useGetUserIncomeInfoQuery,
+  useGetNetCashflowQuery,
 } = dashboardApi;
 
 export default dashboardApi;
