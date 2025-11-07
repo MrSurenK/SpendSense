@@ -5,7 +5,6 @@ import com.MrSurenK.SpendSense_BackEnd.repository.TransactionRepo;
 import com.MrSurenK.SpendSense_BackEnd.service.DashboardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -90,9 +89,9 @@ class DashboardServiceTest {
         LocalDate endDate = LocalDate.of(2025, 8, 31);
 
         // Mock repository returns
-        when(transactionRepo.findAllSalaryForMth(userId, startDate, endDate))
+        when(transactionRepo.sumAllSalaryForMth(userId, startDate, endDate))
                 .thenReturn(new BigDecimal("5000"));
-        when(transactionRepo.findSalaryBonusForMth(userId, startDate, endDate))
+        when(transactionRepo.sumSalaryBonusForMth(userId, startDate, endDate))
                 .thenReturn(new BigDecimal("1000"));
 
         // Call method
@@ -106,8 +105,8 @@ class DashboardServiceTest {
         assertEquals(expectedTotal.multiply(new BigDecimal("0.2")), dto.getCpf_contribution());
 
         // Verify repository calls
-        verify(transactionRepo).findAllSalaryForMth(userId, startDate, endDate);
-        verify(transactionRepo).findSalaryBonusForMth(userId, startDate, endDate);
+        verify(transactionRepo).sumAllSalaryForMth(userId, startDate, endDate);
+        verify(transactionRepo).sumSalaryBonusForMth(userId, startDate, endDate);
     }
 
     @Test
@@ -120,8 +119,8 @@ class DashboardServiceTest {
         BigDecimal salary = new BigDecimal("4000");
         BigDecimal bonus = new BigDecimal("10000");
 
-        when(transactionRepo.findAllSalaryForMth(userId, startDate, endDate)).thenReturn(salary);
-        when(transactionRepo.findSalaryBonusForMth(userId, startDate, endDate)).thenReturn(bonus);
+        when(transactionRepo.sumAllSalaryForMth(userId, startDate, endDate)).thenReturn(salary);
+        when(transactionRepo.sumSalaryBonusForMth(userId, startDate, endDate)).thenReturn(bonus);
 
         // Act
         UserTakeHomeIncomeDto result = dashboardService.getTakeHomeSalary(userId, startDate, endDate);
@@ -138,5 +137,24 @@ class DashboardServiceTest {
         assertEquals(0, expectedTakeHome.compareTo(result.getTakeHomePay()));
     }
 
-
+//    @Test
+//    void testCashflowSum(){
+//        Integer userId = 1;
+//        LocalDate startDate = LocalDate.of(2025, 1, 1);
+//        LocalDate endDate = LocalDate.of(2025, 1, 31);
+//
+//        BigDecimal income = new BigDecimal(1000);
+//
+//        BigDecimal expense = new BigDecimal(200);
+//
+//        //Arrange
+//        when(transactionRepo.sumTotalIncome(userId, startDate, endDate)).thenReturn(income);
+//        when(transactionRepo.sumTotalSpend(userId, startDate, endDate)).thenReturn(expense);
+//
+//        //Act
+//        BigDecimal res = dashboardService.netCashflow(userId,startDate,endDate);
+//
+//        //Assert
+//        assertEquals(BigDecimal.valueOf(800), res);
+//    }
 }

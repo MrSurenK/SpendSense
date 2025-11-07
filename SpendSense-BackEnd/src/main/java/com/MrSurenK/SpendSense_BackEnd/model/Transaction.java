@@ -32,7 +32,7 @@ public class Transaction {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false)
     private String title;
 
     private String remarks;
@@ -56,5 +56,4 @@ public class Transaction {
     @JoinColumn(nullable = false)
     @ManyToOne(fetch=LAZY)
     private Category category;
-
 }

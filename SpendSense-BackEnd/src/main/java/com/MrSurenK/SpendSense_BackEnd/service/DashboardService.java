@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DashboardService {
@@ -46,8 +49,8 @@ public class DashboardService {
 
     public UserTakeHomeIncomeDto getTakeHomeSalary(Integer userId, LocalDate startDate, LocalDate endDate){
         UserTakeHomeIncomeDto userIncomeInfo = new UserTakeHomeIncomeDto();
-        BigDecimal salary = transactionRepo.findAllSalaryForMth(userId, startDate, endDate);
-        BigDecimal bonuses = transactionRepo.findSalaryBonusForMth(userId,startDate,endDate);
+        BigDecimal salary = transactionRepo.sumAllSalaryForMth(userId, startDate, endDate);
+        BigDecimal bonuses = transactionRepo.sumSalaryBonusForMth(userId,startDate,endDate);
         BigDecimal totalIncome = salary.add(bonuses);
 
         BigDecimal takeHome = BigDecimal.ZERO;
@@ -68,6 +71,32 @@ public class DashboardService {
         userIncomeInfo.setCpf_contribution(cpfContribution);
         return userIncomeInfo;
     }
+
+    //ToDo: API - Sum up all transactions including recurring transactions for the month and return value
+    //Allow front end to determine date range for more flexibility. Incase in future wanna have a yearly figure
+    public HashMap<String, BigDecimal> netCashflow(Integer userId, LocalDate startDate, LocalDate endDate){
+
+        //Get all the user transactions and sum up within given date range
+        BigDecimal totalSpend = transactionRepo.sumTotalSpend(userId, startDate, endDate);
+        //Get all the user income and sum up within given date range
+        BigDecimal totalInflow = transactionRepo.sumTotalIncome(userId, startDate, endDate);
+        //Find the difference between income and spend
+        BigDecimal netCashflow = totalInflow.subtract(totalSpend);
+
+        HashMap<String, BigDecimal> data = new HashMap<>();
+        data.put("totalOutflow", totalSpend);
+        data.put("totalInflow", totalInflow);
+        data.put("netCashflow", netCashflow);
+
+        return data;
+    }
+
+
+    //API to return sum of each category spending for the month
+
+
+
+
 
 
 

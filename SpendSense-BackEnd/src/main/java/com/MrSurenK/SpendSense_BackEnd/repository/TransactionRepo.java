@@ -32,10 +32,18 @@ public interface TransactionRepo extends JpaRepository<Transaction, UUID> {
     List<Transaction>allRecurringSpend(@Param("userId") Integer userId, Pageable page);
 
     @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.INCOME AND t.category.name='Bonus' AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
-    BigDecimal findSalaryBonusForMth(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
-                                     @Param("endDate") LocalDate endDate);
+    BigDecimal sumSalaryBonusForMth(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
+                                    @Param("endDate") LocalDate endDate);
 
     @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.INCOME AND t.category.name='Salary' AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
-    BigDecimal findAllSalaryForMth(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
-                                     @Param("endDate") LocalDate endDate);
+    BigDecimal sumAllSalaryForMth(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
+                                  @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType=com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
+    BigDecimal sumTotalSpend(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
+                              @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType=com.MrSurenK.SpendSense_BackEnd.model.TransactionType.INCOME AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
+    BigDecimal sumTotalIncome(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
+                              @Param("endDate") LocalDate endDate);
 }

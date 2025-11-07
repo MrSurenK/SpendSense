@@ -13,6 +13,7 @@ INSERT INTO category (name,transaction_type,is_system) VALUES('Utilities','EXPEN
 INSERT INTO category (name,transaction_type,is_system) VALUES('Transportation','EXPENSE',True);
 INSERT INTO category (name,transaction_type,is_system) VALUES('Insurance','EXPENSE',True);
 INSERT INTO category (name,transaction_type,is_system) VALUES('Food','EXPENSE',True);
+INSERT INTO category (name,transaction_type,is_system) VALUES('Subscription','EXPENSE',True);
 
 -- Income Categories
 INSERT INTO category (name,transaction_type,is_system) VALUES('Salary','INCOME',True);
@@ -25,12 +26,12 @@ INSERT INTO category (name,transaction_type,is_system) VALUES('Allowance','INCOM
 --Insert Dummy Transactions for Sam Smith--
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
 UUID_TO_BIN(UUID()),125.50,'Groceries','Groceries from supermarket',false,'2025-08-09',NOW(),1,2);
-INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),4000.00, 'Salary',"pay day",true,'2025-08-31','2025-09-30',NOW(),1,7);
-INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),5000.00, 'Bonus','Performance Bonus',false,'2025-08-31',NOW(),1,10);
-INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),5000.00, 'Bonus','Annual Bonus',false,'2025-08-31',NOW(),1,10);
+--INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+--UUID_TO_BIN(UUID()),4000.00, 'Salary',"pay day",true,'2025-08-31','2025-09-30',NOW(),1,8);
+--INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
+--UUID_TO_BIN(UUID()),5000.00, 'Bonus','Performance Bonus',false,'2025-08-31',NOW(),1,11);
+--INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
+--UUID_TO_BIN(UUID()),5000.00, 'Bonus','Annual Bonus',false,'2025-08-31',NOW(),1,11);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
 UUID_TO_BIN(UUID()),80.00, 'Phone bill','Circles life bill',true,'2025-08-05','2025-09-05',NOW(),1,3);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
@@ -43,6 +44,24 @@ INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_dat
 UUID_TO_BIN(UUID()),100.00, 'PruShield','Prudential Hospital Plan',true,'2025-08-09','2025-09-30',NOW(),1,5);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
 UUID_TO_BIN(UUID()),40.00, 'Grab',"Grab to friend's place",false,'2025-08-11',NOW(),1,4);
+
+-- Subscriptions --
+INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+UUID_TO_BIN(UUID()),35.00,'Netflix','Netflix subscription',true,'2025-10-09','2025-11-09',NOW(),1,7);
+INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+UUID_TO_BIN(UUID()),40.00,'Disney','Disney Subscription',true,'2025-10-09','2025-11-09',NOW(),1,7);
+INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+UUID_TO_BIN(UUID()),19.00,'HBO Max','HBO subscription',true,'2025-10-09','2025-11-09',NOW(),1,7);
+INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+UUID_TO_BIN(UUID()),110.00,'Microsoft Office','Microsoft Office subscription',true,'2025-10-09','2025-11-09',NOW(),1,7);
+INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+UUID_TO_BIN(UUID()),20.00,'iCloud','Cloud Storage',true,'2025-10-09','2025-11-09',NOW(),1,7);
+INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+UUID_TO_BIN(UUID()),13.00,'GoodNotes','Note taking application subscription',true,'2025-10-09','2025-11-09',NOW(),1,7);
+
+
+
+
 
 
 

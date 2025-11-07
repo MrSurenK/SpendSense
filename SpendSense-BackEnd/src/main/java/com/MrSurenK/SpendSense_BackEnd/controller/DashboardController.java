@@ -13,12 +13,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class DashboardController {
@@ -98,6 +102,21 @@ public class DashboardController {
         res.setMessage("Income details successfully fetched!");
         res.setData(takeHomeIncome);
 
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/dash/netCashflow")
+    public ResponseEntity<ApiResponse<HashMap<String,BigDecimal>>> getNetCashflow(
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate
+    ){
+
+        Integer userId = securityContextService.getUserFromSecurityContext().getId();
+        HashMap<String,BigDecimal> netCashFlow = dashboardService.netCashflow(userId,startDate, endDate);
+        ApiResponse<HashMap<String, BigDecimal>> res = new ApiResponse<>();
+        res.setSuccess(true);
+        res.setMessage("Net cashflow successfully fetched");
+        res.setData(netCashFlow);
         return ResponseEntity.ok(res);
     }
 
