@@ -143,11 +143,13 @@
 }
 
 .cashflowLabel {
-  text-align: right;
+  width: fit-content;
+  justify-self: end;
 }
 
 .cashflowValue {
-  text-align: left;
+  width: fit-content;
+  justify-self: start;
   font-weight: 700;
 }
 
