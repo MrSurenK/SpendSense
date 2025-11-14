@@ -31,7 +31,7 @@
 
 .tableStyle {
   width: 100%;
-  table-layout: auto;
+  table-layout: fixed; /* Important to prevent row expansion */
   border-collapse: collapse;
 }
 
@@ -44,7 +44,7 @@ thead {
 .tableStyle,
 th {
   padding: 1rem 1.5rem;
-  text-align: left;
+  text-align: center;
   font-size: 0.75rem;
   font-weight: 600;
   color: #6b7280;
@@ -55,6 +55,7 @@ th {
 .tableStyle tbody tr {
   border-bottom: 1px solid #e5e7eb;
   transition: background-color 0.2s;
+  height: 6rem;
 }
 
 .tableStyle tbody tr:hover {
@@ -65,17 +66,56 @@ th {
   padding: 1rem 1.5rem;
   font-size: 0.875rem;
   color: #111827;
-  text-align: left;
+  text-align: center;
+}
+
+/* Makes the item column longer than the other columns as it has a description below it too */
+.tableStyle td:nth-child(2),
+.tableStyle th:nth-child(2) {
+  width: 15%;
+}
+
+.tableStyle td:nth-child(3),
+.tableStyle th:nth-child(3) {
+  width: 15%;
+  text-align: center;
+  white-space: nowrap; /* prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* show … if too long */
 }
 
 .words {
-  max-width: 1rem;
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
   white-space: nowrap;
-  overflow: auto;
   text-overflow: ellipsis;
 }
 
 .remarks {
   font-size: x-small;
   font-weight: 400;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+.deleteBtn svg {
+  color: #f44336; /* default red */
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.deleteBtn:hover svg {
+  color: #000; /* hover color */
 }

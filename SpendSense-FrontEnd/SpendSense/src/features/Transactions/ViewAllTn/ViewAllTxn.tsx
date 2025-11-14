@@ -57,8 +57,8 @@ export function ViewAllTxn() {
               <th>Category</th>
               <th>Type</th>
               <th>Recurring</th>
-              <th>Last Updated</th>
               <th>Actions</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -68,15 +68,13 @@ export function ViewAllTxn() {
               </td>
               <td>
                 <div>Groceries</div>
-                <div className={styles.remarks}>
-                  Bought groceries from the store
-                </div>
+                <div className={styles.remarks}>World cup winners are here</div>
               </td>
               <td>
-                <span>+$500</span>
+                <span>-$121.40</span>
               </td>
               <td>
-                <span>Groceries</span>
+                <span className={styles.words}>Groceriesssssssssssss</span>
               </td>
               <td>
                 <span>Expense</span>
@@ -85,14 +83,87 @@ export function ViewAllTxn() {
                 <span>Yes</span>
               </td>
               <td>
-                <span>01/02/2025</span>
+                <div className={styles.actions}>
+                  <Button text={"View"} size={"sm"}></Button>
+                  <Button text={"Edit"} size={"sm"}></Button>
+                </div>
               </td>
               <td>
-                <div>
-                  <Button text={"Edit"} size={"sm"}></Button>
-                  <Button text={"Delete"} size={"sm"}></Button>
+                <button className={styles.deleteBtn}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="35"
+                    height="35"
+                    viewBox="0 0 50 50"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"
+                    ></path>
+                    <path
+                      fill="#fff"
+                      d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"
+                    ></path>
+                    <path
+                      fill="#fff"
+                      d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"
+                    ></path>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>01/08/2025</span>
+              </td>
+              <td>
+                <div>Dummy</div>
+                <div className={styles.remarks}>World cup winners are here</div>
+              </td>
+              <td>
+                <span>+$100000.40</span>
+              </td>
+              <td>
+                <span className={styles.words}>Groceriesssssssssssss</span>
+              </td>
+              <td>
+                <span>Income</span>
+              </td>
+              <td>
+                <span>No</span>
+              </td>
+              <td>
+                <div className={styles.actions}>
                   <Button text={"View"} size={"sm"}></Button>
+                  <Button text={"Edit"} size={"sm"}></Button>
                 </div>
+              </td>
+              <td>
+                <button className={styles.deleteBtn}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="35"
+                    height="35"
+                    viewBox="0 0 50 50"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"
+                    ></path>
+                    <path
+                      fill="#fff"
+                      d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"
+                    ></path>
+                    <path
+                      fill="#fff"
+                      d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"
+                    ></path>
+                  </svg>
+                </button>
               </td>
             </tr>
           </tbody>

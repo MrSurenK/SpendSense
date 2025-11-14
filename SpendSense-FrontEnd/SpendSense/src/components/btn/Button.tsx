@@ -7,6 +7,7 @@ interface ButtonProps {
   disabled?: boolean;
   type?: "submit" | "reset" | "button";
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  className?: string;
 }
 
 function Button({
@@ -16,12 +17,14 @@ function Button({
   disabled = false,
   onClick,
   type,
+  className,
 }: ButtonProps) {
   const buttonStyles = [
     styles.btn,
     styles[variant],
     styles[size],
     disabled ? styles.disabled : " ",
+    className,
   ]
     .filter(Boolean)
     .join(" ");
