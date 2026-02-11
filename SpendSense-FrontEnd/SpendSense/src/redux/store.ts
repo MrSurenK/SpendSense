@@ -13,6 +13,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/es/storage";
+import { transactionApi } from "./rtk-queries/transactionService";
 
 // ToDo: Redux-persisit configuration so that logIn persist when browser is refreshed.
 const persistConfig = {
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   auth: authStatusReducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
+  [transactionApi.reducerPath]: transactionApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -36,7 +38,11 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(authApi.middleware, dashboardApi.middleware),
+    }).concat(
+      authApi.middleware,
+      dashboardApi.middleware,
+      transactionApi.middleware,
+    ),
 });
 
 export const persistor = persistStore(store);
