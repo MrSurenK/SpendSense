@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +44,7 @@ public class DashboardController {
     
     //Displays top 5 monthly spend items
     @GetMapping("/dash/topFiveSpend")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<DashSpendOverview>>> getTopFiveTransactionsCatAndAmount(
             @RequestParam(required = false) Integer month,
             @RequestParam Integer year
@@ -70,6 +72,7 @@ public class DashboardController {
 
 
     @GetMapping("/dash/subscriptions")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<DashSpendOverview>>> allRecurringSpend(
             @PageableDefault(page=0,size=5,sort="amount",direction = Sort.Direction.DESC) Pageable pageable
     ){
@@ -91,6 +94,7 @@ public class DashboardController {
     }
 
     @GetMapping("/dash/incomeSummary")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<UserTakeHomeIncomeDto>> getUserDisposableIncome(
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate
@@ -106,6 +110,7 @@ public class DashboardController {
     }
 
     @GetMapping("/dash/netCashflow")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<HashMap<String,BigDecimal>>> getNetCashflow(
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate

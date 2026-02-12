@@ -10,6 +10,7 @@ import com.MrSurenK.SpendSense_BackEnd.service.CategoryService;
 import com.MrSurenK.SpendSense_BackEnd.service.SecurityContextService;
 import com.MrSurenK.SpendSense_BackEnd.util.EntityToDtoMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class CategoryController {
 
     //GET all category created by user and is not deleted
     @GetMapping("/cat/allCategories")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<CategoryResponse>>> getAllCatsApi(){
         UserAccount user = securityContextService.getUserFromSecurityContext();
         int userId = user.getId();
@@ -71,6 +73,7 @@ public class CategoryController {
 
     //PATCH category
     @PatchMapping("/cat/editCat/{catId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<CategoryResponse>> editCatApi(@RequestBody EditCatDto dto, @PathVariable Long catId){
         UserAccount user = securityContextService.getUserFromSecurityContext();
         int userId = user.getId();
@@ -90,6 +93,7 @@ public class CategoryController {
 
     //Soft delete
     @PatchMapping("/cat/deleteCat/{catId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<CategoryResponse>> deleteCatApi(@PathVariable Long catId)
             throws IllegalAccessException {
         UserAccount user = securityContextService.getUserFromSecurityContext();

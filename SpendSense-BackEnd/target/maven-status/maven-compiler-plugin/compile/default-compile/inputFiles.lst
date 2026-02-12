@@ -40,6 +40,7 @@
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/SecurityContextService.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/TransactionService.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/UserAccountService.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/util/BeanInitTracker.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/util/DateTimeFormats.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/util/EntityToDtoMapper.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/util/ImageUtil.java

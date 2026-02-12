@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ public class TransactionsController {
     }
 
     @PostMapping("/addNewTransaction")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<TransactionResponse>> addNewTransaction(@RequestBody TransactionRequestDto dto){
         UserAccount user = securityContextService.getUserFromSecurityContext();
         int userId = user.getId();
@@ -59,6 +61,7 @@ public class TransactionsController {
     }
 
     @GetMapping("/getAllTransactions")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PaginatedResponse<TransactionResponse>> getAllTranactionsSortedByLastUpdated(
             @PageableDefault(page = 0, size = 10, sort = "lastUpdated", direction = Sort.Direction.DESC) Pageable page){
 //        Pageable pageDetails = PageRequest.of(1, 5, Sort.by("lastUpdated")
@@ -89,6 +92,7 @@ public class TransactionsController {
     }
 
     @GetMapping("/txn/getTxnWithinDateRange")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PaginatedResponse<TransactionResponse>> getTransactionsInRange(
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate,
@@ -120,6 +124,7 @@ public class TransactionsController {
 
 
     @PatchMapping("/transactions/{transactionId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<TransactionResponse>> patchTransaction(@PathVariable("transactionId") UUID transactionId,
                                                                 @RequestBody EditTransactionDto dto){
 
@@ -144,6 +149,7 @@ public class TransactionsController {
     }
 
     @DeleteMapping("/transactions/{transactionId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Void>> deleteTransaction(@PathVariable("transactionId") UUID transactionId){
         transactionService.deleteTransaction(transactionId);
 

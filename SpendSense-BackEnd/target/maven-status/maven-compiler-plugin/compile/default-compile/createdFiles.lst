@@ -42,4 +42,5 @@ com/MrSurenK/SpendSense_BackEnd/configuration/SecurityComponentsConfig.class
 com/MrSurenK/SpendSense_BackEnd/service/CategoryService.class
 com/MrSurenK/SpendSense_BackEnd/util/DateTimeFormats.class
 com/MrSurenK/SpendSense_BackEnd/configuration/RedisConfig.class
+com/MrSurenK/SpendSense_BackEnd/util/BeanInitTracker.class
 com/MrSurenK/SpendSense_BackEnd/controller/DashboardController.class

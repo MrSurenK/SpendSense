@@ -26,12 +26,12 @@ INSERT INTO category (name,transaction_type,is_system) VALUES('Allowance','INCOM
 --Insert Dummy Transactions for Sam Smith--
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
 UUID_TO_BIN(UUID()),125.50,'Groceries','Groceries from supermarket',false,'2025-08-09',NOW(),1,2);
---INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
---UUID_TO_BIN(UUID()),4000.00, 'Salary',"pay day",true,'2025-08-31','2025-09-30',NOW(),1,8);
---INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
---UUID_TO_BIN(UUID()),5000.00, 'Bonus','Performance Bonus',false,'2025-08-31',NOW(),1,11);
---INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
---UUID_TO_BIN(UUID()),5000.00, 'Bonus','Annual Bonus',false,'2025-08-31',NOW(),1,11);
+INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
+UUID_TO_BIN(UUID()),4000.00, 'Salary',"pay day",true,'2025-08-31','2025-09-30',NOW(),1,8);
+INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
+UUID_TO_BIN(UUID()),5000.00, 'Bonus','Performance Bonus',false,'2025-08-31',NOW(),1,11);
+INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
+UUID_TO_BIN(UUID()),5000.00, 'Bonus','Annual Bonus',false,'2025-08-31',NOW(),1,11);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
 UUID_TO_BIN(UUID()),80.00, 'Phone bill','Circles life bill',true,'2025-08-05','2025-09-05',NOW(),1,3);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
