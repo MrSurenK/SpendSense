@@ -3,34 +3,16 @@ import InputBox from "../../../components/input-box/InputBox";
 import styles from "./ViewAllTxn.module.css";
 import Pagination from "../../../components/pagination/Pagination";
 import { useGetAllTransactionsSortedByLastUpdatedQuery } from "../../../redux/rtk-queries/transactionService";
+import { useState } from "react";
 
 export function ViewAllTxn() {
   /*
     ToDo: 
-    1. Filters Section
-    2. Table formatting 
-    3. Import data 
-    4. Add button functionality for delete entry
-    5. Modal to confirm deletion 
-    6. UseEffect to update table data after delete
-    7. Call API and remove all dummy data and hardcoded rows in table
+    Update pagination to change state and call the transactions API with different page. 
+  */
 
-    ------------------------------ Pagination Section ----------------------------
-    1. Responsive pagination Sections(Pagination is server side)
-        - Get total pages in API and render it dynamically from 1 up to 10 only 
-        - UI must indicate current page user is looking at
-\
-    ----------------------------- Filters Section --------------------------------
-    1. Full functionality is in the backend so the UI only needs to update accordingly and have all the
-    filter options present 
-    2. List of Filter options: 
-      a.
-      b. 
-      c. 
-      d. 
-
-    */
-  //How do I map the total number of pages dynamically? Its only 1 to ... n pages
+  //page states
+  const [page, setPage] = useState(1);
 
   //Call API
   const {
@@ -38,7 +20,7 @@ export function ViewAllTxn() {
     error,
     isLoading: boolean,
   } = useGetAllTransactionsSortedByLastUpdatedQuery({
-    page: 1,
+    page: page - 1,
     size: 5,
     sort: "lastUpdated",
   });
@@ -153,7 +135,11 @@ export function ViewAllTxn() {
         </table>
       </div>
       {/*Make this more functional with state*/}
-      <Pagination totalPages={2} />
+      <Pagination
+        currPage={page}
+        totalPages={transactionResponse?.totalPages ?? 1}
+        onPageChange={setPage}
+      />
     </>
   );
 }

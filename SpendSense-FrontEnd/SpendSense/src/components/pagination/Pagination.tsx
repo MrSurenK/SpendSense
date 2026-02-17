@@ -2,16 +2,23 @@ import { useState } from "react";
 import styles from "./pagination.module.css";
 
 export interface PaginationDetails {
+  currPage: number;
   totalPages: number;
+  onPageChange: (page: number) => void;
   pageWindowSize?: number;
 }
 
 export default function Pagination({
+  currPage,
   totalPages,
-  pageWindowSize = 10, //default
+  onPageChange,
+  pageWindowSize = 5, //default
 }: PaginationDetails) {
-  const [currPage, setCurrPage] = useState(1);
-  const [grpIdx, setGrpIdx] = useState(0);
+  const goToPage = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      onPageChange(newPage);
+    }
+  };
 
   /*
   Grouping example assuming 10 pages per grp: 
@@ -19,6 +26,8 @@ export default function Pagination({
   Grp 1: 11 to 20
   Grp 3: 21 to 30
   */
+
+  const grpIdx = Math.floor((currPage - 1) / pageWindowSize);
 
   const startPage = grpIdx * pageWindowSize + 1;
 
@@ -28,41 +37,45 @@ export default function Pagination({
     <>
       <div className={styles.pagination}>
         {/* Navigate to Prev group */}
-        <button disabled={grpIdx === 0} onClick={() => setGrpIdx((g) => g - 1)}>
+        <button
+          disabled={currPage === 1}
+          onClick={() => goToPage(currPage - 1)}
+        >
           {"<"}
         </button>
-
         {/* Page buttons */}
-        {Array.from({ length: pageWindowSize }, (_, i) => {
-          const page = startPage + i;
+        {Array.from(
+          { length: Math.min(pageWindowSize, totalPages - startPage + 1) },
+          (_, i) => {
+            const page = startPage + i;
 
-          if (page > totalPages) {
+            if (page > totalPages) {
+              return (
+                <button key={i} disabled className={styles.disabledPage}>
+                  —
+                </button>
+              );
+            }
+
             return (
-              <button key={i} disabled className={styles.disabledPage}>
-                —
+              <button
+                key={page}
+                onClick={() => {
+                  goToPage(page);
+                }}
+                className={page === currPage ? styles.activePage : ""}
+                aria-current={page === currPage ? "page" : undefined} //accessibility for the blind
+              >
+                {page}
               </button>
             );
-          }
-
-          return (
-            <button
-              key={page}
-              onClick={() => {
-                setCurrPage(page);
-                setGrpIdx(Math.floor((page - 1) / pageWindowSize));
-              }}
-              className={page === currPage ? styles.activePage : ""}
-              aria-current={page === currPage ? "page" : undefined} //accessibility for the blind
-            >
-              {page}
-            </button>
-          );
-        })}
-
+          },
+        )}
         {/* Navigate to next group */}
+
         <button
-          disabled={endPage === totalPages}
-          onClick={() => setGrpIdx((g) => g + 1)}
+          disabled={currPage === totalPages}
+          onClick={() => goToPage(currPage + 1)}
         >
           {" "}
           {">"}
