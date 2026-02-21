@@ -42,8 +42,8 @@ export function Dashboard() {
     error: cashFlowError,
     isLoading: isCashFlowLoading,
   } = useGetNetCashflowQuery({
-    startDate: "2025-08-01",
-    endDate: "2025-11-30",
+    startDate: "2026-02-01",
+    endDate: "2026-02-28",
   });
 
   const cashflowDetails = netCashFlow?.data;

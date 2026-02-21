@@ -1,5 +1,4 @@
 import Button from "../../../components/btn/Button";
-import InputBox from "../../../components/input-box/InputBox";
 import styles from "./ViewAllTxn.module.css";
 import Pagination from "../../../components/pagination/Pagination";
 import {
@@ -7,13 +6,9 @@ import {
   type TransactionFilters,
 } from "../../../redux/rtk-queries/transactionService";
 import { useState, useEffect } from "react";
+import TransactionFiltersComponent from "../../../components/filters/TransactionFiltersComponent";
 
 export function ViewAllTxn() {
-  /*
-    ToDo: 
-    Update pagination to change state and call the transactions API with different page. 
-  */
-
   //page states
 
   const [searchRequest, setSearchRequest] = useState<TransactionFilters>({
@@ -44,36 +39,11 @@ export function ViewAllTxn() {
   return (
     <>
       <h1>All Transactions</h1>
-      <div className={styles.filterContainer}>
-        <div className={styles.filterContent}>
-          <InputBox
-            name={"search box"}
-            size="lg"
-            placeholder="search transactions..."
-          ></InputBox>
-          <select>
-            <option>All Types</option>
-            <option>Income</option>
-            <option>Expense</option>
-          </select>
-          <select>
-            {/* Has to be dynamic from API */}
-            <option>All Categories</option>
-            <option>Groceries</option>
-            <option>Phone Bills</option>
-            <option>Insurance</option>
-          </select>
-          <label>Rows per page:</label>
-          <select title="page count">
-            <option>5</option>
-            <option>10</option>
-            <option>15</option>
-            <option>20</option>
-          </select>
-          {/* Add date filter */}
-          <Button text={"Go"} size="sm"></Button>
-        </div>
-      </div>
+      <TransactionFiltersComponent
+        onSearch={(filters: TransactionFilters) => {
+          setSearchRequest(filters); // directly sets your state
+        }}
+      />
       <div className={styles.tableContainer}>
         <table className={styles.tableStyle}>
           <thead>
