@@ -13,7 +13,9 @@ import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -80,10 +82,19 @@ public class TransactionService {
 
     //Pass JWT token to extract username and get User Id and also Pageable object with page details in controller
     public Page<Transaction> getTransactions(Integer userId,
-   TransactionFiltersDto transactionFiltersDto,
-                                             Pageable page){
+   TransactionFiltersDto transactionFiltersDto){
         //Get the user id from user account
        //return transactionRepo.findAllByUserAccountId(userId,page);
+
+        Pageable page = PageRequest.of(
+                transactionFiltersDto.getPage(),
+                transactionFiltersDto.getSize(),
+          Sort.by(
+                transactionFiltersDto.getSortDirection(),
+                transactionFiltersDto.getSortField()
+        )
+);
+
         return transactionRepo.findAll(
                 Specification.where(TransactionSpecifications.hasUser(userId))
                         .and(TransactionSpecifications.withinDateRange(transactionFiltersDto.getStartDate(),
@@ -93,7 +104,8 @@ public class TransactionService {
                         .and(TransactionSpecifications.hasCategory(transactionFiltersDto.getCatId()))
                         .and(TransactionSpecifications.hasExpenseOrIncome(transactionFiltersDto.getTransactionType()))
                         .and(TransactionSpecifications.isRecurringFilter(transactionFiltersDto.getIsRecurring()))
-                        .and(TransactionSpecifications.hasTitle(transactionFiltersDto.getTitle())),
+                        .and(TransactionSpecifications.hasTitle(transactionFiltersDto.getTitle()))
+                        .and(TransactionSpecifications.globalSearch(transactionFiltersDto.getKeyword())),
                          page
         );
     }

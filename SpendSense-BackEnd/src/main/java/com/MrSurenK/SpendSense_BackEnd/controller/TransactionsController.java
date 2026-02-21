@@ -29,6 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/transactions")
 public class TransactionsController {
 
     private final TransactionService transactionService;
@@ -63,12 +64,11 @@ public class TransactionsController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/transactions")
+    @PostMapping("/search")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PaginatedResponse<TransactionResponse>> getAllTranactionsSortedByLastUpdated(
-            TransactionFiltersDto transactionFiltersDto,
-            @PageableDefault(page = 0, size = 10, sort = "lastUpdated", direction = Sort.Direction.DESC) Pageable page){
-
+            @RequestBody TransactionFiltersDto transactionFiltersDto
+            ){
         UserAccount user = securityContextService.getUserFromSecurityContext();
         Integer userId = user.getId();
 
@@ -84,8 +84,7 @@ public class TransactionsController {
 
 
         Page<Transaction> allTransactions = transactionService.getTransactions(userId,
-                transactionFiltersDto,
-                page);
+                transactionFiltersDto); //pagination is handled at service level
         List<Transaction> getTransactions = allTransactions.getContent();
 
               //Pass data to generif response dto
@@ -141,7 +140,7 @@ public class TransactionsController {
 //    }
 
 
-    @PatchMapping("/transactions/{transactionId}")
+    @PatchMapping("/{transactionId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<TransactionResponse>> patchTransaction(@PathVariable("transactionId") UUID transactionId,
                                                                 @RequestBody EditTransactionDto dto){
@@ -166,7 +165,7 @@ public class TransactionsController {
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/transactions/{transactionId}")
+    @DeleteMapping("/{transactionId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Void>> deleteTransaction(@PathVariable("transactionId") UUID transactionId){
         transactionService.deleteTransaction(transactionId);
