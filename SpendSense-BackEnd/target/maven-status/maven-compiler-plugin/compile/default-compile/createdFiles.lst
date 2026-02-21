@@ -14,6 +14,7 @@ com/MrSurenK/SpendSense_BackEnd/model/TransactionType.class
 com/MrSurenK/SpendSense_BackEnd/configuration/EndPointConfig.class
 com/MrSurenK/SpendSense_BackEnd/dto/requestDto/LogOutRequest.class
 com/MrSurenK/SpendSense_BackEnd/dto/responseDto/ApiResponse.class
+com/MrSurenK/SpendSense_BackEnd/JPASpecifications/TransactionSpecifications.class
 com/MrSurenK/SpendSense_BackEnd/service/SecurityContextService.class
 com/MrSurenK/SpendSense_BackEnd/model/UserAccount_.class
 com/MrSurenK/SpendSense_BackEnd/dto/requestDto/NewCatDto.class
@@ -44,3 +45,4 @@ com/MrSurenK/SpendSense_BackEnd/util/DateTimeFormats.class
 com/MrSurenK/SpendSense_BackEnd/configuration/RedisConfig.class
 com/MrSurenK/SpendSense_BackEnd/util/BeanInitTracker.class
 com/MrSurenK/SpendSense_BackEnd/controller/DashboardController.class
+com/MrSurenK/SpendSense_BackEnd/dto/requestDto/TransactionFiltersDto.class

@@ -1,9 +1,12 @@
 package com.MrSurenK.SpendSense_BackEnd.service;
 
+import com.MrSurenK.SpendSense_BackEnd.JPASpecifications.TransactionSpecifications;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.EditTransactionDto;
+import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionFiltersDto;
 import com.MrSurenK.SpendSense_BackEnd.dto.requestDto.TransactionRequestDto;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
+import com.MrSurenK.SpendSense_BackEnd.model.TransactionType;
 import com.MrSurenK.SpendSense_BackEnd.repository.CategoryRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.TransactionRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
@@ -11,9 +14,11 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -74,29 +79,24 @@ public class TransactionService {
     //Getting and sorting transactions by specific filters
 
     //Pass JWT token to extract username and get User Id and also Pageable object with page details in controller
-    public Page<Transaction> getTransactions(Integer userId, Pageable page){
+    public Page<Transaction> getTransactions(Integer userId,
+   TransactionFiltersDto transactionFiltersDto,
+                                             Pageable page){
         //Get the user id from user account
-        return transactionRepo.findAllByUserAccountId(userId,page);
+       //return transactionRepo.findAllByUserAccountId(userId,page);
+        return transactionRepo.findAll(
+                Specification.where(TransactionSpecifications.hasUser(userId))
+                        .and(TransactionSpecifications.withinDateRange(transactionFiltersDto.getStartDate(),
+                                transactionFiltersDto.getEndDate()))
+                        .and(TransactionSpecifications.amountBetween(transactionFiltersDto.getMin(),
+                                transactionFiltersDto.getMax()))
+                        .and(TransactionSpecifications.hasCategory(transactionFiltersDto.getCatId()))
+                        .and(TransactionSpecifications.hasExpenseOrIncome(transactionFiltersDto.getTransactionType()))
+                        .and(TransactionSpecifications.isRecurringFilter(transactionFiltersDto.getIsRecurring()))
+                        .and(TransactionSpecifications.hasTitle(transactionFiltersDto.getTitle())),
+                         page
+        );
     }
-
-
-    //ToDo: More filter options to retrieve transactions by
-
-    public Page<Transaction> getTransactionWithDateRange(Integer userId, LocalDate startDate, LocalDate endDate,
-                                                         Pageable page){
-        return transactionRepo.findAllByUserAccountIdAndTransactionDateBetween(userId,startDate,endDate,page);
-    }
-
-
-//    public Page<Transaction>getByCategoryFilter(Integer userId, Long catId, Pageable page){
-//        return transactionRepo.findAllByCategoryIdAndUserAccountId(catId,userId,page);
-//    }
-//
-//    public Page<Transaction>getBetweenDatesFilter(LocalDate startDate, LocalDate endDate, Integer userId,
-//                                                  Pageable page){
-//        return transactionRepo.findAllByUserAccountIdAndTransactionDateBetween(startDate, endDate, userId, page);
-//    }
-
 
 
     public Transaction editTransaction(EditTransactionDto dto, int userId, UUID transactionId){

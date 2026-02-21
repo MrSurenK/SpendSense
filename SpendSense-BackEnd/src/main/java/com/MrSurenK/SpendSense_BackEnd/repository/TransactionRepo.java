@@ -31,9 +31,6 @@ public interface TransactionRepo extends JpaRepository<Transaction, UUID>, JpaSp
 //                                                     @Param("description") String description,
 //                                                     Pageable page); //Query to be used for all filtering logic
 
-
-
-
     Page<Transaction> findAllByUserAccountId(int userId, Pageable page);
     Page<Transaction>findAllByCategoryIdAndUserAccountId(Long catId, int userId, Pageable page);
     Page<Transaction> findAllByUserAccountIdAndTransactionDateBetween(int userId,LocalDate startDate, LocalDate endDate,

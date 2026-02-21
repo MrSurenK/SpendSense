@@ -11,7 +11,8 @@ import java.time.YearMonth;
 
 public final class TransactionSpecifications {
 
-    /* -- Filters for transactions --
+    /*
+    -- Filters for transactions --
     1. Date range
     2. Is it recurring?
     3. Is it expense or income?
@@ -19,10 +20,7 @@ public final class TransactionSpecifications {
     5. Amount ranges
     6. Title
     7. Global Search -> title, remarks and amount values in UI search bar
-
-
      */
-
 
     //Specification to get transactions belonging to the given user id
     public static Specification<Transaction> hasUser(Integer userId){
@@ -112,7 +110,4 @@ public final class TransactionSpecifications {
                 }
         };
    }
-
-
-
 }

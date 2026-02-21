@@ -25,25 +25,25 @@ INSERT INTO category (name,transaction_type,is_system) VALUES('Allowance','INCOM
 
 --Insert Dummy Transactions for Sam Smith--
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),125.50,'Groceries','Groceries from supermarket',false,'2025-08-09',NOW(),1,2);
+UUID_TO_BIN(UUID()),125.50,'Groceries','Groceries from supermarket',false,'2026-02-09',NOW(),1,2);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),4000.00, 'Salary',"pay day",true,'2025-08-31','2025-09-30',NOW(),1,8);
+UUID_TO_BIN(UUID()),4000.00, 'Salary',"pay day",true,'2026-02-21','2026-03-21',NOW(),1,8);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),5000.00, 'Bonus','Performance Bonus',false,'2025-08-31',NOW(),1,11);
+UUID_TO_BIN(UUID()),5000.00, 'Bonus','Performance Bonus',false,'2026-02-27',NOW(),1,11);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),5000.00, 'Bonus','Annual Bonus',false,'2025-08-31',NOW(),1,11);
+UUID_TO_BIN(UUID()),5000.00, 'Bonus','Annual Bonus',false,'2026-02-22',NOW(),1,11);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),80.00, 'Phone bill','Circles life bill',true,'2025-08-05','2025-09-05',NOW(),1,3);
+UUID_TO_BIN(UUID()),80.00, 'Phone bill','Circles life bill',true,'2026-02-05','2026-03-05',NOW(),1,3);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),5, 'MRT','Transportation to work and back',false,'2025-08-09',NOW(),1,4);
+UUID_TO_BIN(UUID()),5, 'MRT','Transportation to work and back',false,'2026-02-09',NOW(),1,4);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),5,'MRT','Transportation to work and back',false,'2025-08-10',NOW(),1,4);
+UUID_TO_BIN(UUID()),5,'MRT','Transportation to work and back',false,'2026-02-10',NOW(),1,4);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),7.50,'Dinner','Hawker food below',false,'2025-08-09',NOW(),1,6);
+UUID_TO_BIN(UUID()),7.50,'Dinner','Hawker food below',false,'2026-02-09',NOW(),1,6);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),100.00, 'PruShield','Prudential Hospital Plan',true,'2025-08-09','2025-09-30',NOW(),1,5);
+UUID_TO_BIN(UUID()),100.00, 'PruShield','Prudential Hospital Plan',true,'2026-02-09','2026-03-09',NOW(),1,5);
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,last_updated,user_account_id,category_id) VALUES (
-UUID_TO_BIN(UUID()),40.00, 'Grab',"Grab to friend's place",false,'2025-08-11',NOW(),1,4);
+UUID_TO_BIN(UUID()),40.00, 'Grab',"Grab to friend's place",false,'2026-02-11',NOW(),1,4);
 
 -- Subscriptions --
 INSERT INTO user_transactions (id,amount,title,remarks,recurring,transaction_date,next_due_date,last_updated,user_account_id,category_id) VALUES (
