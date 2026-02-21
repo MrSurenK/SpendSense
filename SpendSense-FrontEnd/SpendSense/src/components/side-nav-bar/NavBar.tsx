@@ -29,7 +29,7 @@ export default function NavBar() {
         {
           key: 21,
           menuItem: "View All Transactions",
-          path: "/txn/allTnx",
+          path: "/txn",
         },
         {
           key: 22,

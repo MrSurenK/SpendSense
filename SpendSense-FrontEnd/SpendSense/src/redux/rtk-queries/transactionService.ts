@@ -36,6 +36,11 @@ export interface TransactionFilters {
   transactionType?: TransactionType;
   isRecurring?: boolean;
   title?: string;
+
+  page?: number;
+  size?: number;
+  sortField?: string;
+  sortDirection?: "ASC" | "DESC";
 }
 
 export type TransactionType = "INCOME" | "EXPENSE";
@@ -45,32 +50,21 @@ export const transactionApi = createApi({
   reducerPath: "transactionApi",
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
-    getAllTransactions: builder.query<
+    searchTransactions: builder.mutation<
       TransactionApiResponse,
-      { page: number; size: number; sort: string; filters?: TransactionFilters }
+      Partial<TransactionFilters>
     >({
-      query: ({ page, size, sort, filters = {} }) => {
-        //format filters to only show if filter is appplied
-        const cleanedFilters = Object.fromEntries(
-          Object.entries(filters).filter(
-            ([_, v]) => v != undefined && v != null && v !== "",
-          ),
-        );
-
+      query: (body) => {
         return {
-          url: `/transactions`,
-          params: {
-            ...cleanedFilters,
-            page,
-            size,
-            sort,
-          },
+          url: `/transactions/search`,
+          method: "POST",
+          body,
         };
       },
     }),
   }),
 });
 
-export const { useGetAllTransactionsQuery } = transactionApi;
+export const { useSearchTransactionsMutation } = transactionApi;
 
 export default transactionApi;

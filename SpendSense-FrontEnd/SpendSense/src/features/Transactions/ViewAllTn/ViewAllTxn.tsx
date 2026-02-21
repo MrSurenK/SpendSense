@@ -2,8 +2,11 @@ import Button from "../../../components/btn/Button";
 import InputBox from "../../../components/input-box/InputBox";
 import styles from "./ViewAllTxn.module.css";
 import Pagination from "../../../components/pagination/Pagination";
-import { useGetAllTransactionsQuery } from "../../../redux/rtk-queries/transactionService";
-import { useState } from "react";
+import {
+  useSearchTransactionsMutation,
+  type TransactionFilters,
+} from "../../../redux/rtk-queries/transactionService";
+import { useState, useEffect } from "react";
 
 export function ViewAllTxn() {
   /*
@@ -12,21 +15,31 @@ export function ViewAllTxn() {
   */
 
   //page states
-  const [page, setPage] = useState(1);
 
-  const [filters, setFilters] = useState<TransactionFilters>({});
+  const [searchRequest, setSearchRequest] = useState<TransactionFilters>({
+    page: 0,
+    size: 5,
+    sortField: "lastUpdated",
+    sortDirection: "DESC",
+  });
+
+  const handlePageChange = (uiPage: number) => {
+    setSearchRequest((prev) => ({
+      ...prev,
+      page: Math.max(uiPage - 1, 0),
+    }));
+  };
 
   //Call API
-  const {
-    data: transactionResponse,
-    error,
-    isLoading: boolean,
-  } = useGetAllTransactionsQuery({
-    filters: filters,
-    page: page - 1,
-    size: 5,
-    sort: "lastUpdated",
-  });
+  const [searchTransactions, { data: transactionResponse }] =
+    useSearchTransactionsMutation();
+
+  useEffect(() => {
+    searchTransactions({
+      ...searchRequest,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchRequest]);
 
   return (
     <>
@@ -139,9 +152,9 @@ export function ViewAllTxn() {
       </div>
       {/*Make this more functional with state*/}
       <Pagination
-        currPage={page}
+        currPage={(searchRequest.page ?? 0) + 1}
         totalPages={transactionResponse?.totalPages ?? 1}
-        onPageChange={setPage}
+        onPageChange={handlePageChange}
       />
     </>
   );
