@@ -4,7 +4,7 @@ import baseQueryWithReauth from "../config/baseQueryWithReauth";
 export interface TransactionApiResponse {
   success: boolean;
   message: string;
-  content: transactionRow[];
+  content: TransactionRow[];
   page: number;
   size: number;
   total: number;
@@ -13,7 +13,7 @@ export interface TransactionApiResponse {
   last: boolean;
 }
 
-export interface transactionRow {
+export interface TransactionRow {
   id: string; //UUID is a string not number
   amount: number;
   title: string;
@@ -27,29 +27,50 @@ export interface transactionRow {
   transactionType: TransactionType;
 }
 
-export type TransactionType = "income" | "expense";
+export interface TransactionFilters {
+  startDate?: string; //yyyy-mm-dd
+  endDate?: string; //yyyy-mm-dd
+  min?: number;
+  max?: number;
+  catId?: number;
+  transactionType?: TransactionType;
+  isRecurring?: boolean;
+  title?: string;
+}
+
+export type TransactionType = "INCOME" | "EXPENSE";
 
 //Call the API
 export const transactionApi = createApi({
   reducerPath: "transactionApi",
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
-    getAllTransactionsSortedByLastUpdated: builder.query<
+    getAllTransactions: builder.query<
       TransactionApiResponse,
-      { page: number; size: number; sort: string }
+      { page: number; size: number; sort: string; filters?: TransactionFilters }
     >({
-      query: ({ page, size, sort }) => ({
-        url: `/getAllTransactions`,
-        params: {
-          page,
-          size,
-          sort,
-        },
-      }),
+      query: ({ page, size, sort, filters = {} }) => {
+        //format filters to only show if filter is appplied
+        const cleanedFilters = Object.fromEntries(
+          Object.entries(filters).filter(
+            ([_, v]) => v != undefined && v != null && v !== "",
+          ),
+        );
+
+        return {
+          url: `/transactions`,
+          params: {
+            ...cleanedFilters,
+            page,
+            size,
+            sort,
+          },
+        };
+      },
     }),
   }),
 });
 
-export const { useGetAllTransactionsSortedByLastUpdatedQuery } = transactionApi;
+export const { useGetAllTransactionsQuery } = transactionApi;
 
 export default transactionApi;

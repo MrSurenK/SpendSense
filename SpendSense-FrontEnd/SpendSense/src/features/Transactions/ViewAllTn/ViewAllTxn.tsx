@@ -2,7 +2,7 @@ import Button from "../../../components/btn/Button";
 import InputBox from "../../../components/input-box/InputBox";
 import styles from "./ViewAllTxn.module.css";
 import Pagination from "../../../components/pagination/Pagination";
-import { useGetAllTransactionsSortedByLastUpdatedQuery } from "../../../redux/rtk-queries/transactionService";
+import { useGetAllTransactionsQuery } from "../../../redux/rtk-queries/transactionService";
 import { useState } from "react";
 
 export function ViewAllTxn() {
@@ -14,12 +14,15 @@ export function ViewAllTxn() {
   //page states
   const [page, setPage] = useState(1);
 
+  const [filters, setFilters] = useState<TransactionFilters>({});
+
   //Call API
   const {
     data: transactionResponse,
     error,
     isLoading: boolean,
-  } = useGetAllTransactionsSortedByLastUpdatedQuery({
+  } = useGetAllTransactionsQuery({
+    filters: filters,
     page: page - 1,
     size: 5,
     sort: "lastUpdated",
@@ -82,7 +85,7 @@ export function ViewAllTxn() {
                 </td>
                 <td>
                   <span>
-                    {txn.transactionType === "expense" ? "-" : "+"}$
+                    {txn.transactionType === "EXPENSE" ? "-" : "+"}$
                     {txn.amount.toFixed(2)}
                   </span>
                 </td>
@@ -92,7 +95,7 @@ export function ViewAllTxn() {
                 <td>
                   <span>
                     {" "}
-                    {txn.transactionType === "expense" ? "Expense" : "Income"}
+                    {txn.transactionType === "EXPENSE" ? "EXPENSE" : "INCOME"}
                   </span>
                 </td>
                 <td>

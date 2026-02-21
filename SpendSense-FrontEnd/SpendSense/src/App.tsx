@@ -24,7 +24,7 @@ function AppWrapper() {
           <Route path="/register" element={<Registration />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings" element={<AccountSettings />} />
-          <Route path="/txn/allTnx" element={<ViewAllTxn />} />
+          <Route path="/txn" element={<ViewAllTxn />} />
         </Routes>
       </main>
     </div>
