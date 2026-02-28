@@ -2,6 +2,7 @@ import Button from "../../../components/btn/Button";
 import styles from "./ViewAllTxn.module.css";
 import Pagination from "../../../components/pagination/Pagination";
 import {
+  useGetCategoriesQuery,
   useSearchTransactionsMutation,
   type TransactionFilters,
 } from "../../../redux/rtk-queries/transactionService";
@@ -11,12 +12,16 @@ import TransactionFiltersComponent from "../../../components/filters/Transaction
 export function ViewAllTxn() {
   //page states
 
-  const [searchRequest, setSearchRequest] = useState<TransactionFilters>({
+  //Defaults
+  const defaultRequest: TransactionFilters = {
     page: 0,
-    size: 5,
+    size: 10,
     sortField: "lastUpdated",
     sortDirection: "DESC",
-  });
+  };
+
+  const [searchRequest, setSearchRequest] =
+    useState<TransactionFilters>(defaultRequest);
 
   const handlePageChange = (uiPage: number) => {
     setSearchRequest((prev) => ({
@@ -24,6 +29,10 @@ export function ViewAllTxn() {
       page: Math.max(uiPage - 1, 0),
     }));
   };
+
+  const { data: catData } = useGetCategoriesQuery();
+
+  console.log(catData);
 
   //Call API
   const [searchTransactions, { data: transactionResponse }] =
@@ -40,9 +49,20 @@ export function ViewAllTxn() {
     <>
       <h1>All Transactions</h1>
       <TransactionFiltersComponent
-        onSearch={(filters: TransactionFilters) => {
-          setSearchRequest(filters); // directly sets your state
+        onSearch={(uiFilters) => {
+          if (Object.keys(uiFilters).length === 0) {
+            //reset: restore parent defaults
+            setSearchRequest(defaultRequest);
+          } else {
+            // replace searchRequest entirely — only include what child sent + pagination defaults
+            setSearchRequest({
+              ...defaultRequest,
+              ...uiFilters,
+              page: 0,
+            });
+          }
         }}
+        categories={catData}
       />
       <div className={styles.tableContainer}>
         <table className={styles.tableStyle}>
@@ -68,7 +88,7 @@ export function ViewAllTxn() {
                 </td>
                 <td>
                   <span>
-                    {txn.transactionType === "EXPENSE" ? "-" : "+"}$
+                    {txn.transactionType === "expense" ? "-" : "+"}$
                     {txn.amount.toFixed(2)}
                   </span>
                 </td>
@@ -78,7 +98,7 @@ export function ViewAllTxn() {
                 <td>
                   <span>
                     {" "}
-                    {txn.transactionType === "EXPENSE" ? "EXPENSE" : "INCOME"}
+                    {txn.transactionType === "expense" ? "EXPENSE" : "INCOME"}
                   </span>
                 </td>
                 <td>

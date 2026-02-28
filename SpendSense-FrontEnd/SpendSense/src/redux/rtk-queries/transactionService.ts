@@ -43,7 +43,22 @@ export interface TransactionFilters {
   sortDirection?: "ASC" | "DESC";
 }
 
-export type TransactionType = "INCOME" | "EXPENSE";
+export type Categories = {
+  id: number;
+  name: string;
+  isDeleted: boolean;
+  isSystem: boolean;
+  transactionType: TransactionType;
+  userName: string;
+};
+
+export interface CategoriesResponse {
+  success: boolean;
+  message: string;
+  data: Categories[];
+}
+
+export type TransactionType = "income" | "expense";
 
 //Call the API
 export const transactionApi = createApi({
@@ -62,9 +77,19 @@ export const transactionApi = createApi({
         };
       },
     }),
+    //Get Request for User categories
+    getCategories: builder.query<{ id: number; name: string }[], void>({
+      query: () => ({
+        url: "/cat/allCategories",
+        method: "GET",
+      }),
+      transformResponse: (response: CategoriesResponse) =>
+        (response.data || []).map((c) => ({ id: c.id, name: c.name })),
+    }),
   }),
 });
 
-export const { useSearchTransactionsMutation } = transactionApi;
+export const { useSearchTransactionsMutation, useGetCategoriesQuery } =
+  transactionApi;
 
 export default transactionApi;

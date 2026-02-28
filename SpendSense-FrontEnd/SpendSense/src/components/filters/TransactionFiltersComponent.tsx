@@ -1,36 +1,46 @@
 import { useState } from "react";
 import styles from "./TransactionFiltersComponent.module.css";
 
-// Mock categories for demo - replace with API call
-const MOCK_CATEGORIES = [
-  { id: 1, name: "Groceries" },
-  { id: 2, name: "Phone Bills" },
-  { id: 3, name: "Insurance" },
-  { id: 4, name: "Entertainment" },
-  { id: 5, name: "Transport" },
-];
+// Enforce categories shape to be passed to this component\
+interface CatType {
+  id: number;
+  name: string;
+}
 
-const defaultFilters = {
-  keyword: "",
-  title: "",
-  startDate: "",
-  endDate: "",
-  min: "",
-  max: "",
-  catId: "",
-  transactionType: "",
-  isRecurring: false,
-  page: 0,
-  size: 10,
-  sortField: "lastUpdated",
-  sortDirection: "DESC",
+const cat_placeholder: CatType[] = [];
+
+const formatDate = (d: Date) => d.toLocaleDateString("en-CA");
+
+const getDefaultFilters = () => {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1);
+  const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  return {
+    keyword: "",
+    title: "",
+    startDate: formatDate(start),
+    endDate: formatDate(end),
+    min: "",
+    max: "",
+    catId: "",
+    isRecurring: false,
+    size: 10,
+    sortField: "lastUpdated",
+    sortDirection: "DESC",
+    transactionType: "",
+  };
 };
+
+interface TransactionFiltersProps {
+  onSearch?: (filters: Record<string, any>) => void;
+  categories?: CatType[];
+}
 
 export default function TransactionFilters({
   onSearch,
-  categories = MOCK_CATEGORIES,
-}) {
-  const [filters, setFilters] = useState(defaultFilters);
+  categories = cat_placeholder,
+}: TransactionFiltersProps) {
+  const [filters, setFilters] = useState(getDefaultFilters);
   const [expanded, setExpanded] = useState(true);
   const [activeCount, setActiveCount] = useState(0);
 
@@ -38,6 +48,7 @@ export default function TransactionFilters({
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  //Count the number of active filters applied to display on the UI
   const countActive = (f) => {
     let n = 0;
     if (f.keyword) n++;
@@ -50,21 +61,51 @@ export default function TransactionFilters({
     return n;
   };
 
+  //Empty search fields
   const handleSearch = () => {
     setActiveCount(countActive(filters));
-    onSearch?.({ ...filters, page: 0 });
+
+    // Remove any field that is empty/null/undefined/false — backend applies its own defaults
+    const cleanedFilters = Object.fromEntries(
+      Object.entries(filters).filter(([_, v]) => {
+        if (v === "" || v === null || v === undefined || v === false)
+          return false;
+        return true;
+      }),
+    ) as Record<string, any>;
+
+    // normalize types
+    if (cleanedFilters.transactionType) {
+      cleanedFilters.transactionType = String(
+        cleanedFilters.transactionType,
+      ).toLowerCase();
+    }
+    if (cleanedFilters.catId) {
+      cleanedFilters.catId = Number(cleanedFilters.catId);
+    }
+    if (cleanedFilters.min !== undefined) {
+      cleanedFilters.min = Number(cleanedFilters.min);
+    }
+    if (cleanedFilters.max !== undefined) {
+      cleanedFilters.max = Number(cleanedFilters.max);
+    }
+
+    console.log("cleanedFilters:", cleanedFilters);
+    onSearch?.(cleanedFilters);
   };
 
+  //Reset all fields to empty fields
   const handleReset = () => {
-    setFilters(defaultFilters);
+    const defaults = getDefaultFilters();
+    setFilters(defaults);
     setActiveCount(0);
-    onSearch?.(defaultFilters);
+    onSearch?.({});
   };
 
   const getTypeClass = (type) => {
     if (filters.transactionType !== type) return styles.toggleBtn;
-    if (type === "INCOME") return `${styles.toggleBtn} ${styles.toggleIncome}`;
-    if (type === "EXPENSE")
+    if (type === "income") return `${styles.toggleBtn} ${styles.toggleIncome}`;
+    if (type === "expense")
       return `${styles.toggleBtn} ${styles.toggleExpense}`;
     return `${styles.toggleBtn} ${styles.toggleActive}`;
   };
@@ -155,14 +196,14 @@ export default function TransactionFilters({
                   All
                 </button>
                 <button
-                  className={getTypeClass("INCOME")}
-                  onClick={() => update("transactionType", "INCOME")}
+                  className={getTypeClass("income")}
+                  onClick={() => update("transactionType", "income")}
                 >
                   ↑ Income
                 </button>
                 <button
-                  className={getTypeClass("EXPENSE")}
-                  onClick={() => update("transactionType", "EXPENSE")}
+                  className={getTypeClass("expense")}
+                  onClick={() => update("transactionType", "expense")}
                 >
                   ↓ Expense
                 </button>
