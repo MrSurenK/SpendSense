@@ -6,6 +6,8 @@ import { Dashboard } from "./features/Dashboard/Dashboard";
 import AccountSettings from "./features/AccountMgmt/AccountSettings";
 import NavBar from "./components/side-nav-bar/navBar";
 import { ViewAllTxn } from "./features/Transactions/ViewAllTn/ViewAllTxn";
+import NewTxn from "./features/Transactions/AddNewTn/NewTxn";
+import TxnLayout from "./features/Transactions/TxnLayout";
 
 function AppWrapper() {
   const location = useLocation();
@@ -24,7 +26,12 @@ function AppWrapper() {
           <Route path="/register" element={<Registration />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings" element={<AccountSettings />} />
-          <Route path="/txn" element={<ViewAllTxn />} />
+
+          {/* Transactions parent route with nested children */}
+          <Route path="/txn" element={<TxnLayout />}>
+            <Route index element={<ViewAllTxn />} />
+            <Route path="addNew" element={<NewTxn />} />
+          </Route>
         </Routes>
       </main>
     </div>

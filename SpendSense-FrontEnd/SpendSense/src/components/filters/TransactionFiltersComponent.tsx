@@ -90,7 +90,6 @@ export default function TransactionFilters({
       cleanedFilters.max = Number(cleanedFilters.max);
     }
 
-    console.log("cleanedFilters:", cleanedFilters);
     onSearch?.(cleanedFilters);
   };
 
