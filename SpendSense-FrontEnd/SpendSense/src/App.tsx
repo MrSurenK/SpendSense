@@ -8,6 +8,7 @@ import NavBar from "./components/side-nav-bar/navBar";
 import { ViewAllTxn } from "./features/Transactions/ViewAllTn/ViewAllTxn";
 import NewTxn from "./features/Transactions/AddNewTn/NewTxn";
 import TxnLayout from "./features/Transactions/TxnLayout";
+import Modal from "./components/modal/Modal";
 
 function AppWrapper() {
   const location = useLocation();
@@ -32,6 +33,8 @@ function AppWrapper() {
             <Route index element={<ViewAllTxn />} />
             <Route path="addNew" element={<NewTxn />} />
           </Route>
+
+          <Route path="/modal" element={<Modal />} />
         </Routes>
       </main>
     </div>
