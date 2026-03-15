@@ -70,7 +70,7 @@ export type NewTransactionRequest = {
   remarks: string;
   recurring: boolean;
   date: string;
-  category: number; //cat id
+  categoryId: number; //cat id
 };
 
 export type NewCategoryRequest = {

@@ -10,6 +10,8 @@ import {
 } from "../../../redux/rtk-queries/transactionService";
 import Modal from "../../../components/modal/Modal";
 
+//ToDo: fix the date formating before submitting form
+
 export default function NewTxn() {
   //State to manage form information
 
@@ -19,18 +21,19 @@ export default function NewTxn() {
     remarks: "",
     recurring: false,
     date: new Date().toISOString().slice(0, 10),
-    category: 0,
+    categoryId: 0,
   });
 
   const [transactionType, setTransactionType] = useState<TransactionType>();
-  const hasSelectedCategory = newTxnForm.category !== 0;
 
+  const [fillAllFieldsMsg, setFillAllFieldsMsg] = useState<String | null>(null);
+  const hasSelectedCategory = newTxnForm.categoryId !== 0;
   const handleCatChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const rawValue = e.target.value;
     const selectedCategoryId = rawValue === "" ? 0 : Number(rawValue);
 
     // Update form state with selected category id.
-    setNewTxnForm((prev) => ({ ...prev, category: selectedCategoryId }));
+    setNewTxnForm((prev) => ({ ...prev, categoryId: selectedCategoryId }));
 
     //Update transactionType state to display the correct state
     const selectedCat = catData?.data?.find(
@@ -48,19 +51,49 @@ export default function NewTxn() {
 
     let parsedValue: string | number | boolean = value;
 
-    if (name === "amount" || name === "category") {
+    if (name === "amount" || name === "categoryId") {
       parsedValue = value === "" ? 0 : Number(value);
     } else if (name === "recurring") {
       parsedValue = value === "true";
     }
-
     setNewTxnForm((prev) => ({ ...prev, [name]: parsedValue }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  function formatToDdMmYyyy(dateStr: string) {
+    const date = new Date(dateStr);
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = String(date.getFullYear());
+    const day = String(date.getDate()).padStart(2, "0");
+    console.log(`$(day) + $(month) + $(year)`);
+    return `${day}-${month}-${year}`;
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    console.log("Form before submit: ", newTxnForm);
+
+    //Check if all fields have been filled
+    if (
+      newTxnForm.title.trim() === "" ||
+      newTxnForm.remarks.trim() === "" ||
+      newTxnForm.categoryId === 0 ||
+      newTxnForm.amount <= 0
+    ) {
+      setFillAllFieldsMsg("PLEASE FILL ALL FIELDS!");
+      return; // do not call API if all fields are not set
+    }
+
     try {
-      // const response = await addNewTxn(newTxnForm).unwrap();
+      const payload = {
+        ...newTxnForm,
+        date: formatToDdMmYyyy(newTxnForm.date),
+      };
+      await addNewTxn(payload).unwrap(); //call add txn api
+      if (fillAllFieldsMsg) {
+        setFillAllFieldsMsg(null);
+      }
+      setShowModal(true);
     } catch (error) {
       console.error("Failed to create transaction", error);
     }
@@ -148,7 +181,12 @@ export default function NewTxn() {
             {/* ── Title ── */}
             <div className={styles.row}>
               <label>Title</label>
-              <InputBox name="title" placeholder="e.g. Groceries" size="md" />
+              <InputBox
+                name="title"
+                onChange={handleInputChange}
+                placeholder="e.g. Groceries"
+                size="md"
+              />
             </div>
 
             {/* ── Remarks ── */}
@@ -181,8 +219,10 @@ export default function NewTxn() {
               <label>Category</label>
               <div className={styles.selectWrap}>
                 <select
-                  name="category"
-                  value={newTxnForm.category === 0 ? "" : newTxnForm.category}
+                  name="categoryId"
+                  value={
+                    newTxnForm.categoryId === 0 ? "" : newTxnForm.categoryId
+                  }
                   onChange={handleCatChange}
                 >
                   <option value="">Select a category</option>
@@ -225,18 +265,18 @@ export default function NewTxn() {
             <div className={styles.totals}>
               <div className={styles.totalsRow}>
                 <span>TOTAL</span>
-                <span>$0.00</span>
+                <span>${(newTxnForm.amount ?? 0).toFixed(2)}</span>
               </div>
             </div>
             <hr className={styles.divider} />
             {/* ── Actions ── */}
             <div className={styles.footer}>
-              <Button
-                text="Submit Transaction"
-                size="lg"
-                type="submit"
-                onClick={() => setShowModal(true)}
-              />
+              {fillAllFieldsMsg && (
+                <h3 style={{ color: "red", textAlign: "center" }}>
+                  {fillAllFieldsMsg}
+                </h3>
+              )}
+              <Button text="Submit Transaction" size="lg" type="submit" />
               <Button
                 text="Add New Category"
                 variant="btn-secondary"
