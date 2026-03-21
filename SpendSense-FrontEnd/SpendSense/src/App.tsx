@@ -9,6 +9,7 @@ import { ViewAllTxn } from "./features/Transactions/ViewAllTn/ViewAllTxn";
 import NewTxn from "./features/Transactions/AddNewTn/NewTxn";
 import TxnLayout from "./features/Transactions/TxnLayout";
 import Modal from "./components/modal/Modal";
+import NewCatModal from "./components/modal/NewCatModal";
 
 function AppWrapper() {
   const location = useLocation();
@@ -34,7 +35,7 @@ function AppWrapper() {
             <Route path="addNew" element={<NewTxn />} />
           </Route>
 
-          <Route path="/modal" element={<Modal />} />
+          <Route path="/modal" element={<NewCatModal />} />
         </Routes>
       </main>
     </div>

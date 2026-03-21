@@ -1,0 +1,147 @@
+.modalPos {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1rem;
+  box-sizing: border-box;
+  z-index: 1000;
+  min-height: 100svh;
+  min-height: 100vh;
+}
+
+:global(html, body, #root) {
+  height: 100%;
+  margin: 0;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1.25rem 1.25rem 4rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.15);
+  position: relative;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.75rem;
+}
+
+.formRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.formRow label {
+  min-width: 90px;
+}
+
+.select {
+  position: relative;
+  min-width: 120px;
+  max-width: 180px;
+  flex: 1 1 140px;
+}
+
+.select select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 8px 36px 8px 12px;
+  width: 100%;
+  border: 1px solid #e8eaed;
+  border-radius: 6px;
+  background: white;
+  box-shadow: 0 1px 3px -2px #9098a9;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.formRow input[type="text"] {
+  flex: 2 1 220px;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid #e8eaed;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+/* add extra spacing above absolute actions to avoid overlap */
+.formRow:last-of-type {
+  margin-bottom: 2.25rem;
+}
+
+.select svg {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  color: #9098a9;
+}
+
+.modal h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.header {
+  background: #002b6d;
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
+  margin: -1.25rem -1.25rem 0 -1.25rem;
+  border-radius: 8px 8px 0 0;
+  position: relative;
+}
+
+.header h1 {
+  margin: 0;
+  color: inherit;
+  font-size: 1.125rem;
+}
+
+/* gap between header and the following form */
+.header + form {
+  margin-top: 0.75rem;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+}
+
+.closeBtn button {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  color: #ffffff;
+}
+
+.closeBtn button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.actions {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+}
