@@ -1,7 +1,57 @@
 import Button from "../btn/Button";
 import style from "./NewCatModal.module.css";
+import {
+  type NewCategoryRequest,
+  useAddNewCatMutation,
+  type TransactionType,
+} from "../../redux/rtk-queries/transactionService";
+import { useState } from "react";
 
-export default function NewCatModal() {
+type Props = {
+  setOpenCatModal?: (open: boolean) => void;
+};
+
+//Use this type first as state is not properly set on first render
+type NewCatForm = {
+  name: string;
+  transactionType: TransactionType | "";
+};
+
+//ToDo: update the states and handle open close and form elements interactivity.
+//ToDo: Update the modal into the parent compoenent and ensure full functionality when sending front end to API
+
+export default function NewCatModal({ setOpenCatModal }: Props) {
+  const [form, setForm] = useState<NewCatForm>({
+    name: "",
+    transactionType: "",
+  });
+
+  //call the api
+  const [addNewCat] = useAddNewCatMutation();
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!form.name.trim() || !form.transactionType) return;
+
+    const payload: NewCategoryRequest = {
+      name: form.name.trim(),
+      transactionType: form.transactionType,
+    };
+
+    await addNewCat(payload).unwrap();
+  };
+
   return (
     <>
       <div>
@@ -10,22 +60,37 @@ export default function NewCatModal() {
             <div className={style.header}>
               <h1>Add New Category</h1>
               <div className={style.closeBtn}>
-                <button type="button" aria-label="Close">
+                <button
+                  type="button"
+                  aria-label="Close"
+                  onClick={() => setOpenCatModal?.(false)}
+                >
                   X
                 </button>
               </div>
             </div>
             {/* input form */}
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className={style.formRow}>
                 <label htmlFor="newCat">Category:</label>
-                <input id="newCat" type="text" name="newCat" />
+                <input
+                  id="newCat"
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                />
               </div>
 
               <div className={style.formRow}>
                 <label htmlFor="type">Type:</label>
                 <div className={style.select}>
-                  <select id="type" name="type" defaultValue="">
+                  <select
+                    id="type"
+                    name="transactionType"
+                    value={form.transactionType}
+                    onChange={handleChange}
+                  >
                     <option value="" disabled>
                       Pick category type
                     </option>
@@ -48,7 +113,6 @@ export default function NewCatModal() {
                   </svg>
                 </div>
               </div>
-
               <div className={style.actions}>
                 <Button size="sm" text="submit" />
               </div>
