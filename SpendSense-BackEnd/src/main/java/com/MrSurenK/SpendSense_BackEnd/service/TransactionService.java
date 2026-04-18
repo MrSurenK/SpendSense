@@ -12,6 +12,7 @@ import com.MrSurenK.SpendSense_BackEnd.repository.TransactionRepo;
 import com.MrSurenK.SpendSense_BackEnd.repository.UserAccountRepo;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,9 +26,11 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class TransactionService {
 
 
@@ -187,5 +190,13 @@ public class TransactionService {
             template.setNextDueDate(today.plusMonths(1));
             transactionRepo.save(template);
         }
+    }
+
+    public Transaction getTransaction(UUID id){
+        log.info("Retrieving transaction : {}", id);
+        Transaction transaction = transactionRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
+        log.info("Retrieved transaction successfully");
+        return transaction;
     }
 }

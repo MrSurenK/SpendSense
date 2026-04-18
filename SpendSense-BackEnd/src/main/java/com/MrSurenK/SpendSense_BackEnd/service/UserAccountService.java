@@ -78,7 +78,8 @@ public class UserAccountService {
 				)
 		);
 
-		UserAccount user = userAccountRepo.findByUsername(input.getUsername()).orElseThrow();
+		UserAccount user = userAccountRepo.findByUsername(input.getUsername())
+				.orElseThrow(()-> new EntityNotFoundException("No user record found."));
 
 		user.setLastLogin(LocalDateTime.now()); //Update the last login in Db
 

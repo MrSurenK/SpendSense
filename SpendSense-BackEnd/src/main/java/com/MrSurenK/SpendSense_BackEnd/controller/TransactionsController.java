@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -181,6 +182,18 @@ public class TransactionsController {
         res.setSuccess(true);
         res.setMessage("Transaction successfully deleted!");
 
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/{transactionId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<TransactionResponse>> getTransactionById(@PathVariable("transactionId") UUID transactionId){
+        Transaction transaction = transactionService.getTransaction(transactionId);
+        TransactionResponse transactionResponse = EntityToDtoMapper.mapEntityToTransactionResponseDto(transaction);
+        ApiResponse<TransactionResponse> res = new ApiResponse<>();
+        res.setSuccess(true);
+        res.setMessage("Transaction retrieved successfully");
+        res.setData(transactionResponse);
         return ResponseEntity.ok(res);
     }
 }

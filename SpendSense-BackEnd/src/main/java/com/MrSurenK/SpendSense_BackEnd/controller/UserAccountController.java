@@ -13,6 +13,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +27,7 @@ import java.util.Map;
 // To Do: Clean up global exceptions
 
 @RestController
+@Slf4j
 public class UserAccountController {
 
     UserAccountService userAccountService;
@@ -87,6 +89,7 @@ public class UserAccountController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDto logindto, HttpServletResponse response){
         UserAccount authenticatedUser = userAccountService.authenticate(logindto);
         String userName = logindto.getUsername();
+        log.info("Logging in: {}", userName);
 
         //if login was successful then generate refresh token and JWT access token
         String jwtToken = jwtService.generateToken(authenticatedUser); //access token
@@ -129,6 +132,7 @@ public class UserAccountController {
         loginResponse.setMessage("User logged in successfully!");
         loginResponse.setAccessTokenExpiresIn(accessTokenExpiration);
         loginResponse.setRefreshTokenExpiresIn(refreshTokenExpiration);
+        log.info("{}. {} successfully logged in.", userId, userName);
         return ResponseEntity.ok(loginResponse);
     }
 

@@ -3,6 +3,7 @@ package com.MrSurenK.SpendSense_BackEnd.repository;
 import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 import com.MrSurenK.SpendSense_BackEnd.model.TransactionType;
+import com.MrSurenK.SpendSense_BackEnd.model.Transaction_;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
