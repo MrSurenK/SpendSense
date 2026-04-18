@@ -3,10 +3,13 @@ import styles from "./ViewAllTxn.module.css";
 import Pagination from "../../../components/pagination/Pagination";
 import {
   useGetCategoriesQuery,
-  useSearchTransactionsMutation,
+  useSearchTransactionsQuery,
+  type TransactionRow,
   type TransactionFilters,
 } from "../../../redux/rtk-queries/transactionService";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { createPortal } from "react-dom";
+import EditTxnModal from "../../../components/modal/EditTxnModal";
 import TransactionFiltersComponent from "../../../components/filters/TransactionFiltersComponent";
 
 export function ViewAllTxn() {
@@ -22,6 +25,7 @@ export function ViewAllTxn() {
 
   const [searchRequest, setSearchRequest] =
     useState<TransactionFilters>(defaultRequest);
+  const [selectedTxn, setSelectedTxn] = useState<TransactionRow | null>(null);
 
   const handlePageChange = (uiPage: number) => {
     setSearchRequest((prev) => ({
@@ -35,15 +39,9 @@ export function ViewAllTxn() {
   console.log(catData);
 
   //Call API
-  const [searchTransactions, { data: transactionResponse }] =
-    useSearchTransactionsMutation();
-
-  useEffect(() => {
-    searchTransactions({
-      ...searchRequest,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchRequest]);
+  const { data: transactionResponse } = useSearchTransactionsQuery({
+    ...searchRequest,
+  });
 
   return (
     <>
@@ -107,7 +105,11 @@ export function ViewAllTxn() {
                 <td>
                   <div className={styles.actions}>
                     <Button text={"View"} size={"sm"}></Button>
-                    <Button text={"Edit"} size={"sm"}></Button>
+                    <Button
+                      text={"Edit"}
+                      size={"sm"}
+                      onClick={() => setSelectedTxn(txn)}
+                    ></Button>
                   </div>
                 </td>
                 <td>
@@ -146,6 +148,16 @@ export function ViewAllTxn() {
         totalPages={transactionResponse?.totalPages ?? 1}
         onPageChange={handlePageChange}
       />
+      {selectedTxn &&
+        createPortal(
+          <EditTxnModal
+            transaction={selectedTxn}
+            setOpenEditModal={(open) => {
+              if (!open) setSelectedTxn(null);
+            }}
+          />,
+          document.body,
+        )}
     </>
   );
 }

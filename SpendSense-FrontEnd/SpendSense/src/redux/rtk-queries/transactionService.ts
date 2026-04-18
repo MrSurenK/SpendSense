@@ -64,6 +64,21 @@ export interface NewTransactionResponse {
   data: TransactionRow[]; //reuse transaction row type here as it is the same
 }
 
+export interface EditedTransactionResponse {
+  success: boolean;
+  message: string;
+  data: TransactionRow;
+}
+
+export type EditTransactionRequest = {
+  amount?: number;
+  title?: string;
+  remarks?: string;
+  recurring?: boolean;
+  date?: string; //format date field to dd-MM-yyyy
+  categoryId?: number;
+};
+
 export type NewTransactionRequest = {
   amount: number;
   title: string;
@@ -84,10 +99,10 @@ export type TransactionType = "income" | "expense";
 export const transactionApi = createApi({
   reducerPath: "transactionApi",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Categories"], //If user updates category in app we want the drop down list to update accordingly by refetching
+  tagTypes: ["Categories", "Transactions"], //If user updates category in app we want the drop down list to update accordingly by refetching
   endpoints: (builder) => ({
     //POST request for all the transactions for logged in User with filters
-    searchTransactions: builder.mutation<
+    searchTransactions: builder.query<
       TransactionApiResponse,
       Partial<TransactionFilters>
     >({
@@ -98,7 +113,24 @@ export const transactionApi = createApi({
           body,
         };
       },
+      providesTags: ["Transactions"],
     }),
+
+    //PATCH request for transaction to be edited
+    editTransactions: builder.mutation<
+      EditedTransactionResponse,
+      { id: string; body: EditTransactionRequest }
+    >({
+      query: ({ id, body }) => {
+        return {
+          url: `/transactions/${id}`,
+          method: "PATCH",
+          body,
+        };
+      },
+      invalidatesTags: ["Transactions"],
+    }),
+
     //Get Request for User categories
     getCategories: builder.query<{ id: number; name: string }[], void>({
       query: () => ({
@@ -142,7 +174,8 @@ export const transactionApi = createApi({
 });
 
 export const {
-  useSearchTransactionsMutation,
+  useSearchTransactionsQuery,
+  useEditTransactionsMutation,
   useGetCategoriesQuery,
   useGetCategoriesWithFullResQuery,
   useAddNewTxnMutation,
