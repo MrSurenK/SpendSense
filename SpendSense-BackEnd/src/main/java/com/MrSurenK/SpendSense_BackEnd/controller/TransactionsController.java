@@ -87,7 +87,7 @@ public class TransactionsController {
                 transactionFiltersDto); //pagination is handled at service level
         List<Transaction> getTransactions = allTransactions.getContent();
 
-              //Pass data to generif response dto
+        //Pass data to generic response dto
         PaginatedResponse<TransactionResponse> res = new PaginatedResponse<>();
 
         List<TransactionResponse> getListOfTransactions = getTransactions.stream()

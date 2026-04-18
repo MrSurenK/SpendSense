@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -112,12 +113,14 @@ public class DashboardController {
     @GetMapping("/dash/netCashflow")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<HashMap<String,BigDecimal>>> getNetCashflow(
-            @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate
+            @RequestParam String startDate,
+            @RequestParam String endDate
     ){
 
         Integer userId = securityContextService.getUserFromSecurityContext().getId();
-        HashMap<String,BigDecimal> netCashFlow = dashboardService.netCashflow(userId,startDate, endDate);
+        LocalDate formatedStartDate = LocalDate.parse(startDate, DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate formatedEndDate = LocalDate.parse(endDate, DateTimeFormatter.ISO_LOCAL_DATE);
+        HashMap<String,BigDecimal> netCashFlow = dashboardService.netCashflow(userId,formatedStartDate, formatedEndDate);
         ApiResponse<HashMap<String, BigDecimal>> res = new ApiResponse<>();
         res.setSuccess(true);
         res.setMessage("Net cashflow successfully fetched");

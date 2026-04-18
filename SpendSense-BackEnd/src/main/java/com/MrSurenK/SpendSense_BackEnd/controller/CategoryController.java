@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/cat")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -31,7 +32,7 @@ public class CategoryController {
 
 
     //POST new category
-    @PostMapping("/cat/createCat")
+    @PostMapping("/createCat")
     public ResponseEntity<ApiResponse<CategoryResponse>> createCatApi(@RequestBody NewCatDto dto){
         UserAccount user = securityContextService.getUserFromSecurityContext();
         int userId = user.getId();
@@ -51,7 +52,7 @@ public class CategoryController {
     }
 
     //GET all category created by user and is not deleted
-    @GetMapping("/cat/allCategories")
+    @GetMapping("/allCategories")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<CategoryResponse>>> getAllCatsApi(){
         UserAccount user = securityContextService.getUserFromSecurityContext();
@@ -72,7 +73,7 @@ public class CategoryController {
 
 
     //PATCH category
-    @PatchMapping("/cat/editCat/{catId}")
+    @PatchMapping("/editCat/{catId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<CategoryResponse>> editCatApi(@RequestBody EditCatDto dto, @PathVariable Long catId){
         UserAccount user = securityContextService.getUserFromSecurityContext();
@@ -92,7 +93,7 @@ public class CategoryController {
     }
 
     //Soft delete
-    @PatchMapping("/cat/deleteCat/{catId}")
+    @PatchMapping("/deleteCat/{catId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<CategoryResponse>> deleteCatApi(@PathVariable Long catId)
             throws IllegalAccessException {

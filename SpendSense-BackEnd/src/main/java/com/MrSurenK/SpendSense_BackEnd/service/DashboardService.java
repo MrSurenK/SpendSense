@@ -73,6 +73,7 @@ public class DashboardService {
     }
 
     //ToDo: API - Sum up all transactions including recurring transactions for the month and return value
+    //ToDo: Check for leap year date edge cases
     //Allow front end to determine date range for more flexibility. Incase in future wanna have a yearly figure
     public HashMap<String, BigDecimal> netCashflow(Integer userId, LocalDate startDate, LocalDate endDate){
 
