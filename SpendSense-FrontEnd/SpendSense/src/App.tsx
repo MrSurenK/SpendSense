@@ -11,6 +11,7 @@ import TxnLayout from "./features/Transactions/TxnLayout";
 import Modal from "./components/modal/Modal";
 import NewCatModal from "./components/modal/NewCatModal";
 import EditTxnModal from "./components/modal/EditTxnModal";
+import ViewTxnModal from "./components/modal/ViewTxnModal";
 
 function AppWrapper() {
   const location = useLocation();
@@ -38,7 +39,26 @@ function AppWrapper() {
 
           <Route
             path="/modal"
-            element={<EditTxnModal setOpenEditModal={true} />}
+            element={
+              <ViewTxnModal
+                setOpenViewModal={function (open: boolean): void {
+                  throw new Error("Function not implemented.");
+                }}
+                transaction={{
+                  id: "",
+                  amount: 0,
+                  title: "",
+                  remarks: "",
+                  recurring: false,
+                  transactionDate: "",
+                  nextDueDate: undefined,
+                  lastUpdated: undefined,
+                  catId: 0,
+                  catName: "",
+                  transactionType: "income",
+                }}
+              />
+            }
           />
         </Routes>
       </main>

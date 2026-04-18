@@ -20,8 +20,8 @@ export type TransactionRow = {
   remarks: string;
   recurring: boolean;
   transactionDate: string; //ISO date string
-  nextDueDate: Date;
-  lastUpdated: Date;
+  nextDueDate?: string | null;
+  lastUpdated?: string | null;
   catId: number;
   catName: string;
   transactionType: TransactionType;
@@ -70,6 +70,12 @@ export interface EditedTransactionResponse {
   data: TransactionRow;
 }
 
+export interface GetTransactionResponse {
+  success: boolean;
+  message: string;
+  data: TransactionRow;
+}
+
 export type EditTransactionRequest = {
   amount?: number;
   title?: string;
@@ -113,6 +119,18 @@ export const transactionApi = createApi({
           body,
         };
       },
+      providesTags: ["Transactions"],
+    }),
+
+    //Get a single transaction by id
+    getTransaction: builder.query<TransactionRow, string>({
+      query: (id) => {
+        return {
+          url: `/transactions/${id}`,
+          method: "GET",
+        };
+      },
+      transformResponse: (response: GetTransactionResponse) => response.data,
       providesTags: ["Transactions"],
     }),
 
@@ -175,6 +193,7 @@ export const transactionApi = createApi({
 
 export const {
   useSearchTransactionsQuery,
+  useGetTransactionQuery,
   useEditTransactionsMutation,
   useGetCategoriesQuery,
   useGetCategoriesWithFullResQuery,

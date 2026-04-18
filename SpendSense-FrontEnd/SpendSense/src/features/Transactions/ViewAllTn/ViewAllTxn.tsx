@@ -3,13 +3,16 @@ import styles from "./ViewAllTxn.module.css";
 import Pagination from "../../../components/pagination/Pagination";
 import {
   useGetCategoriesQuery,
+  useGetTransactionQuery,
   useSearchTransactionsQuery,
   type TransactionRow,
   type TransactionFilters,
 } from "../../../redux/rtk-queries/transactionService";
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { skipToken } from "@reduxjs/toolkit/query";
 import EditTxnModal from "../../../components/modal/EditTxnModal";
+import ViewTxnModal from "../../../components/modal/ViewTxnModal";
 import TransactionFiltersComponent from "../../../components/filters/TransactionFiltersComponent";
 
 export function ViewAllTxn() {
@@ -26,6 +29,7 @@ export function ViewAllTxn() {
   const [searchRequest, setSearchRequest] =
     useState<TransactionFilters>(defaultRequest);
   const [selectedTxn, setSelectedTxn] = useState<TransactionRow | null>(null);
+  const [viewTxnId, setViewTxnId] = useState<string | null>(null);
 
   const handlePageChange = (uiPage: number) => {
     setSearchRequest((prev) => ({
@@ -42,6 +46,10 @@ export function ViewAllTxn() {
   const { data: transactionResponse } = useSearchTransactionsQuery({
     ...searchRequest,
   });
+
+  const { data: selectedViewTxn } = useGetTransactionQuery(
+    viewTxnId ?? skipToken,
+  );
 
   return (
     <>
@@ -104,7 +112,11 @@ export function ViewAllTxn() {
                 </td>
                 <td>
                   <div className={styles.actions}>
-                    <Button text={"View"} size={"sm"}></Button>
+                    <Button
+                      text={"View"}
+                      size={"sm"}
+                      onClick={() => setViewTxnId(txn.id)}
+                    ></Button>
                     <Button
                       text={"Edit"}
                       size={"sm"}
@@ -154,6 +166,18 @@ export function ViewAllTxn() {
             transaction={selectedTxn}
             setOpenEditModal={(open) => {
               if (!open) setSelectedTxn(null);
+            }}
+          />,
+          document.body,
+        )}
+
+      {viewTxnId &&
+        selectedViewTxn &&
+        createPortal(
+          <ViewTxnModal
+            transaction={selectedViewTxn}
+            setOpenViewModal={(open) => {
+              if (!open) setViewTxnId(null);
             }}
           />,
           document.body,
