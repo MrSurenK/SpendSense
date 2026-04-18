@@ -2,6 +2,7 @@ import styles from "./NewTxn.module.css";
 import InputBox from "../../../components/input-box/InputBox";
 import Button from "../../../components/btn/Button";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import {
   useAddNewTxnMutation,
   useGetCategoriesWithFullResQuery,
@@ -9,6 +10,7 @@ import {
   type TransactionType,
 } from "../../../redux/rtk-queries/transactionService";
 import Modal from "../../../components/modal/Modal";
+import NewCatModal from "../../../components/modal/NewCatModal";
 
 //ToDo: fix the date formating before submitting form
 
@@ -113,6 +115,7 @@ export default function NewTxn() {
 
   //Modal state management
   const [showModal, setShowModal] = useState(false);
+  const [showCatModal, setShowCatModal] = useState(false);
 
   return (
     <>
@@ -282,6 +285,7 @@ export default function NewTxn() {
                 variant="btn-secondary"
                 size="sm"
                 type="button"
+                onClick={() => setShowCatModal(true)}
               />
             </div>
           </form>
@@ -300,6 +304,11 @@ export default function NewTxn() {
           setShowModal={setShowModal}
         ></Modal>
       )}
+      {showCatModal &&
+        createPortal(
+          <NewCatModal setOpenCatModal={setShowCatModal} />,
+          document.body,
+        )}
     </>
   );
 }

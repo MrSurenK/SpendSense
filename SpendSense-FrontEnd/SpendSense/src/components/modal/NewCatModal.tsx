@@ -50,6 +50,7 @@ export default function NewCatModal({ setOpenCatModal }: Props) {
     };
 
     await addNewCat(payload).unwrap();
+    setOpenCatModal?.(false);
   };
 
   return (
@@ -114,7 +115,7 @@ export default function NewCatModal({ setOpenCatModal }: Props) {
                 </div>
               </div>
               <div className={style.actions}>
-                <Button size="sm" text="submit" />
+                <Button size="sm" text="submit" onClick={handleSubmit} />
               </div>
             </form>
           </div>
