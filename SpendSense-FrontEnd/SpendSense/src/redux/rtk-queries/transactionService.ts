@@ -133,7 +133,6 @@ export const transactionApi = createApi({
       transformResponse: (response: GetTransactionResponse) => response.data,
       providesTags: ["Transactions"],
     }),
-
     //PATCH request for transaction to be edited
     editTransactions: builder.mutation<
       EditedTransactionResponse,
@@ -148,7 +147,16 @@ export const transactionApi = createApi({
       },
       invalidatesTags: ["Transactions"],
     }),
-
+    //Single transaction delete
+    deleteTransaction: builder.mutation<void, string>({
+      query: (id) => {
+        return {
+          url: `/transactions/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Transactions"],
+    }),
     //Get Request for User categories
     getCategories: builder.query<{ id: number; name: string }[], void>({
       query: () => ({
@@ -199,6 +207,7 @@ export const {
   useGetCategoriesWithFullResQuery,
   useAddNewTxnMutation,
   useAddNewCatMutation,
+  useDeleteTransactionMutation,
 } = transactionApi;
 
 export default transactionApi;

@@ -5,6 +5,7 @@ import {
   useGetCategoriesQuery,
   useGetTransactionQuery,
   useSearchTransactionsQuery,
+  useDeleteTransactionMutation,
   type TransactionRow,
   type TransactionFilters,
 } from "../../../redux/rtk-queries/transactionService";
@@ -50,6 +51,8 @@ export function ViewAllTxn() {
   const { data: selectedViewTxn } = useGetTransactionQuery(
     viewTxnId ?? skipToken,
   );
+
+  const [deleteTransaction] = useDeleteTransactionMutation();
 
   return (
     <>
@@ -125,7 +128,10 @@ export function ViewAllTxn() {
                   </div>
                 </td>
                 <td>
-                  <button className={styles.deleteBtn}>
+                  <button
+                    className={styles.deleteBtn}
+                    onClick={() => deleteTransaction(txn.id)}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       x="0px"

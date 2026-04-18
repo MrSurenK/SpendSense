@@ -12,7 +12,12 @@ export function Dashboard() {
   //Get curr month and year for dashboard data
   const today = new Date();
   const currYear = today.getFullYear();
-  const currMth = today.getMonth();
+  const currMth = today.getMonth(); // 0-indexed
+  const currMthNum = currMth + 1; // 1-indexed for API
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const mthStartDate = `${currYear}-${pad(currMthNum)}-01`;
+  const mthLastDay = new Date(currYear, currMthNum, 0).getDate();
+  const mthEndDate = `${currYear}-${pad(currMthNum)}-${pad(mthLastDay)}`;
 
   //Call API to display top list
   const {
@@ -20,7 +25,7 @@ export function Dashboard() {
     error: topSpendError,
     isLoading: isTopSpendLoading,
   } = useGetTopFiveSpendQuery({
-    month: 8, //toDo: remove hardcoded month and add currMth in here
+    month: currMthNum,
     year: currYear,
   });
 
@@ -42,8 +47,8 @@ export function Dashboard() {
     error: cashFlowError,
     isLoading: isCashFlowLoading,
   } = useGetNetCashflowQuery({
-    startDate: "2026-02-01",
-    endDate: "2026-02-28",
+    startDate: mthStartDate,
+    endDate: mthEndDate,
   });
 
   const cashflowDetails = netCashFlow?.data;
