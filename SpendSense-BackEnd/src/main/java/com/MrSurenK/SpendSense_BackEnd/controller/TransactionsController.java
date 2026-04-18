@@ -139,7 +139,14 @@ public class TransactionsController {
 //        return ResponseEntity.ok(res);
 //    }
 
-
+    /**
+     * Edit transaction details.
+     * Only fields that are provided in the dto will be edited and all other fields will remain unchanged.
+     * Transaction is identified by transactionId and userId is used to verify that transaction belongs to user.
+     * @param transactionId
+     * @param dto
+     * @return
+     */
     @PatchMapping("/{transactionId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<TransactionResponse>> patchTransaction(@PathVariable("transactionId") UUID transactionId,

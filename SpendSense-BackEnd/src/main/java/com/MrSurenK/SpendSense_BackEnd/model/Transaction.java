@@ -18,7 +18,6 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Data
 @Entity
-@Check(constraints = "recurring = false OR next_due_date IS NOT NULL")
 @Table(name="user_transactions")
 public class Transaction {
 
