@@ -10,6 +10,7 @@ import NewTxn from "./features/Transactions/AddNewTn/NewTxn";
 import TxnLayout from "./features/Transactions/TxnLayout";
 import Modal from "./components/modal/Modal";
 import NewCatModal from "./components/modal/NewCatModal";
+import EditTxnModal from "./components/modal/EditTxnModal";
 
 function AppWrapper() {
   const location = useLocation();
@@ -35,7 +36,10 @@ function AppWrapper() {
             <Route path="addNew" element={<NewTxn />} />
           </Route>
 
-          <Route path="/modal" element={<NewCatModal />} />
+          <Route
+            path="/modal"
+            element={<EditTxnModal setOpenEditModal={true} />}
+          />
         </Routes>
       </main>
     </div>
