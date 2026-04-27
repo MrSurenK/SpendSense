@@ -44,7 +44,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, UUID>, JpaSp
     List<Transaction> findTopFiveByAmount(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
                                           @Param("endDate") LocalDate endDate, Pageable page);
 
-    @Query(value="SELECT t FROM Transaction t WHERE (t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE AND t.recurring=true)")
+    @Query(value="SELECT t FROM Transaction t WHERE (t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE AND t.recurring=true AND t.category.name='Subscription')")
     List<Transaction>allRecurringSpend(@Param("userId") Integer userId, Pageable page);
 
     @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.INCOME AND t.category.name='Bonus' AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
