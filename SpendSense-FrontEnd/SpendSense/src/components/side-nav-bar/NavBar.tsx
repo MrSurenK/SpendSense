@@ -36,11 +36,6 @@ export default function NavBar() {
           menuItem: "Add New Transactions",
           path: "/txn/addNew",
         },
-        {
-          key: 23,
-          menuItem: "Edit Transactions",
-          path: "/txn/editTxn",
-        },
       ],
     },
     {
