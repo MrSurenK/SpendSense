@@ -4,7 +4,7 @@ import com.MrSurenK.SpendSense_BackEnd.model.Category;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction;
 import com.MrSurenK.SpendSense_BackEnd.model.TransactionType;
 import com.MrSurenK.SpendSense_BackEnd.model.Transaction_;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -62,4 +62,12 @@ public interface TransactionRepo extends JpaRepository<Transaction, UUID>, JpaSp
     @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType=com.MrSurenK.SpendSense_BackEnd.model.TransactionType.INCOME AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
     BigDecimal sumTotalIncome(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
                               @Param("endDate") LocalDate endDate);
+
+    //Join table and find expense amount, category for given data range
+    @Query("SELECT t from Transaction t JOIN FETCH t.category c WHERE (t.userAccount.id=:userId AND MONTH(t.transactionDate)=:mth AND YEAR(t.transactionDate)=:year AND c.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE)")
+    List<Transaction>findAllTransactionsInGivenTimePeriod(@Param("userId") Integer userId,
+                                                          @Param("mth") Integer mth,
+                                                          @Param("year") Integer year);
+
+
 }

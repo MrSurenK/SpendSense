@@ -113,8 +113,18 @@
   justify-self: center;
   align-self: center;
   font-weight: 900;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
 }
 
 #netCashflowValue {
@@ -172,4 +182,83 @@
   height: 100%;
   width: 100%;
   color: #dc2626;
+}
+
+.bottomChartsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  min-height: 42vh;
+}
+
+.bottomChartLeft,
+.bottomChartRight {
+  width: 100%;
+  border-width: 2px;
+  border-color: black;
+  box-shadow: 0.25em 0.25em;
+}
+
+.bottomChartLeft {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.bottomChartRight {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.chartTitle {
+  margin: 0 0 1rem 0;
+  text-align: center;
+  font-weight: 700;
+}
+
+.chartFeedback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #dc2626;
+}
+
+.pieChartWrapper {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 280px;
+}
+
+.lineChartWrapper {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 280px;
+}
+
+@media (max-width: 1024px) {
+  .cardsContainer {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .card {
+    min-height: 18rem;
+  }
+
+  .bottomChartsContainer {
+    grid-template-columns: 1fr;
+    min-height: 25rem;
+  }
+
+  .bottomChartRight {
+    display: none;
+  }
 }

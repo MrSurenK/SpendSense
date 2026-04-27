@@ -6,6 +6,7 @@
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/configuration/RedisConfig.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/configuration/SecurityComponentsConfig.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/controller/CategoryController.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/controller/ChartingController.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/controller/DashboardController.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/controller/TransactionsController.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/controller/UserAccountController.java
@@ -21,7 +22,11 @@
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/requestDto/UserSignUpDto.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/ApiResponse.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/CategoryResponse.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/ChartJsLineChartResponseDTO.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/ChartJsLineResponseDTO.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/ChartJsPieResponseDTO.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/DashSpendOverview.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/ExpenseBreakdownDTO.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/LoginResponse.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/PaginatedResponse.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/dto/responseDto/TransactionResponse.java
@@ -37,12 +42,14 @@
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/repository/UserAccountRepo.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/scheduler/RecurringTransactionScheduler.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/CategoryService.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/ChartDataService.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/DashboardService.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/JwtService.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/SecurityContextService.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/TransactionService.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/service/UserAccountService.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/util/BeanInitTracker.java
+/Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/util/ControllerExecutionLogs.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/util/DateTimeFormats.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/util/EntityToDtoMapper.java
 /Users/surenk/Projects/SpendSense/SpendSense-BackEnd/src/main/java/com/MrSurenK/SpendSense_BackEnd/util/ImageUtil.java

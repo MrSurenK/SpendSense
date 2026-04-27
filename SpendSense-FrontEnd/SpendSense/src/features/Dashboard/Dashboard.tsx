@@ -1,12 +1,36 @@
-import NavBar from "../../components/side-nav-bar/navBar";
+import {
+  ArcElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  type TooltipItem,
+} from "chart.js";
+import { Line, Pie } from "react-chartjs-2";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import {
   useGetNetCashflowQuery,
+  useGetSpendingPieChartQuery,
   useGetTopFiveSpendQuery,
   useGetTopSubsQuery,
+  useGetYearlyLineChartQuery,
 } from "../../redux/rtk-queries/dashboardService";
 import styles from "./Dashboard.module.css";
-import type { DashboardApiResponse } from "../../redux/rtk-queries/dashboardService";
+
+ChartJS.register(
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 export function Dashboard() {
   //Get curr month and year for dashboard data
@@ -74,6 +98,86 @@ export function Dashboard() {
 
   const resInflow = cashflowDetails?.totalInflow;
   const resOutflow = cashflowDetails?.totalOutflow;
+
+  //Call API to display monthly category spend as pie chart
+  const {
+    data: spendingPieData,
+    error: spendingPieError,
+    isLoading: isSpendingPieLoading,
+  } = useGetSpendingPieChartQuery({
+    month: currMthNum,
+    year: currYear,
+  });
+
+  const pieChartData = {
+    labels: spendingPieData?.labels ?? [],
+    datasets: [
+      {
+        label: "Spending",
+        data: spendingPieData?.values ?? [],
+        backgroundColor: [
+          "#2563eb",
+          "#f97316",
+          "#16a34a",
+          "#dc2626",
+          "#eab308",
+          "#7c3aed",
+          "#0d9488",
+          "#475569",
+        ],
+        borderColor: "#ffffff",
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const pieChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "bottom" as const,
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: TooltipItem<"pie">) => {
+            const amount = Number(context.parsed ?? 0);
+            const percentage =
+              spendingPieData?.percentages?.[context.dataIndex];
+            if (percentage === undefined) {
+              return `${context.label}: $${amount.toFixed(2)}`;
+            }
+            return `${context.label}: $${amount.toFixed(2)} (${percentage.toFixed(2)}%)`;
+          },
+        },
+      },
+    },
+  };
+
+  //Call API to display yearly income vs expense line chart
+  const {
+    data: yearlyLineData,
+    error: yearlyLineError,
+    isLoading: isYearlyLineLoading,
+  } = useGetYearlyLineChartQuery({ year: currYear });
+
+  const lineChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "bottom" as const,
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
 
   // -- protected component -- //
   const loginInfo = useAppSelector((state) => state.auth);
@@ -181,7 +285,62 @@ export function Dashboard() {
               </div>
             </div>
           </div>
-          <div>Chart(s)</div>
+          <div className={styles.bottomChartsContainer}>
+            <div className={styles.bottomChartLeft}>
+              <h2 className={styles.chartTitle}>
+                Spending Breakdown by Category
+              </h2>
+              {isSpendingPieLoading ? (
+                <div className={styles.chartFeedback}>
+                  <div className="loader"></div>
+                </div>
+              ) : spendingPieError ? (
+                <div className={styles.chartFeedback}>
+                  <p>⚠️ Unable to load chart data</p>
+                  <small>
+                    {"message" in spendingPieError
+                      ? spendingPieError.message
+                      : "Something went wrong"}
+                  </small>
+                </div>
+              ) : spendingPieData && spendingPieData.labels.length > 0 ? (
+                <div className={styles.pieChartWrapper}>
+                  <Pie data={pieChartData} options={pieChartOptions} />
+                </div>
+              ) : (
+                <div className={styles.chartFeedback}>
+                  <p>No spending data for this month.</p>
+                </div>
+              )}
+            </div>
+            <div className={styles.bottomChartRight}>
+              <h2 className={styles.chartTitle}>
+                Income vs Expense ({currYear})
+              </h2>
+              {isYearlyLineLoading ? (
+                <div className={styles.chartFeedback}>
+                  <div className="loader"></div>
+                </div>
+              ) : yearlyLineError ? (
+                <div className={styles.chartFeedback}>
+                  <p>⚠️ Unable to load chart data</p>
+                  <small>
+                    {"message" in yearlyLineError
+                      ? yearlyLineError.message
+                      : "Something went wrong"}
+                  </small>
+                </div>
+              ) : yearlyLineData ? (
+                <div className={styles.lineChartWrapper}>
+                  <Line data={yearlyLineData} options={lineChartOptions} />
+                </div>
+              ) : (
+                <div className={styles.chartFeedback}>
+                  <p>No data available for this year.</p>
+                </div>
+              )}
+            </div>
+          </div>
         </>
       )}
     </>

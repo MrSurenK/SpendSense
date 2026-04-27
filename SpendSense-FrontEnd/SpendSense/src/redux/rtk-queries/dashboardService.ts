@@ -22,6 +22,37 @@ export type NetCashFlow = {
   };
 };
 
+export type ChartJsPieData = {
+  labels: string[];
+  values: number[];
+  percentages: number[];
+};
+
+type ChartJsPieApiResponse = {
+  success: boolean;
+  message: string;
+  data: ChartJsPieData;
+};
+
+export type LineChartDataset = {
+  label: string;
+  data: number[];
+  fill: boolean;
+  borderColor: string;
+  tension: number;
+};
+
+export type ChartJsLineData = {
+  labels: string[];
+  datasets: LineChartDataset[];
+};
+
+type ChartJsLineApiResponse = {
+  success: boolean;
+  message: string;
+  data: ChartJsLineData;
+};
+
 export const dashboardApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
@@ -52,6 +83,23 @@ export const dashboardApi = createApi({
         params: { startDate, endDate },
       }),
     }),
+    getSpendingPieChart: builder.query<
+      ChartJsPieData,
+      { month: number; year: number }
+    >({
+      query: ({ month, year }) => ({
+        url: `/chart/pie/${month}/${year}`,
+        method: "GET",
+      }),
+      transformResponse: (response: ChartJsPieApiResponse) => response.data,
+    }),
+    getYearlyLineChart: builder.query<ChartJsLineData, { year: number }>({
+      query: ({ year }) => ({
+        url: `/chart/line/${year}`,
+        method: "GET",
+      }),
+      transformResponse: (response: ChartJsLineApiResponse) => response.data,
+    }),
   }),
 });
 
@@ -60,6 +108,8 @@ export const {
   useGetTopFiveSpendQuery,
   useGetTopSubsQuery,
   useGetNetCashflowQuery,
+  useGetSpendingPieChartQuery,
+  useGetYearlyLineChartQuery,
 } = dashboardApi;
 
 export default dashboardApi;
