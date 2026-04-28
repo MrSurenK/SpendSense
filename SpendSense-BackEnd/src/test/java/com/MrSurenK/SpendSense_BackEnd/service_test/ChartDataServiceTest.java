@@ -11,6 +11,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,9 +30,10 @@ class ChartDataServiceTest {
     private ChartDataService chartDataService;
 
     @Test
-    void getLineChartData_currentYear_stillIncludesAllTwelveMonths() {
+    void getLineChartData_currentYear_stopsAtCurrentMonth() {
         int userId = 1;
         int year = LocalDate.now().getYear();
+        int currentMonth = LocalDate.now().getMonthValue();
 
         when(transactionRepo.sumTotalSpend(anyInt(), any(LocalDate.class), any(LocalDate.class)))
                 .thenAnswer(invocation -> {
@@ -45,13 +49,13 @@ class ChartDataServiceTest {
 
         ChartJsLineChartResponseDTO result = chartDataService.getLineChartData(userId, year);
 
-        assertEquals(12, result.labels().size());
+        assertEquals(currentMonth, result.labels().size());
         assertEquals("Jan", result.labels().getFirst());
-        assertEquals("Dec", result.labels().getLast());
-        assertEquals(12, result.datasets().get(0).data().size());
-        assertEquals(12, result.datasets().get(1).data().size());
+        assertEquals(Month.of(currentMonth).getDisplayName(TextStyle.SHORT, Locale.ENGLISH), result.labels().getLast());
+        assertEquals(currentMonth, result.datasets().get(0).data().size());
+        assertEquals(currentMonth, result.datasets().get(1).data().size());
         assertEquals(BigDecimal.valueOf(10), result.datasets().get(0).data().getFirst());
-        assertEquals(BigDecimal.valueOf(240), result.datasets().get(1).data().getLast());
+        assertEquals(BigDecimal.valueOf(currentMonth * 20L), result.datasets().get(1).data().getLast());
     }
 
     @Test

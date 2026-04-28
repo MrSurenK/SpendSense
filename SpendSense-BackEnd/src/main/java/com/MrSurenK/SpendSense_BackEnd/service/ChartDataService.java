@@ -80,14 +80,18 @@ public class ChartDataService {
     }
 
     /**
-     * Get line chart data with fixed Jan-Dec monthly expense and income totals for a given year.
+     * Get line chart data with monthly expense and income totals for a given year.
+     * Current year is capped at the current month to avoid future-month zero points.
      */
     public ChartJsLineChartResponseDTO getLineChartData(int userId, int year) {
         List<String> labels = new ArrayList<>();
         List<BigDecimal> expenseData = new ArrayList<>();
         List<BigDecimal> incomeData = new ArrayList<>();
 
-        for (int month = 1; month <= 12; month++) {
+        int currentYear = LocalDate.now().getYear();
+        int endMonth = (year == currentYear) ? LocalDate.now().getMonthValue() : 12;
+
+        for (int month = 1; month <= endMonth; month++) {
             LocalDate startDate = LocalDate.of(year, month, 1);
             LocalDate endDate = startDate.plusMonths(1).minusDays(1);
 

@@ -8,7 +8,8 @@ services:
       - 'MYSQL_USER=myuser'
     ports:
       - '3306:3306'
-
+    volumes:
+      - myapp:/home/node/app
   redis:
     image: 'redis:latest'
     ports:
