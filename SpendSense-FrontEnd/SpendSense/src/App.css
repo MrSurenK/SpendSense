@@ -9,9 +9,30 @@
 /* Main content area - takes remaining space */
 .main-content {
   flex: 1;
+  min-width: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: #f8f9fa;
   padding: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .main-content {
+    padding: 0.9rem;
+  }
+}
+
+@media (max-height: 1000px) {
+  .main-content {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
 }
 
 .pageTitle {

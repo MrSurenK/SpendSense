@@ -1,24 +1,31 @@
-.cardsContainer {
+.dashboardLayout {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  min-height: 100%;
+  gap: clamp(0.75rem, 1.2vw, 1rem);
+}
+
+.cardsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   width: 100%;
-  height: 35vh;
-  gap: 2rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  height: auto;
+  gap: clamp(1rem, 2vw, 2rem);
+  margin: 0;
 }
 
 .card {
   display: flex;
   width: 100%;
-  height: 100%;
+  min-width: 0;
+  min-height: clamp(14rem, 28vh, 18rem);
   border-width: 2px;
   border-color: black;
   box-shadow: 0.25em 0.25em;
 }
 
 .cardTitle {
-  margin: 1rem 0 1rem 1rem;
+  margin: 0.6rem 0 0.2rem 0;
   font-weight: 600;
   color: Black;
   text-decoration: underline;
@@ -33,17 +40,18 @@
   width: 100%;
   height: 100%;
   align-items: start;
-  justify-items: space-evenly;
+  padding: 0 1rem;
 }
 
 .titleAndListSpacing ul {
-  width: 95%;
+  width: 100%;
   padding: 0;
-  margin: 0 1rem; /* Match the cardTitle margin */
+  margin: 0;
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  flex: 1;
+  justify-content: space-around;
 }
 
 .spanSpacing {
@@ -51,7 +59,7 @@
   grid-template-columns: 1fr auto; /* Title takes remaining space, amount takes what it needs */
   gap: 1rem;
   padding: 0.25rem 0;
-  width: 90%;
+  width: 100%;
 }
 
 .spanSpacing span:first-child {
@@ -67,16 +75,16 @@
 }
 
 .titleAndCurrency {
-  display: inline-grid;
+  display: flex;
   width: 100%;
-  grid-template-columns: auto auto; /* Two columns, each sized to content */
-  align-items: center; /* Optional: vertical alignment */
+  margin: 0;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .titleAndCurrency h2:last-child {
-  justify-self: center;
   font-weight: 600;
-  margin-left: 1.5rem;
+  white-space: nowrap;
 }
 
 .errorPosition {
@@ -186,15 +194,19 @@
 
 .bottomChartsContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(1rem, 2vw, 2rem);
   width: 100%;
-  min-height: 42vh;
+  min-height: 0;
+  flex: 1;
+  align-items: stretch;
 }
 
 .bottomChartLeft,
 .bottomChartRight {
   width: 100%;
+  min-width: 0;
+  min-height: clamp(16rem, 36vh, 28rem);
   border-width: 2px;
   border-color: black;
   box-shadow: 0.25em 0.25em;
@@ -233,32 +245,71 @@
   position: relative;
   width: 100%;
   flex: 1;
-  min-height: 280px;
+  min-height: 180px;
 }
 
 .lineChartWrapper {
   position: relative;
   width: 100%;
   flex: 1;
-  min-height: 280px;
+  min-height: 180px;
 }
 
 @media (max-width: 1024px) {
-  .cardsContainer {
-    flex-direction: column;
-    height: auto;
+  .card {
+    min-height: 13.5rem;
   }
 
-  .card {
-    min-height: 18rem;
+  .bottomChartLeft,
+  .bottomChartRight {
+    min-height: 14.5rem;
+  }
+
+  .pieChartWrapper,
+  .lineChartWrapper {
+    min-height: 140px;
+  }
+
+  .chartTitle {
+    margin: 0 0 0.5rem 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .cardsContainer {
+    grid-template-columns: 1fr;
   }
 
   .bottomChartsContainer {
     grid-template-columns: 1fr;
-    min-height: 25rem;
+  }
+}
+
+@media (max-height: 1000px) {
+  .dashboardLayout {
+    gap: 0.7rem;
   }
 
+  .cardsContainer,
+  .bottomChartsContainer {
+    gap: 1rem;
+  }
+
+  .card {
+    min-height: 12.5rem;
+  }
+
+  .bottomChartLeft,
   .bottomChartRight {
-    display: none;
+    min-height: 13.5rem;
+  }
+
+  .pieChartWrapper,
+  .lineChartWrapper {
+    min-height: 130px;
+  }
+
+  .chartTitle {
+    margin: 0 0 0.5rem 0;
   }
 }

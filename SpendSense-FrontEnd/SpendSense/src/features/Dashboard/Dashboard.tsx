@@ -10,6 +10,7 @@ import {
   Tooltip,
   type TooltipItem,
 } from "chart.js";
+import { useEffect, useState } from "react";
 import { Line, Pie } from "react-chartjs-2";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import {
@@ -33,6 +34,33 @@ ChartJS.register(
 );
 
 export function Dashboard() {
+  const [chartResizeKey, setChartResizeKey] = useState(
+    `${window.innerWidth}x${window.innerHeight}`,
+  );
+
+  useEffect(() => {
+    let frameId: number | undefined;
+
+    const handleResize = () => {
+      if (frameId !== undefined) {
+        cancelAnimationFrame(frameId);
+      }
+
+      frameId = requestAnimationFrame(() => {
+        setChartResizeKey(`${window.innerWidth}x${window.innerHeight}`);
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (frameId !== undefined) {
+        cancelAnimationFrame(frameId);
+      }
+    };
+  }, []);
+
   //Get curr month and year for dashboard data
   const today = new Date();
   const currYear = today.getFullYear();
@@ -185,7 +213,7 @@ export function Dashboard() {
   return (
     <>
       {loginInfo.isLoggedIn && (
-        <>
+        <div className={styles.dashboardLayout}>
           <div className="pageTitle">Dashboard</div>
           <div className={styles.cardsContainer}>
             <div className={styles.card}>
@@ -305,7 +333,11 @@ export function Dashboard() {
                 </div>
               ) : spendingPieData && spendingPieData.labels.length > 0 ? (
                 <div className={styles.pieChartWrapper}>
-                  <Pie data={pieChartData} options={pieChartOptions} />
+                  <Pie
+                    key={`pie-${chartResizeKey}`}
+                    data={pieChartData}
+                    options={pieChartOptions}
+                  />
                 </div>
               ) : (
                 <div className={styles.chartFeedback}>
@@ -332,7 +364,11 @@ export function Dashboard() {
                 </div>
               ) : yearlyLineData ? (
                 <div className={styles.lineChartWrapper}>
-                  <Line data={yearlyLineData} options={lineChartOptions} />
+                  <Line
+                    key={`line-${chartResizeKey}`}
+                    data={yearlyLineData}
+                    options={lineChartOptions}
+                  />
                 </div>
               ) : (
                 <div className={styles.chartFeedback}>
@@ -341,7 +377,7 @@ export function Dashboard() {
               )}
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );

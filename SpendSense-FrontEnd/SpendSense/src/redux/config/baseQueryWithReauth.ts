@@ -4,7 +4,7 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
-import { loginState, logoutState } from "../slices/authSlice";
+import { logoutState } from "../slices/authSlice";
 import { Mutex } from "async-mutex";
 
 const mutex = new Mutex(); //to prevent multiple unecessary calls to refresh token endpoint
@@ -27,11 +27,15 @@ const baseQueryWithReauth: BaseQueryFn<
       //try to call refresh token if still valid
       try {
         const refreshResult = await baseQuery(
-          "/auth/refreshToken",
+          {
+            url: "/auth/refreshToken",
+            method: "POST",
+          },
           api,
-          extraOptions
+          extraOptions,
         );
-        if (refreshResult.data) {
+
+        if (!refreshResult.error) {
           //refresh token will be set in HTTP only header by backend so no need to handle in front end
           //retry the initial query
           result = await baseQuery(args, api, extraOptions);
