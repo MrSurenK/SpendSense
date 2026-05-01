@@ -1,0 +1,216 @@
+package com.MrSurenK.SpendCentsBackend.service_test;
+
+import com.MrSurenK.SpendCentsBackend.dto.requestDto.EditTransactionDto;
+import com.MrSurenK.SpendCentsBackend.dto.requestDto.TransactionRequestDto;
+import com.MrSurenK.SpendCentsBackend.model.Category;
+import com.MrSurenK.SpendCentsBackend.model.Transaction;
+import com.MrSurenK.SpendCentsBackend.model.UserAccount;
+import com.MrSurenK.SpendCentsBackend.repository.CategoryRepo;
+import com.MrSurenK.SpendCentsBackend.repository.TransactionRepo;
+import com.MrSurenK.SpendCentsBackend.repository.UserAccountRepo;
+import com.MrSurenK.SpendCentsBackend.service.JwtService;
+import com.MrSurenK.SpendCentsBackend.service.TransactionService;
+
+import com.MrSurenK.SpendCentsBackend.util.DateTimeFormats;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.Mockito.*;
+
+@Slf4j
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Test funtionality of transactions features")
+public class TransactionServiceTest {
+
+    @Mock
+    private TransactionRepo transactionRepo;
+
+    @Mock
+    private JwtService jwtService;
+
+    @Mock
+    private UserAccountRepo userAccountRepo;
+
+    @InjectMocks
+    private TransactionService transactionService;
+
+    @Mock
+    private CategoryRepo categoryRepo;
+
+
+    @Nested
+    class TransactionCRUD {
+
+         TransactionRequestDto transactionRequestDto;
+
+
+        @Test
+        @DisplayName("Test functionality to add transaction")
+        void addTransaction(){
+            transactionRequestDto = new TransactionRequestDto();
+
+            BigDecimal amount = new BigDecimal("100.00");
+            String remarks = "Test new transaction record added.";
+            LocalDate date  = DateTimeFormats.formatStringDate("17-07-2025");
+            Category catObject = new Category();
+            catObject.setId(3L);
+            catObject.setName("Test Category");
+
+            transactionRequestDto.setAmount(amount);
+            transactionRequestDto.setRemarks(remarks);
+            transactionRequestDto.setRecurring(false);
+            transactionRequestDto.setDate(date);
+            transactionRequestDto.setCategoryId(3L);
+
+            UserAccount dummyAccount = new UserAccount();
+            dummyAccount.setId(1);
+            dummyAccount.setUsername("testAccount");
+
+            Category cat = new Category();
+            cat.setId(3L);
+
+            when(categoryRepo.getValidCat(1,3L)).thenReturn(Optional.of(cat));
+            when(userAccountRepo.findById(1)).thenReturn(Optional.of(dummyAccount));
+
+            transactionService.addItem(transactionRequestDto,dummyAccount.getId());
+
+            ArgumentCaptor<Transaction> captor = ArgumentCaptor.forClass(Transaction.class);
+
+            verify(transactionRepo,times(1)).save(captor.capture());
+
+            Transaction transaction = captor.getValue();
+
+            assertEquals(transactionRequestDto.getAmount(),transaction.getAmount());
+            assertEquals(transactionRequestDto.getCategoryId(),transaction.getCategory().getId());
+            assertEquals(transactionRequestDto.getDate(),transaction.getTransactionDate());
+            assertEquals(transactionRequestDto.getRecurring(),transaction.getRecurring());
+            assertEquals(transactionRequestDto.getRemarks(),transaction.getRemarks());
+            assertEquals(dummyAccount,transaction.getUserAccount());
+        }
+
+        @Test
+        @DisplayName("Test functionality of editing existing transaction")
+        void editTransaction(){
+            //Arrange
+            Transaction testTransaction = new Transaction();
+
+            Category cat = new Category();
+            cat.setId(2L);
+            cat.setName("First Cat");
+
+            Category newCat = new Category();
+            newCat.setId(3L);
+            newCat.setName("New Cat");
+
+            UserAccount user = new UserAccount();
+            user.setId(1);
+
+            UUID id = UUID.randomUUID();
+            testTransaction.setId(id);
+            testTransaction.setTransactionDate(LocalDate.of(2025, 07, 29));
+            testTransaction.setLastUpdated(LocalDateTime.of(2025, 07, 20,10,5));
+
+            testTransaction.setCategory(cat);
+            testTransaction.setAmount(new BigDecimal("123.45"));
+            testTransaction.setRemarks("Test case");
+            testTransaction.setRecurring(false);
+
+            EditTransactionDto editForm = new EditTransactionDto();
+            editForm.setRemarks("New remark");
+            editForm.setRecurring(true);
+            editForm.setAmount(new BigDecimal("555.00"));
+            editForm.setCategoryId(3L);
+            editForm.setDate(LocalDate.of(2025, 04, 03));
+
+            //Act
+            when(transactionRepo.findById(id)).thenReturn(Optional.of(testTransaction));
+            when(categoryRepo.getValidCat(1, 3L)).thenReturn(Optional.of(newCat));
+            transactionService.editTransaction(editForm, user.getId(), id);
+
+            //Assert
+            assertEquals(id,testTransaction.getId());
+            assertEquals(editForm.getRemarks(),testTransaction.getRemarks());
+            assertEquals(editForm.getAmount(),testTransaction.getAmount());
+            assertEquals(editForm.getCategoryId(), testTransaction.getCategory().getId());
+            assertEquals(editForm.getRecurring(),testTransaction.getRecurring());
+            assertEquals(editForm.getDate(), testTransaction.getTransactionDate());
+            assertNotEquals(testTransaction.getLastUpdated(),LocalDateTime
+                    .of(2025, 07, 20,10,5));
+
+
+        }
+
+        @Test
+        void generateNewRecurringTransactions_shouldCreateCopyAndUpdateNextDueDate() {
+        // Arrange
+        LocalDate today = LocalDate.now();
+
+        Transaction template = new Transaction();
+        template.setId(java.util.UUID.randomUUID());
+        template.setAmount(new BigDecimal("100.00"));
+        template.setCategory(new Category());
+        template.setUserAccount(new UserAccount());
+        template.setTransactionDate(today.minusMonths(1));
+        template.setRecurring(true);
+        template.setNextDueDate(today);
+        template.setRemarks("Monthly Rent");
+        template.setLastUpdated(LocalDateTime.now());
+
+        when(transactionRepo.findByRecurringTrueAndNextDueDate(today))
+                .thenReturn(List.of(template));
+
+        // Act
+        transactionService.generateNewRecurringTransactions();
+
+        // Assert: template should be updated
+        assert template.getNextDueDate().equals(today.plusMonths(1));
+
+        // Verify repo interactions
+        verify(transactionRepo, times(1)).findByRecurringTrueAndNextDueDate(today);
+
+        // Capture the saved transactions
+        ArgumentCaptor<Transaction> captor = ArgumentCaptor.forClass(Transaction.class);
+        verify(transactionRepo, times(2)).save(captor.capture());
+
+        List<Transaction> savedTransactions = captor.getAllValues();
+
+        // One should be the copy, one should be the template
+        Transaction savedCopy = savedTransactions.stream()
+                .filter(t -> !t.getRecurring()) // the generated copy
+                .findFirst()
+                .orElseThrow();
+
+        Transaction savedTemplate = savedTransactions.stream()
+                .filter(Transaction::getRecurring) // the updated template
+                .findFirst()
+                .orElseThrow();
+
+        // Validate copy
+        assert savedCopy.getTransactionDate().equals(today);
+        assert savedCopy.getParentTransaction().equals(template);
+
+        // Validate template
+        assert savedTemplate.getNextDueDate().equals(today.plusMonths(1));
+        }
+
+
+
+    }
+
+}
