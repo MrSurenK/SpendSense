@@ -37,31 +37,31 @@ public interface TransactionRepo extends JpaRepository<Transaction, UUID>, JpaSp
     List<Transaction> findByRecurringTrueAndNextDueDate(LocalDate date);
 
     //More efficient than using MONTH and YEAR filters
-    @Query(value ="SELECT t FROM Transaction t WHERE (t.userAccount.id = :userId AND t.transactionDate >=:startDate AND t.transactionDate < :endDate AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE) ORDER BY t.amount DESC")
+    @Query(value ="SELECT t FROM Transaction t WHERE (t.userAccount.id = :userId AND t.transactionDate >=:startDate AND t.transactionDate < :endDate AND t.category.transactionType = com.MrSurenK.SpendCentsBackend.model.TransactionType.EXPENSE) ORDER BY t.amount DESC")
     List<Transaction> findTopFiveByAmount(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
                                           @Param("endDate") LocalDate endDate, Pageable page);
 
-    @Query(value="SELECT t FROM Transaction t WHERE (t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE AND t.recurring=true AND t.category.name='Subscription')")
+    @Query(value="SELECT t FROM Transaction t WHERE (t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendCentsBackend.model.TransactionType.EXPENSE AND t.recurring=true AND t.category.name='Subscription')")
     List<Transaction>allRecurringSpend(@Param("userId") Integer userId, Pageable page);
 
-    @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.INCOME AND t.category.name='Bonus' AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
+    @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendCentsBackend.model.TransactionType.INCOME AND t.category.name='Bonus' AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
     BigDecimal sumSalaryBonusForMth(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
                                     @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.INCOME AND t.category.name='Salary' AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
+    @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType = com.MrSurenK.SpendCentsBackend.model.TransactionType.INCOME AND t.category.name='Salary' AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
     BigDecimal sumAllSalaryForMth(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
                                   @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType=com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
+    @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType=com.MrSurenK.SpendCentsBackend.model.TransactionType.EXPENSE AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
     BigDecimal sumTotalSpend(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
                               @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType=com.MrSurenK.SpendSense_BackEnd.model.TransactionType.INCOME AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
+    @Query("SELECT COALESCE(SUM(t.amount),0) FROM Transaction t WHERE t.userAccount.id=:userId AND t.category.transactionType=com.MrSurenK.SpendCentsBackend.model.TransactionType.INCOME AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate")
     BigDecimal sumTotalIncome(@Param("userId") Integer userId, @Param("startDate") LocalDate startDate,
                               @Param("endDate") LocalDate endDate);
 
     //Join table and find expense amount, category for given data range
-    @Query("SELECT t from Transaction t JOIN FETCH t.category c WHERE (t.userAccount.id=:userId AND MONTH(t.transactionDate)=:mth AND YEAR(t.transactionDate)=:year AND c.transactionType = com.MrSurenK.SpendSense_BackEnd.model.TransactionType.EXPENSE)")
+    @Query("SELECT t from Transaction t JOIN FETCH t.category c WHERE (t.userAccount.id=:userId AND MONTH(t.transactionDate)=:mth AND YEAR(t.transactionDate)=:year AND c.transactionType = com.MrSurenK.SpendCentsBackend.model.TransactionType.EXPENSE)")
     List<Transaction>findAllTransactionsInGivenTimePeriod(@Param("userId") Integer userId,
                                                           @Param("mth") Integer mth,
                                                           @Param("year") Integer year);

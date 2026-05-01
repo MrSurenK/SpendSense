@@ -1,6 +1,6 @@
 services:
   app:
-    image: 'spendsense-app:0.0.1'
+    image: 'spendcents-app:0.0.1'
     depends_on:
       - mysql
       - redis

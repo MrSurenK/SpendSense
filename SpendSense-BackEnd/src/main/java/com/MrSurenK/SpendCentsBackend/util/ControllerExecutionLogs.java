@@ -19,7 +19,7 @@ import java.util.Arrays;
 public class ControllerExecutionLogs {
 
     //Target all controller methods(API) when called
-    @Pointcut("within(com.MrSurenK.SpendSense_BackEnd.controller..*)")
+    @Pointcut("within(com.MrSurenK.SpendCentsBackend.controller..*)")
     public void controllerMethods(){};
 
     @Around("controllerMethods()")
