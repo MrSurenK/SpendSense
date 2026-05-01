@@ -11,7 +11,7 @@
 	<groupId>com.MrSurenK</groupId>
 	<artifactId>SpendCents-Backend</artifactId>
 	<version>0.0.1</version>
-	<name>SpendCents-BackEnd</name>
+	<name>SpendCents-Backend</name>
 	<description>Expense tracker application for daily use</description>
 	<url/>
 	<licenses>
