@@ -1,4 +1,5 @@
 com/MrSurenK/SpendSense_BackEnd/SpendSenseBackEndApplicationTests.class
+com/MrSurenK/SpendSense_BackEnd/service_test/DashboardServiceTest.class
 com/MrSurenK/SpendSense_BackEnd/service_test/CategoryServiceTest.class
 com/MrSurenK/SpendSense_BackEnd/service_test/TransactionServiceTest.class
 com/MrSurenK/SpendSense_BackEnd/service_test/ChartDataServiceTest.class

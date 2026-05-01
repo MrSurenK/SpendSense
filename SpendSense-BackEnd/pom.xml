@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.MrSurenK</groupId>
-	<artifactId>SpendSense-BackEnd</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>SpendSense-BackEnd</name>
+	<artifactId>SpendCents-BackEnd</artifactId>
+	<version>0.0.1</version>
+	<name>SpendCents-BackEnd</name>
 	<description>Expense tracker application for daily use</description>
 	<url/>
 	<licenses>

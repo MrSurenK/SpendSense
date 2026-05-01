@@ -3,6 +3,7 @@ com/MrSurenK/SpendSense_BackEnd/util/ControllerExecutionLogs.class
 com/MrSurenK/SpendSense_BackEnd/repository/TransactionRepo.class
 com/MrSurenK/SpendSense_BackEnd/SpendSenseBackEndApplication.class
 com/MrSurenK/SpendSense_BackEnd/controller/controller_advice/GlobalExceptionHandler.class
+com/MrSurenK/SpendSense_BackEnd/dto/responseDto/UserSummary.class
 com/MrSurenK/SpendSense_BackEnd/dto/responseDto/CategoryResponse.class
 com/MrSurenK/SpendSense_BackEnd/dto/responseDto/DashSpendOverview.class
 com/MrSurenK/SpendSense_BackEnd/model/UserAccount.class
@@ -10,6 +11,7 @@ com/MrSurenK/SpendSense_BackEnd/dto/responseDto/PaginatedResponse.class
 com/MrSurenK/SpendSense_BackEnd/dto/responseDto/ChartJsLineChartResponseDTO.class
 com/MrSurenK/SpendSense_BackEnd/dto/requestDto/TransactionRequestDto.class
 com/MrSurenK/SpendSense_BackEnd/controller/UserAccountController.class
+com/MrSurenK/SpendSense_BackEnd/scheduler/RecurringTransactionScheduler.class
 com/MrSurenK/SpendSense_BackEnd/dto/requestDto/LoginDto.class
 com/MrSurenK/SpendSense_BackEnd/controller/CategoryController.class
 com/MrSurenK/SpendSense_BackEnd/model/TransactionType.class
@@ -43,6 +45,7 @@ com/MrSurenK/SpendSense_BackEnd/dto/responseDto/LoginResponse.class
 com/MrSurenK/SpendSense_BackEnd/dto/responseDto/TransactionResponse.class
 com/MrSurenK/SpendSense_BackEnd/dto/requestDto/RefreshRequest.class
 com/MrSurenK/SpendSense_BackEnd/service/UserAccountService.class
+com/MrSurenK/SpendSense_BackEnd/dto/responseDto/UserTakeHomeIncomeDto.class
 com/MrSurenK/SpendSense_BackEnd/service/ChartDataService.class
 com/MrSurenK/SpendSense_BackEnd/model/Transaction_.class
 com/MrSurenK/SpendSense_BackEnd/repository/CategoryRepo.class

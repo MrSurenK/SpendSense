@@ -1,16 +1,39 @@
 services:
-  mysql:
-    image: 'mysql:latest'
+  app:
+    image: 'spendsense-app:0.0.1'
+    depends_on:
+      - mysql
+      - redis
     environment:
-      - 'MYSQL_DATABASE=SpendSenseDb'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - SPRING_DATASOURCE_URL=${DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - SECURITY_JWT_SECRET_KEY=${SECRET}
+      - SECURITY_JWT_ACCESS_EXPIRATION=${ACCESS_EXPIRATION}
+      - SECURITY_JWT_REFRESH_EXPIRATION=${REFRESH_EXPIRATION}
+    ports:
+      - '8080:8080'
+  mysql:
+    image: 'mysql:9'
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_USERNAME}
     ports:
       - '3306:3306'
     volumes:
-      - myapp:/home/node/app
+       - mysql_data:/var/lib/mysql
   redis:
     image: 'redis:latest'
     ports:
       - '6379:6379'
+    volumes:
+      - redis_data:/data
+volumes:
+    mysql_data:
+    redis_data:
+
