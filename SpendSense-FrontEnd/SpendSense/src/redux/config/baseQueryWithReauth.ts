@@ -9,7 +9,7 @@ import { Mutex } from "async-mutex";
 
 const mutex = new Mutex(); //to prevent multiple unecessary calls to refresh token endpoint
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://127.0.0.1:8080",
+  baseUrl: import.meta.env.VITE_API_BASE_URL,
   credentials: "include",
 });
 const baseQueryWithReauth: BaseQueryFn<
