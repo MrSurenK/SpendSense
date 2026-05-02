@@ -11,7 +11,24 @@ const cat_placeholder: CatType[] = [];
 
 const formatDate = (d: Date) => d.toLocaleDateString("en-CA");
 
-const getDefaultFilters = () => {
+type TransactionTypeFilter = "" | "income" | "expense";
+
+interface FilterState {
+  keyword: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+  min: string;
+  max: string;
+  catId: string;
+  isRecurring: boolean;
+  size: number;
+  sortField: string;
+  sortDirection: "ASC" | "DESC";
+  transactionType: TransactionTypeFilter;
+}
+
+const getDefaultFilters = (): FilterState => {
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), 1);
   const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -44,12 +61,15 @@ export default function TransactionFilters({
   const [expanded, setExpanded] = useState(true);
   const [activeCount, setActiveCount] = useState(0);
 
-  const update = (key, value) => {
+  const update = <K extends keyof FilterState>(
+    key: K,
+    value: FilterState[K],
+  ) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   //Count the number of active filters applied to display on the UI
-  const countActive = (f) => {
+  const countActive = (f: FilterState) => {
     let n = 0;
     if (f.keyword) n++;
     if (f.title) n++;
@@ -101,7 +121,7 @@ export default function TransactionFilters({
     onSearch?.({});
   };
 
-  const getTypeClass = (type) => {
+  const getTypeClass = (type: Exclude<TransactionTypeFilter, "">) => {
     if (filters.transactionType !== type) return styles.toggleBtn;
     if (type === "income") return `${styles.toggleBtn} ${styles.toggleIncome}`;
     if (type === "expense")

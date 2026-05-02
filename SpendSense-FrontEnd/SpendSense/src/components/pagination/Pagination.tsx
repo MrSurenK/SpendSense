@@ -1,5 +1,4 @@
-import { useState } from "react";
-import styles from "./pagination.module.css";
+import styles from "./Pagination.module.css";
 
 export interface PaginationDetails {
   currPage: number;
@@ -30,8 +29,6 @@ export default function Pagination({
   const grpIdx = Math.floor((currPage - 1) / pageWindowSize);
 
   const startPage = grpIdx * pageWindowSize + 1;
-
-  const endPage = Math.min(startPage + pageWindowSize - 1, totalPages);
 
   return (
     <>

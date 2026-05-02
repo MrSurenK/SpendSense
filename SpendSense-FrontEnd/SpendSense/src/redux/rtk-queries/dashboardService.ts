@@ -1,16 +1,17 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../config/baseQueryWithReauth";
 
-export type DashboardApiResponse = {
+export type TopListApiResponse = {
   success: boolean;
   message: string;
-  data: TopSubAndSpendData[] | NetCashFlow;
+  data: TopSubAndSpendData[];
 };
 
 export type TopSubAndSpendData = {
   amount: number;
+  title?: string;
   catName: string;
-  description: string;
+  description?: string;
   transactionDate: Date;
 };
 
@@ -57,7 +58,7 @@ export const dashboardApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     getTopFiveSpend: builder.query<
-      DashboardApiResponse,
+      TopListApiResponse,
       { month: number; year: number }
     >({
       query: ({ month, year }) => ({
@@ -66,7 +67,7 @@ export const dashboardApi = createApi({
       }),
     }),
     getTopSubs: builder.query<
-      DashboardApiResponse,
+      TopListApiResponse,
       { page: number; size: number }
     >({
       query: ({ page, size }) => ({

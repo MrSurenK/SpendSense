@@ -4,13 +4,10 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router";
 import Registration from "./features/user-account/Registration";
 import { Dashboard } from "./features/Dashboard/Dashboard";
 import AccountSettings from "./features/AccountMgmt/AccountSettings";
-import NavBar from "./components/side-nav-bar/navBar";
+import NavBar from "./components/side-nav-bar/NavBar";
 import { ViewAllTxn } from "./features/Transactions/ViewAllTn/ViewAllTxn";
 import NewTxn from "./features/Transactions/AddNewTn/NewTxn";
 import TxnLayout from "./features/Transactions/TxnLayout";
-import Modal from "./components/modal/Modal";
-import NewCatModal from "./components/modal/NewCatModal";
-import EditTxnModal from "./components/modal/EditTxnModal";
 import ViewTxnModal from "./components/modal/ViewTxnModal";
 
 function AppWrapper() {
@@ -41,9 +38,7 @@ function AppWrapper() {
             path="/modal"
             element={
               <ViewTxnModal
-                setOpenViewModal={function (open: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
+                setOpenViewModal={() => {}}
                 transaction={{
                   id: "",
                   amount: 0,

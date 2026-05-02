@@ -4,7 +4,7 @@ import styles from "./LogIn.module.css";
 import { NavLink, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { useLoginMutation } from "../../redux/rtk-queries/authService.ts";
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks.ts";
+import { useAppDispatch } from "../../hooks/reduxHooks.ts";
 import { loginState, type LoginPayload } from "../../redux/slices/authSlice.ts";
 
 interface LogInForm {
@@ -24,7 +24,7 @@ function LogIn() {
   }
 
   function isBackendError(obj: any): obj is BackendError {
-    return obj && typeof obj.message === "string";
+    return obj && typeof obj.description === "string";
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -61,7 +61,6 @@ function LogIn() {
   };
 
   //Manage log in state
-  const loginInfo = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

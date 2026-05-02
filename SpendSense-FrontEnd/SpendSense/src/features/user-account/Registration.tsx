@@ -1,7 +1,7 @@
 import styles from "./Registration.module.css";
 import InputBox from "../../components/input-box/InputBox";
 import Button from "../../components/btn/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface RegistrationForm {
   email: string;
@@ -15,15 +15,6 @@ interface RegistrationForm {
 }
 
 type Payload = Omit<RegistrationForm, "matchPassword">;
-
-type AccountCreationRes = {
-  message: string;
-};
-
-type LogInCredentials = {
-  accessToken: string;
-  refreshToken: string;
-};
 
 function Registration() {
   //Construct the JSON from the form fields to pass to API
@@ -45,12 +36,8 @@ function Registration() {
 
   //API states for creating account
   const [loading, setLoading] = useState<boolean>(false);
-  const [response, setResponse] = useState<AccountCreationRes | null>(null);
   //ToDo: Modal to display error message
   const [submitError, setSubmitError] = useState<Error | null>(null);
-
-  //API states to log user in and put access and refresh token(ToDo: move state to global store)
-  const [loggedIn, setLoggedIn] = useState<LogInCredentials | null>(null);
 
   async function postForm(options: RequestInit) {
     setLoading(true);
@@ -64,11 +51,9 @@ function Registration() {
       }
       const result = await res.json().catch(() => null);
       return result;
-      console.log(result);
-      setResponse(result);
     } catch (err) {
       setSubmitError(
-        err instanceof Error ? err : new Error("Unknown error occurred")
+        err instanceof Error ? err : new Error("Unknown error occurred"),
       );
     } finally {
       setLoading(false);
@@ -88,7 +73,7 @@ function Registration() {
       if (!res.ok) {
         const httpErrorMsg = await res.text();
         throw new Error(
-          `HTTP error. Status: ${res.status}, body: ${httpErrorMsg}`
+          `HTTP error. Status: ${res.status}, body: ${httpErrorMsg}`,
         );
       }
       const response = await res.json();
@@ -102,7 +87,7 @@ function Registration() {
       setSubmitError(
         e instanceof Error
           ? e
-          : new Error("Log in unsucessful.Please try again")
+          : new Error("Log in unsucessful.Please try again"),
       );
     } finally {
       setLoading(false);
@@ -208,6 +193,9 @@ function Registration() {
           <h1 className={`${styles.header}`}>Registration</h1>
           <form className={styles.form}>
             {requiredCheck && <p style={{ color: "red" }}>{requiredCheck}</p>}
+            {submitError && (
+              <p style={{ color: "red" }}>{submitError.message}</p>
+            )}
             <div>
               <label>
                 Email<span className={styles.required}>*</span>

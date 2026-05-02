@@ -5,7 +5,7 @@ import type { RootState } from "../store";
 export type AuthState = {
   userId: number | null;
   username: string | null;
-  lastLogIn: Date | null;
+  lastLogIn: string | null;
   isLoggedIn: boolean;
 };
 

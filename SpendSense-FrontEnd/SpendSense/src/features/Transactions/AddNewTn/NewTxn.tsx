@@ -28,7 +28,7 @@ export default function NewTxn() {
 
   const [transactionType, setTransactionType] = useState<TransactionType>();
 
-  const [fillAllFieldsMsg, setFillAllFieldsMsg] = useState<String | null>(null);
+  const [fillAllFieldsMsg, setFillAllFieldsMsg] = useState<string | null>(null);
   const hasSelectedCategory = newTxnForm.categoryId !== 0;
   const handleCatChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const rawValue = e.target.value;
@@ -105,7 +105,7 @@ export default function NewTxn() {
   //API call to get categories
   const { data: catData } = useGetCategoriesWithFullResQuery();
 
-  const [addNewTxn, { isSuccess, isLoading, isError }] = useAddNewTxnMutation();
+  const [addNewTxn] = useAddNewTxnMutation();
 
   //Todo: Categories is where the type is derived from so in the form user should not select type before selecting a category
   /*

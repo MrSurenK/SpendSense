@@ -1,8 +1,14 @@
 import Button from "../btn/Button";
 import styles from "./Modal.module.css";
 import ReactDom from "react-dom";
+import type { Dispatch, SetStateAction } from "react";
 
-export default function Modal({ message, setShowModal }) {
+type ModalProps = {
+  message: string;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+};
+
+export default function Modal({ message, setShowModal }: ModalProps) {
   return ReactDom.createPortal(
     <>
       <div className={styles.overlay}>

@@ -12,6 +12,8 @@ import {
 } from "chart.js";
 import { useEffect, useState } from "react";
 import { Line, Pie } from "react-chartjs-2";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import type { SerializedError } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import {
   useGetNetCashflowQuery,
@@ -20,6 +22,7 @@ import {
   useGetTopSubsQuery,
   useGetYearlyLineChartQuery,
 } from "../../redux/rtk-queries/dashboardService";
+import type { TopSubAndSpendData } from "../../redux/rtk-queries/dashboardService";
 import styles from "./Dashboard.module.css";
 
 ChartJS.register(
@@ -34,6 +37,28 @@ ChartJS.register(
 );
 
 export function Dashboard() {
+  const getErrorMessage = (
+    error?: FetchBaseQueryError | SerializedError,
+  ): string => {
+    if (!error) return "Something went wrong";
+
+    if ("message" in error && typeof error.message === "string") {
+      return error.message;
+    }
+
+    if ("data" in error) {
+      const data = error.data as
+        | { message?: string; error?: string }
+        | string
+        | undefined;
+      if (typeof data === "string") return data;
+      if (data?.message) return data.message;
+      if (data?.error) return data.error;
+    }
+
+    return "Something went wrong";
+  };
+
   const [chartResizeKey, setChartResizeKey] = useState(
     `${window.innerWidth}x${window.innerHeight}`,
   );
@@ -81,7 +106,7 @@ export function Dashboard() {
     year: currYear,
   });
 
-  const topFiveList = topSpendData?.data;
+  const topFiveList: TopSubAndSpendData[] = topSpendData?.data ?? [];
 
   //Call API to display top subscription spends
   const {
@@ -90,7 +115,7 @@ export function Dashboard() {
     isLoading: isSubLoading,
   } = useGetTopSubsQuery({ page: 0, size: 5 });
 
-  const topSubs = subData?.data;
+  const topSubs: TopSubAndSpendData[] = subData?.data ?? [];
 
   //call API to display income details
 
@@ -226,9 +251,7 @@ export function Dashboard() {
                 ) : cashFlowError ? (
                   <div className={styles.cashflowErrorAndLoader}>
                     <p>⚠️ Unable to load data</p>
-                    <small>
-                      {cashFlowError.message || "Something went wrong"}
-                    </small>
+                    <small>{getErrorMessage(cashFlowError)}</small>
                   </div>
                 ) : (
                   <>
@@ -269,15 +292,15 @@ export function Dashboard() {
                 ) : topSpendError ? (
                   <div className={styles.errorPosition}>
                     <p>⚠️ Unable to load data</p>
-                    <small>
-                      {topSpendError.message || "Something went wrong"}
-                    </small>
+                    <small>{getErrorMessage(topSpendError)}</small>
                   </div>
                 ) : (
                   <ul>
                     {topFiveList?.map((item, index) => (
                       <li key={index} className={styles.spanSpacing}>
-                        <span>{item.title}</span>
+                        <span>
+                          {item.title ?? item.description ?? "Untitled"}
+                        </span>
                         <span>{item.amount.toFixed(2)}</span>
                       </li>
                     ))}
@@ -298,13 +321,15 @@ export function Dashboard() {
                 ) : subError ? (
                   <div className={styles.errorPosition}>
                     <p>⚠️ Unable to load data</p>
-                    <small>{subError.message || "Something went wrong"}</small>
+                    <small>{getErrorMessage(subError)}</small>
                   </div>
                 ) : (
                   <ul>
                     {topSubs?.map((item, index) => (
                       <li key={index} className={styles.spanSpacing}>
-                        <span>{item.title}</span>
+                        <span>
+                          {item.title ?? item.description ?? "Untitled"}
+                        </span>
                         <span>{item.amount.toFixed(2)}</span>
                       </li>
                     ))}
@@ -325,11 +350,7 @@ export function Dashboard() {
               ) : spendingPieError ? (
                 <div className={styles.chartFeedback}>
                   <p>⚠️ Unable to load chart data</p>
-                  <small>
-                    {"message" in spendingPieError
-                      ? spendingPieError.message
-                      : "Something went wrong"}
-                  </small>
+                  <small>{getErrorMessage(spendingPieError)}</small>
                 </div>
               ) : spendingPieData && spendingPieData.labels.length > 0 ? (
                 <div className={styles.pieChartWrapper}>
@@ -356,11 +377,7 @@ export function Dashboard() {
               ) : yearlyLineError ? (
                 <div className={styles.chartFeedback}>
                   <p>⚠️ Unable to load chart data</p>
-                  <small>
-                    {"message" in yearlyLineError
-                      ? yearlyLineError.message
-                      : "Something went wrong"}
-                  </small>
+                  <small>{getErrorMessage(yearlyLineError)}</small>
                 </div>
               ) : yearlyLineData ? (
                 <div className={styles.lineChartWrapper}>
