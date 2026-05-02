@@ -2,6 +2,9 @@ import styles from "./Registration.module.css";
 import InputBox from "../../components/input-box/InputBox";
 import Button from "../../components/btn/Button";
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useAppDispatch } from "../../hooks/reduxHooks";
+import { loginState, type LoginPayload } from "../../redux/slices/authSlice";
 
 interface RegistrationForm {
   email: string;
@@ -18,6 +21,8 @@ type Payload = Omit<RegistrationForm, "matchPassword">;
 
 function Registration() {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   //Construct the JSON from the form fields to pass to API
   const [formData, setFormData] = useState<RegistrationForm>({
@@ -62,11 +67,15 @@ function Registration() {
     }
   }
 
-  async function logUserIn(username: string, password: string) {
+  async function logUserIn(
+    username: string,
+    password: string,
+  ): Promise<LoginPayload | null> {
     setLoading(true);
     try {
       const res = await fetch(`${apiBaseUrl}/auth/login`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -79,18 +88,21 @@ function Registration() {
         );
       }
       const response = await res.json();
-      console.log(response);
+
+      return {
+        userId: response.userId,
+        username: response.username,
+        lastLogin: new Date(response.lastLogin).toISOString(),
+      };
 
       //Cookie expiration to match JWT access token expiration
-      const expiryDateTime = new Date();
-      const addExpiration = response.refreshTokenExpiresIn;
-      expiryDateTime.setTime(expiryDateTime.getTime() + addExpiration);
     } catch (e) {
       setSubmitError(
         e instanceof Error
           ? e
           : new Error("Log in unsucessful.Please try again"),
       );
+      return null;
     } finally {
       setLoading(false);
     }
@@ -178,7 +190,11 @@ function Registration() {
     const result = await postForm(options);
 
     if (result) {
-      await logUserIn(payload.userName, payload.password);
+      const loginPayload = await logUserIn(payload.userName, payload.password);
+      if (loginPayload) {
+        dispatch(loginState(loginPayload));
+        navigate("/dashboard");
+      }
     }
   };
 
