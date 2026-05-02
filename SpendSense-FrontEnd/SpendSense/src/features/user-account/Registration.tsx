@@ -17,6 +17,8 @@ interface RegistrationForm {
 type Payload = Omit<RegistrationForm, "matchPassword">;
 
 function Registration() {
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
   //Construct the JSON from the form fields to pass to API
   const [formData, setFormData] = useState<RegistrationForm>({
     email: "",
@@ -42,7 +44,7 @@ function Registration() {
   async function postForm(options: RequestInit) {
     setLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8080/auth/register", options);
+      const res = await fetch(`${apiBaseUrl}/auth/register`, options);
       if (!res.ok) {
         //Catch HTTP errors
         const httpError = await res.text();
@@ -63,7 +65,7 @@ function Registration() {
   async function logUserIn(username: string, password: string) {
     setLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8080/auth/login", {
+      const res = await fetch(`${apiBaseUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
