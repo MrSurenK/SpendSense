@@ -3,7 +3,7 @@ name: backend deployment
 on:
  push:
   paths:
-   - "SpendCents-Backend/**"
+   - "SpendSense-Backend/**"
 
 jobs:
  deploy:
