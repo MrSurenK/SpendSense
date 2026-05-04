@@ -15,6 +15,7 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 #Create working dir
 WORKDIR /app
 
+#Copy to build file to app
 COPY app.jar /app/app.jar
 
 EXPOSE 8080
