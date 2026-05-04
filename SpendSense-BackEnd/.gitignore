@@ -1,5 +1,68 @@
+# Environment variables
 .env
 .env.*
 !.env.example
 
+# Maven
+target/
+.m2/
+*.jar
+*.jar.original
+*.lst
 
+# IDE - IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+*.refactorings
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+*.jdt
+
+# IDE - VS Code
+.vscode/
+*.code-workspace
+
+# IDE - NetBeans
+nbproject/
+.nb-gradle/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*.swo
+*~
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# General
+*.log
+logs/
+*.swp
+*.bak
+*.tmp
+*.temp
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+
+# Build & Output
+out/
+build/
+dist/
+*.exe
+
+# OS backup files
+*.backup

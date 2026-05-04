@@ -1,6 +1,7 @@
 services:
   app:
-    image: 'spendcents-app:0.0.1'
+    build: .
+    image: spendcents-app
     depends_on:
       - mysql
       - redis

@@ -14,7 +14,7 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 WORKDIR /app
 
-COPY target/SpendCents-Backend-*.jar  /app/app.jar
+COPY app.jar /app/app.jar
 
 EXPOSE 8080
 
