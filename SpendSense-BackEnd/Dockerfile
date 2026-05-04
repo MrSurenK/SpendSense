@@ -18,6 +18,7 @@ WORKDIR /app
 #Copy to build file to app
 COPY app.jar /app/app.jar
 
+#Port 8080 to access app from outside container
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
