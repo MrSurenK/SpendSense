@@ -30,6 +30,7 @@ jobs:
       username: ubuntu
       key: ${{ secrets.EC2_SSH_KEY }}
       source: "SpendSense-BackEnd/target/app.jar"
+      strip_components: 2
       target: "/home/ubuntu/apps/SpendCents/"
 
    - name: Copy Infra config to EC2
@@ -38,9 +39,7 @@ jobs:
       host: ${{ secrets.EC2_HOST }}
       username: ubuntu
       key: ${{ secrets.EC2_SSH_KEY }}
-      source: |
-       SpendSense-BackEnd/Dockerfile
-       SpendSense-BackEnd/compose.yaml
+      source: SpendSense-BackEnd/Dockerfile,SpendSense-BackEnd/compose.yaml
       strip_components: 1
       target: "/home/ubuntu/apps/SpendCents/"
 
