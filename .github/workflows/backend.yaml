@@ -38,9 +38,7 @@ jobs:
       host: ${{ secrets.EC2_HOST }}
       username: ubuntu
       key: ${{ secrets.EC2_SSH_KEY }}
-      source: |
-       SpendSense-BackEnd/compose.yaml
-       SpendSense-BackEnd/Dockerfile
+      source: SpendSense-BackEnd/compose.yaml,SpendSense-BackEnd/Dockerfile
       target: "/home/ubuntu/apps/SpendCents/"
 
    - name: Rebuild backend on EC2
