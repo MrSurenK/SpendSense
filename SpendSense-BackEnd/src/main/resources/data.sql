@@ -4,7 +4,7 @@
 --INSERT INTO user_account (email,username,first_name,last_name,date_of_birth,occupation,password) VALUES ('dummyUser02@email.com',
 --'dummyUser02','Tony','Stark','2026-04-21','SWE','$2a$12$IrP.YECyun.ruDsuy2xeu.LIoAV6kWbaRdM493P5fAItUe09m.foa');
 
--- Default categories for prod db initialization --
+-- Default categories for prod db initialization only--
 --Expense Categories --
 INSERT INTO category (name,transaction_type,is_system) VALUES('Rent','EXPENSE',True);
 INSERT INTO category (name,transaction_type,is_system) VALUES('Groceries','EXPENSE',True);
