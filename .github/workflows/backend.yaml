@@ -19,7 +19,7 @@ jobs:
 
    - name: Build backend
      run: |
-      cd SpendCents-Backend
+      cd SpendSense-BackEnd
       ./mvnw clean package -DskipTests
 
    - name: Copy JAR to EC2
