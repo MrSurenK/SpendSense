@@ -38,8 +38,8 @@ jobs:
       username: ubuntu
       key: ${{ secrets.EC2_SSH_KEY }}
       source: |
-	compose.yaml
-	Dockerfile
+       compose.yaml
+       Dockerfile
       target: "/home/ubuntu/apps/SpendCents/"
 
    - name: Rebuild backend on EC2
@@ -49,6 +49,6 @@ jobs:
       username: ubuntu 
       key: ${{ secrets.EC2_SSH_KEY }}
       script: |
-	cd /home/ubuntu/apps/SpendCents/
-	docker compose down
-	docker compose up -d --build
+        cd /home/ubuntu/apps/SpendCents/
+        docker compose down
+        docker compose up -d --build
