@@ -55,7 +55,9 @@ type ChartJsLineApiResponse = {
 };
 
 export const dashboardApi = createApi({
+  reducerPath: "dashboardApi",
   baseQuery: baseQueryWithReauth,
+  tagTypes: ["Dashboard"],
   endpoints: (builder) => ({
     getTopFiveSpend: builder.query<
       TopListApiResponse,
@@ -65,6 +67,7 @@ export const dashboardApi = createApi({
         url: "/dash/topFiveSpend",
         params: { month, year },
       }),
+      providesTags: ["Dashboard"],
     }),
     getTopSubs: builder.query<
       TopListApiResponse,
@@ -74,6 +77,7 @@ export const dashboardApi = createApi({
         url: "/dash/subscriptions",
         params: { page, size },
       }),
+      providesTags: ["Dashboard"],
     }),
     getNetCashflow: builder.query<
       NetCashFlow,
@@ -83,6 +87,7 @@ export const dashboardApi = createApi({
         url: "/dash/netCashflow",
         params: { startDate, endDate },
       }),
+      providesTags: ["Dashboard"],
     }),
     getSpendingPieChart: builder.query<
       ChartJsPieData,
@@ -93,6 +98,7 @@ export const dashboardApi = createApi({
         method: "GET",
       }),
       transformResponse: (response: ChartJsPieApiResponse) => response.data,
+      providesTags: ["Dashboard"],
     }),
     getYearlyLineChart: builder.query<ChartJsLineData, { year: number }>({
       query: ({ year }) => ({
@@ -100,6 +106,7 @@ export const dashboardApi = createApi({
         method: "GET",
       }),
       transformResponse: (response: ChartJsLineApiResponse) => response.data,
+      providesTags: ["Dashboard"],
     }),
   }),
 });

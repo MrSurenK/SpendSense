@@ -1,5 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../config/baseQueryWithReauth";
+import { dashboardApi } from "./dashboardService";
 
 export interface TransactionApiResponse {
   success: boolean;
@@ -146,6 +147,14 @@ export const transactionApi = createApi({
         };
       },
       invalidatesTags: ["Transactions"],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(dashboardApi.util.invalidateTags(["Dashboard"]));
+        } catch {
+          // no-op: don't invalidate caches if mutation failed
+        }
+      },
     }),
     //Single transaction delete
     deleteTransaction: builder.mutation<void, string>({
@@ -156,6 +165,14 @@ export const transactionApi = createApi({
         };
       },
       invalidatesTags: ["Transactions"],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(dashboardApi.util.invalidateTags(["Dashboard"]));
+        } catch {
+          // no-op: don't invalidate caches if mutation failed
+        }
+      },
     }),
     //Get Request for User categories
     getCategories: builder.query<{ id: number; name: string }[], void>({
@@ -194,6 +211,15 @@ export const transactionApi = createApi({
           method: "POST",
           body,
         };
+      },
+      invalidatesTags: ["Transactions"],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(dashboardApi.util.invalidateTags(["Dashboard"]));
+        } catch {
+          // no-op: don't invalidate caches if mutation failed
+        }
       },
     }),
   }),
