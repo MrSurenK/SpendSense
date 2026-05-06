@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/", //To pick up domain name in prod
+  base: "/", //To pick up domain name in prod without env
   server: {
     host: "127.0.0.1", // This allows access from both localhost and 127.0.0.1
     port: 5173,
