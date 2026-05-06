@@ -22,12 +22,12 @@ jobs:
 
    - name: Install dependencies
      run: |
-      cd SpendSense-FrontEnd
+      cd SpendSense-FrontEnd/SpendSense
       npm ci
 
    - name: Build frontend
      run: |
-      cd SpendSense-FrontEnd
+      cd SpendSense-FrontEnd/SpendSense
       npm run build
 
    - name: Configure AWS Credentials
@@ -39,7 +39,7 @@ jobs:
 
    - name: Upload build to S3
      run: |
-      aws s3 sync SpendSense-FrontEnd/dist s3://${{ vars.SPENDCENTS_S3_BUCKET }} --delete
+      aws s3 sync SpendSense-FrontEnd/SpendSense/dist/ s3://${{ vars.SPENDCENTS_S3_BUCKET }} --delete
    
    - name: Invalidate CloudFront cache
      run: |
