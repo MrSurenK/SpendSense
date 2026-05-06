@@ -1,7 +1,9 @@
 name: frontend deployment
 
 on:
- push: 
+ push:
+  branches:
+   - main 
   paths:
    - "SpendSense-FrontEnd/**"
 
