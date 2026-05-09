@@ -16,9 +16,28 @@
   padding: 2rem;
 }
 
+.main-content.auth-content {
+  padding: 0;
+  background-color: transparent;
+  overflow: hidden;
+}
+
 @media (max-width: 1024px) {
   .main-content {
     padding: 1.25rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .app-layout {
+    flex-direction: column;
+    height: 100dvh;
+    overflow: auto;
+  }
+
+  .main-content {
+    min-height: 0;
+    flex: 1;
   }
 }
 

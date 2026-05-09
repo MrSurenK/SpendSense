@@ -119,3 +119,53 @@ th {
 .deleteBtn:hover svg {
   color: #000; /* hover color */
 }
+
+@media (max-width: 1024px) {
+  .filterContent {
+    padding: 1.25rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .filterContent label {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 768px) {
+  .filterContainer {
+    margin-bottom: 0.75rem;
+  }
+
+  .filterContent {
+    padding: 0.9rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .tableStyle {
+    min-width: 860px;
+  }
+
+  .tableStyle th,
+  .tableStyle td {
+    padding: 0.7rem 0.8rem;
+  }
+
+  .tableStyle tbody tr {
+    height: 5.25rem;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 560px) {
+  .filterContent {
+    grid-template-columns: 1fr;
+  }
+
+  .tableContainer {
+    border-radius: 0.35rem;
+  }
+}

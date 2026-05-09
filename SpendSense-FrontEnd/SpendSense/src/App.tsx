@@ -15,13 +15,14 @@ function AppWrapper() {
 
   //Paths that do not need NavBar
   const noNavPaths = ["/", "/register"];
-  const showNav = !noNavPaths.includes(location.pathname);
+  const isAuthRoute = noNavPaths.includes(location.pathname);
+  const showNav = !isAuthRoute;
 
   return (
     <div className="app-layout">
       {showNav && <NavBar />}
 
-      <main className="main-content">
+      <main className={`main-content ${isAuthRoute ? "auth-content" : ""}`}>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Registration />} />

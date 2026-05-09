@@ -30,3 +30,17 @@
   color: #9ca3af;
   cursor: not-allowed;
 }
+
+@media (max-width: 640px) {
+  .pagination {
+    justify-content: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .pagination button {
+    padding: 0.45rem 0.65rem;
+    min-width: 2.1rem;
+  }
+}
