@@ -2,6 +2,7 @@ services:
   app:
     build: .
     image: spendcents-app
+    profiles: ["prod"]
     depends_on:
       - mysql
       - redis
