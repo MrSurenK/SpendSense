@@ -1,22 +1,22 @@
 services:
-#  app:
-#    build: .
-#    image: spendcents-app
-#    depends_on:
-#      - mysql
-#      - redis
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-#      - SPRING_DATASOURCE_URL=${DATASOURCE_URL}
-#      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
-#      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-#      - SPRING_DATA_REDIS_HOST=redis
-#      - SPRING_DATA_REDIS_PORT=6379
-#      - SECURITY_JWT_SECRET_KEY=${SECRET}
-#      - SECURITY_JWT_ACCESS_EXPIRATION=${ACCESS_EXPIRATION}
-#      - SECURITY_JWT_REFRESH_EXPIRATION=${REFRESH_EXPIRATION}
-#    ports:
-#      - '8080:8080'
+  app:
+    build: .
+    image: spendcents-app
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - SPRING_DATASOURCE_URL=${DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - SECURITY_JWT_SECRET_KEY=${SECRET}
+      - SECURITY_JWT_ACCESS_EXPIRATION=${ACCESS_EXPIRATION}
+      - SECURITY_JWT_REFRESH_EXPIRATION=${REFRESH_EXPIRATION}
+    ports:
+      - '8080:8080'
   mysql:
     image: 'mysql:9.0'
     environment:
