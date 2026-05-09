@@ -84,76 +84,79 @@ export function ViewAllTxn() {
               <th>Type</th>
               <th>Recurring</th>
               <th>Actions</th>
-              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
             {transactionResponse?.content.map((txn) => (
               <tr key={txn.id}>
-                <td>{new Date(txn.transactionDate).toLocaleDateString()}</td>
-                <td>
+                <td data-label="Date">
+                  {new Date(txn.transactionDate).toLocaleDateString()}
+                </td>
+                <td data-label="Item">
                   <div>{txn.title}</div>
                   <div className={styles.remarks}>{txn.remarks}</div>
                 </td>
-                <td>
+                <td data-label="Amount">
                   <span>
                     {txn.transactionType === "expense" ? "-" : "+"}$
                     {txn.amount.toFixed(2)}
                   </span>
                 </td>
-                <td>
+                <td data-label="Category">
                   <span className={styles.words}>{txn.catName}</span>
                 </td>
-                <td>
+                <td data-label="Type">
                   <span>
                     {" "}
                     {txn.transactionType === "expense" ? "EXPENSE" : "INCOME"}
                   </span>
                 </td>
-                <td>
+                <td data-label="Recurring">
                   <span>{txn.recurring ? "Yes" : "No"}</span>
                 </td>
-                <td>
+                <td data-label="Actions">
                   <div className={styles.actions}>
                     <Button
                       text={"View"}
                       size={"sm"}
+                      className={styles.viewBtn}
                       onClick={() => setViewTxnId(txn.id)}
                     ></Button>
                     <Button
                       text={"Edit"}
                       size={"sm"}
+                      className={styles.editBtn}
                       onClick={() => setSelectedTxn(txn)}
                     ></Button>
-                  </div>
-                </td>
-                <td>
-                  <button
-                    className={styles.deleteBtn}
-                    onClick={() => deleteTransaction(txn.id)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      x="0px"
-                      y="0px"
-                      width="35"
-                      height="35"
-                      viewBox="0 0 50 50"
+                    <button
+                      className={styles.deleteBtn}
+                      onClick={() => deleteTransaction(txn.id)}
+                      aria-label={`Delete ${txn.title}`}
                     >
-                      <path
-                        fill="currentColor"
-                        d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"
-                      ></path>
-                      <path
-                        fill="#fff"
-                        d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"
-                      ></path>
-                      <path
-                        fill="#fff"
-                        d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"
-                      ></path>
-                    </svg>
-                  </button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        x="0px"
+                        y="0px"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 50 50"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"
+                        ></path>
+                        <path
+                          fill="#fff"
+                          d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"
+                        ></path>
+                        <path
+                          fill="#fff"
+                          d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"
+                        ></path>
+                      </svg>
+                      <span>Delete</span>
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
